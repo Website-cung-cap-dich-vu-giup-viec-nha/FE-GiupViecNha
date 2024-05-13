@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import googleLogo from "../assets/icon/google.png";
 import fbLogo from "../assets/icon/facebook.png";
+import { Link } from "react-router-dom";
 const DangNhap = () => {
   const [user, setUser] = useState({ phone: "", password: "" });
   const [error, setError] = useState("");
@@ -120,7 +121,7 @@ const DangNhap = () => {
       </div>
       <div className="mt-4 text-center" style={{ color: "rgba(0, 0, 0, .26)" }}>
         Bạn mới biết đến bTaskee?
-        <span style={{ color: "#ee4d2d", cursor: "pointer" }}> Đăng ký</span>
+        <Link to="/dangky" style={{ color: "#ee4d2d", cursor: "pointer" }}> Đăng ký</Link>
       </div>
     </div>
   );
