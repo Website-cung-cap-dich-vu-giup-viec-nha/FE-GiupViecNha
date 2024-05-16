@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import axios from "axios";
 import googleLogo from "../assets/icon/google.png";
 import fbLogo from "../assets/icon/facebook.png";
+import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 const DangNhap = () => {
   const [user, setUser] = useState({ phone: "", password: "" });
@@ -16,11 +18,18 @@ const DangNhap = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!user.phone || !user.password) {
-      setError("Dang nhap khong thanh cong");
-    } else {
-      setError("Dang nhap khong thanh cong");
-    }
+    console.log("Heello");
+    <Navigate to="/" />
+    // axios.post('url/api', { phone: user.phone, password: user.password })
+    //     .then(response => {
+    //         console.log('Phản hồi từ máy chủ:', response.data);
+    //         <Navigate to="/"/>
+    //     })
+    //     .catch(error => {
+    //       <Navigate to="/"/>
+    //         console.error('Lỗi khi gửi yêu cầu:', error);
+            
+    //     });
   };
   return (
     <div
