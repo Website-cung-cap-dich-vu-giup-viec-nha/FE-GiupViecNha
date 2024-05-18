@@ -1,13 +1,16 @@
 import React from "react";
 import logo from "../assets/Logo.png";
-import { Link } from "react-router-dom";
-const Header = () => {
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
+
+const Header = ({ dangxuat, message }) => {
+  const navigate = useNavigate();
+  
   return (
     <nav className="navbar navbar-expand-md navbar-light">
       <Link className="navbar-brand" to="/">
-        
-          <img width={"150px"} src={logo} alt="" />
-        
+        <img width={"150px"} src={logo} alt="" />
       </Link>
       <button
         className="navbar-toggler"
@@ -40,9 +43,18 @@ const Header = () => {
             </a>
           </li>
           <li className="nav-item">
-            <Link className="nav-link d-md-none" to="/dangnhap">
-              Đăng nhập
-            </Link>
+            {message ? (
+              <div 
+                className="nav-link d-md-none" role="button"
+                onClick={dangxuat}
+              >
+                Đăng xuất
+              </div>
+            ) : (
+              <Link className="nav-link d-md-none" to="/dangnhap">
+                Đăng nhập
+              </Link>
+            )}
           </li>
         </ul>
       </div>

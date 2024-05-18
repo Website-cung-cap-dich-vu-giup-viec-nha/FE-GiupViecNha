@@ -1,23 +1,27 @@
-import React from "react";
+import {React, useState, useEffect} from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Cookies from "js-cookie";
 
-import banner1 from "../assets/banner/banner1.jpg";
-import banner2 from "../assets/banner/banner2.jpg";
-import banner3 from "../assets/banner/banner3.jpg";
 import cleaners from "../assets/icon/cleaners.svg";
-import dv1 from "../assets/giupviec.jpg";
-import dv2 from "../assets/TongVeSinh.jpg";
-import dv3 from "../assets/vesinhmaylanh.png";
-import dv4 from "../assets/babysitting.jpg";
-import dv5 from "../assets/sofaclean.jpg";
 import anhnen from "../assets/background/anhnen.png";
 import fast from "../assets/icon/fast.svg";
 import quality from "../assets/icon/quality.svg";
 import secure from "../assets/icon/secure.svg";
 import supplies from "../assets/icon/supplies.svg";
 const TrangChuView = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const token = Cookies.get('token');
+        if (token) {
+          setIsAuthenticated(true)
+        }
+    }, []);
+
+
+  
   const settings = {
     dots: true,
     infinite: false,
@@ -62,13 +66,13 @@ const TrangChuView = () => {
       >
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <img src={banner1} className="d-block w-100" alt="..." />
+            <img src={require("../assets/banner/banner1.jpg")} className="d-block w-100" alt="..." />
           </div>
           <div className="carousel-item">
-            <img src={banner2} className="d-block w-100" alt="..." />
+            <img src={require("../assets/banner/banner2.jpg")} className="d-block w-100" alt="..." />
           </div>
           <div className="carousel-item">
-            <img src={banner3} className="d-block w-100" alt="..." />
+            <img src={require("../assets/banner/banner3.jpg")} className="d-block w-100" alt="..." />
           </div>
         </div>
         <button
@@ -144,7 +148,7 @@ const TrangChuView = () => {
           <Slider {...settings} className="h-100">
             <div className="card h-100" style={{ width: "18rem" }}>
               <img
-                src={dv1}
+                src={require("../assets/giupviec.jpg")}
                 className="card-img-top"
                 alt="..."
                 style={{ height: "171px" }}
@@ -162,7 +166,7 @@ const TrangChuView = () => {
             </div>
             <div className="card h-100" style={{ width: "18rem" }}>
               <img
-                src={dv2}
+                src={require("../assets/TongVeSinh.jpg")}
                 className="card-img-top"
                 alt="..."
                 style={{ height: "171px" }}
@@ -180,7 +184,7 @@ const TrangChuView = () => {
             </div>
             <div className="card h-100" style={{ width: "18rem" }}>
               <img
-                src={dv3}
+                src={require("../assets/vesinhmaylanh.png")}
                 className="card-img-top"
                 alt="..."
                 style={{ height: "171px" }}
@@ -199,7 +203,7 @@ const TrangChuView = () => {
             </div>
             <div className="card h-100" style={{ width: "18rem" }}>
               <img
-                src={dv4}
+                src={require("../assets/babysitting.jpg")}
                 className="card-img-top"
                 alt="..."
                 style={{ height: "171px" }}
@@ -217,7 +221,7 @@ const TrangChuView = () => {
             </div>
             <div className="card h-100" style={{ width: "18rem" }}>
               <img
-                src={dv5}
+                src={require("../assets/sofaclean.jpg")}
                 className="card-img-top"
                 alt="..."
                 style={{ height: "171px" }}
@@ -242,28 +246,28 @@ const TrangChuView = () => {
         <h2 className="text-center">Những con số ấn tượng</h2>
         <div className="row mt-5 justify-content-center">
           <div className="col-sm-6 col-lg-3 d-flex flex-column p-4">
-            <i class="fa-solid fa-user-group fs-3"></i>
+            <i className="fa-solid fa-user-group fs-3"></i>
             <span className="fs-1 fw-bolder" style={{ color: "#FF8227" }}>
               500.000+
             </span>
             <p className="fw-bold">Khách hàng sử dụng dịch vụ</p>
           </div>
           <div className="col-sm-6 col-lg-3 d-flex flex-column p-4">
-            <i class="fa-solid fa-face-smile fs-3"></i>
+            <i className="fa-solid fa-face-smile fs-3"></i>
             <span className="fs-1 fw-bolder" style={{ color: "#FF8227" }}>
               97%
             </span>
             <p className="fw-bold">Khách hàng hài lòng</p>
           </div>
           <div className="col-sm-6 col-lg-3 d-flex flex-column p-4">
-            <i class="fa-solid fa-list-check fs-3 "></i>
+            <i className="fa-solid fa-list-check fs-3 "></i>
             <span className="fs-1 fw-bolder" style={{ color: "#FF8227" }}>
               2.600.000+
             </span>
             <p className="fw-bold">Công việc được hoàn thành</p>
           </div>
           <div className="col-sm-6 col-lg-3 d-flex flex-column p-4">
-            <i class="fa-solid fa-clock fs-3 "></i>
+            <i className="fa-solid fa-clock fs-3 "></i>
             <span className="fs-1 fw-bolder" style={{ color: "#FF8227" }}>
               8.000.000+
             </span>

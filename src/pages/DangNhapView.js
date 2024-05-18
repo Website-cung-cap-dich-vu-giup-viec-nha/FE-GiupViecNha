@@ -1,5 +1,4 @@
 import DangNhap from "../components/DangNhap";
-import bg2 from "../assets/background/bg2.png"
 const DangNhapView = () => {
   return (
     <div
@@ -13,7 +12,7 @@ const DangNhapView = () => {
           <div
             className="col-lg-6 d-lg-block d-none d-lg-flex align-items-center justify-content-center"
           >
-            <img src={bg2} alt="" />
+            <img src={require("../assets/background/bg2.png")} alt="" />
           </div>
           <div className="col-lg-6 p-4">
             <DangNhap/>

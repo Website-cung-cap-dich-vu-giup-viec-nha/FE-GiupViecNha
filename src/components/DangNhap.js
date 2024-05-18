@@ -1,36 +1,30 @@
 import React, { useState } from "react";
 import axios from "axios";
-import googleLogo from "../assets/icon/google.png";
-import fbLogo from "../assets/icon/facebook.png";
-import { Navigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import Cookies from 'js-cookie';
+import { useNavigate, Link } from "react-router-dom";
+
 const DangNhap = () => {
-  const [user, setUser] = useState({ phone: "", password: "" });
+  const [user, setUser] = useState({ SDT: "", password: "" });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser({
-      ...user,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Heello");
-    <Navigate to="/" />
-    // axios.post('url/api', { phone: user.phone, password: user.password })
-    //     .then(response => {
-    //         console.log('Phản hồi từ máy chủ:', response.data);
-    //         <Navigate to="/"/>
-    //     })
-    //     .catch(error => {
-    //       <Navigate to="/"/>
-    //         console.error('Lỗi khi gửi yêu cầu:', error);
-            
-    //     });
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/auth/login", user);
+      if (!response.data.status) {
+        setError("Đăng nhập thất bại!");
+        return;
+      }
+      Cookies.set("token", response.data.token, { expires: response.data.expires_in, secure: true, sameSite: 'Strict' });
+      console.log(response.data)
+      navigate("/");
+    } catch (error) {
+      const errorMessage = "Số điện thoại không hợp lệ!";
+      setError(errorMessage);
+    }
   };
+
   return (
     <div
       style={{ maxWidth: "400px", backgroundColor: "white" }}
@@ -42,7 +36,9 @@ const DangNhap = () => {
           className="alert alert-danger d-flex align-items-center"
           role="alert"
         >
-          <div><i className="fa-solid fa-triangle-exclamation"></i> Đăng nhập thất bại</div>
+          <div>
+            <i className="fa-solid fa-triangle-exclamation"></i> {error}
+          </div>
         </div>
       )}
       <div>
@@ -51,14 +47,13 @@ const DangNhap = () => {
             <input
               style={{ borderRadius: "5px", border: "1px solid" }}
               type="text"
-              name="phone"
-              value={user.phone}
-              onChange={handleChange}
+              name="SDT"
+              value={user.SDT}
+              onChange={(e) => setUser({ ...user, SDT: e.target.value })}
               className="d-block w-100 ps-3 p-2"
               placeholder="Số điện thoại"
               required
             />
-            {/* {errors.phone && <span className='text-danger position-absolute' style={{fontSize:"14px"}}>Vui lòng nhập số điện thoại</span>} */}
           </div>
           <div className="mb-4">
             <input
@@ -66,12 +61,11 @@ const DangNhap = () => {
               type="password"
               name="password"
               value={user.password}
-              onChange={handleChange}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
               className="d-block w-100 ps-3 p-2"
               placeholder="Mật khẩu"
               required
             />
-            {/* {passwordErr && <span className='text-danger position-absolute' style={{fontSize:"14px"}}>Vui lòng nhập mật khẩu</span>} */}
           </div>
 
           <input
@@ -118,19 +112,22 @@ const DangNhap = () => {
         </div>
 
         <div className="d-flex justify-content-between ">
-          <button className="flex-grow-1 m-2 buttonDangNhap">
-            <img width={"30px"} src={fbLogo} alt="facebook" />
+          <button className="flex-grow-1 m-2 rounded">
+            <img width={"30px"} src={require("../assets/icon/facebook.png")} alt="facebook" />
             Facebook
           </button>
-          <button className="flex-grow-1 m-2 buttonDangNhap d-flex align-items-center justify-content-center">
-            <img width={"24px"} src={googleLogo} alt="google" />
+          <button className="flex-grow-1 m-2 rounded d-flex align-items-center justify-content-center">
+            <img width={"24px"} src={require("../assets/icon/google.png")} alt="google" />
             <div className="ms-1">Google</div>
           </button>
         </div>
       </div>
       <div className="mt-4 text-center" style={{ color: "rgba(0, 0, 0, .26)" }}>
         Bạn mới biết đến bTaskee?
-        <Link to="/dangky" style={{ color: "#ee4d2d", cursor: "pointer" }}> Đăng ký</Link>
+        <Link to="/dangky" style={{ color: "#ee4d2d", cursor: "pointer" }}>
+          {" "}
+          Đăng ký
+        </Link>
       </div>
     </div>
   );
