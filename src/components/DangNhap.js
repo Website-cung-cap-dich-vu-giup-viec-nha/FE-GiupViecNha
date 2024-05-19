@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { useNavigate, Link } from "react-router-dom";
 
 const DangNhap = () => {
@@ -11,13 +11,20 @@ const DangNhap = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/auth/login", user);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/auth/login",
+        user
+      );
       if (!response.data.status) {
         setError("Đăng nhập thất bại!");
         return;
       }
-      Cookies.set("token", response.data.token, { expires: response.data.expires_in, secure: true, sameSite: 'Strict' });
-      console.log(response.data)
+      Cookies.set("token", response.data.token, {
+        expires: response.data.expires_in,
+        secure: true,
+        sameSite: "Strict",
+      });
+      console.log(response.data);
       navigate("/");
     } catch (error) {
       const errorMessage = "Số điện thoại không hợp lệ!";
@@ -111,15 +118,31 @@ const DangNhap = () => {
           ></div>
         </div>
 
-        <div className="d-flex justify-content-between ">
-          <button className="flex-grow-1 m-2 rounded">
-            <img width={"30px"} src={require("../assets/icon/facebook.png")} alt="facebook" />
-            Facebook
-          </button>
-          <button className="flex-grow-1 m-2 rounded d-flex align-items-center justify-content-center">
-            <img width={"24px"} src={require("../assets/icon/google.png")} alt="google" />
-            <div className="ms-1">Google</div>
-          </button>
+        <div className="row">
+          <div className="col">
+          <div className="rounded border border-secondary w-100 d-flex justify-content-center btn btn-light">
+              <Link to="/sorry" className="text-decoration-none text-dark">
+                <img
+                  width={"30px"}
+                  src={require("../assets/icon/facebook.png")}
+                  alt="google"
+                />
+                Facebook
+              </Link>
+            </div>
+          </div>
+          <div className="col">
+            <div className="rounded border border-secondary w-100 d-flex justify-content-center btn btn-light">
+              <Link to="/sorry" className="text-decoration-none text-dark">
+                <img
+                  width={"30px"}
+                  src={require("../assets/icon/google.png")}
+                  alt="google"
+                />
+                Google
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
       <div className="mt-4 text-center" style={{ color: "rgba(0, 0, 0, .26)" }}>

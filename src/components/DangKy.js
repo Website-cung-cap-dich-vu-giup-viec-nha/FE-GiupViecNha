@@ -22,7 +22,12 @@ const DangKy = () => {
         navigate("/dangnhap");
       })
       .catch((error) => {
-        setError("Số điện thoại không hợp lệ!")
+        if(error.response.data.message.includes("valid")){
+          setError("Số điện thoại không hợp lệ!")
+        }else{
+          setError("Số điện thoại này đã được đăng ký!")
+        }
+        
       });
 }
 
@@ -147,16 +152,32 @@ const DangKy = () => {
             ></div>
           </div>
 
-          <div className="d-flex justify-content-between ">
-            <button className="flex-grow-1 m-2 rounded">
-              <img width={"30px"} src={require("../assets/icon/facebook.png")} alt="facebook" />
-              Facebook
-            </button>
-            <button className="flex-grow-1 m-2 rounded d-flex align-items-center justify-content-center">
-              <img width={"24px"} src={require("../assets/icon/google.png")} alt="google" />
-              <div className="ms-1">Google</div>
-            </button>
+          <div className="row">
+          <div className="col">
+          <div className="rounded border border-secondary w-100 d-flex justify-content-center btn btn-light">
+              <Link to="/sorry" className="text-decoration-none text-dark">
+                <img
+                  width={"30px"}
+                  src={require("../assets/icon/facebook.png")}
+                  alt="google"
+                />
+                Facebook
+              </Link>
+            </div>
           </div>
+          <div className="col">
+            <div className="rounded border border-secondary w-100 d-flex justify-content-center btn btn-light">
+              <Link to="/sorry" className="text-decoration-none text-dark">
+                <img
+                  width={"30px"}
+                  src={require("../assets/icon/google.png")}
+                  alt="google"
+                />
+                Google
+              </Link>
+            </div>
+          </div>
+        </div>
         </div>
         <div
           className="mt-4 text-center"

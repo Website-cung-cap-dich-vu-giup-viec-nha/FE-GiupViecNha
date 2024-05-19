@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -25,6 +25,9 @@ const Header = ({ user }) => {
   };
 
   return (
+    <div className="container-fluid border-bottom">
+
+    
     <div className="container-md">
       <div className="row align-items-center py-2">
         <div className="col-md-9">
@@ -49,14 +52,14 @@ const Header = ({ user }) => {
               </div>
               <ul className="dropdown-menu" aria-labelledby="dropdownMenuUser">
                 <li>
-                  <a className="dropdown-item" href="#1">
+                  <Link className="dropdown-item" to="/hoso">
                     Hồ sơ
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#2">
+                  <Link className="dropdown-item" to="/giohang">
                     Giỏ hàng
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <span className="dropdown-item" onClick={handleDangXuat}>
@@ -75,6 +78,7 @@ const Header = ({ user }) => {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };

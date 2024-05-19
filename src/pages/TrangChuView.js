@@ -1,8 +1,7 @@
-import {React, useState, useEffect} from "react";
+import { React, useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Cookies from "js-cookie";
 
 import cleaners from "../assets/icon/cleaners.svg";
 import anhnen from "../assets/background/anhnen.png";
@@ -10,18 +9,29 @@ import fast from "../assets/icon/fast.svg";
 import quality from "../assets/icon/quality.svg";
 import secure from "../assets/icon/secure.svg";
 import supplies from "../assets/icon/supplies.svg";
+import axios from "axios";
 const TrangChuView = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    useEffect(() => {
-        const token = Cookies.get('token');
-        if (token) {
-          setIsAuthenticated(true)
-        }
-    }, []);
+  const [dichvus, setDichvus] = useState([]);
 
+  useEffect(() => {
+    const layDanhSachDV = async () => {
+      const response = await axios.get('http://127.0.0.1:8000/api/dichvu');
+      setDichvus(response.data);
+    };
 
-  
+    layDanhSachDV();
+  }, []);
+
+  const getImage = (imageName) => {
+    try {
+      return require(`../assets/${imageName}`);
+    } catch (err) {
+      console.error('Image not found:', imageName);
+      return null; // hoặc một hình ảnh mặc định nếu cần
+    }
+  };
+
   const settings = {
     dots: true,
     infinite: false,
@@ -66,13 +76,25 @@ const TrangChuView = () => {
       >
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <img src={require("../assets/banner/banner1.jpg")} className="d-block w-100" alt="..." />
+            <img
+              src={require("../assets/banner/banner1.jpg")}
+              className="d-block w-100"
+              alt="..."
+            />
           </div>
           <div className="carousel-item">
-            <img src={require("../assets/banner/banner2.jpg")} className="d-block w-100" alt="..." />
+            <img
+              src={require("../assets/banner/banner2.jpg")}
+              className="d-block w-100"
+              alt="..."
+            />
           </div>
           <div className="carousel-item">
-            <img src={require("../assets/banner/banner3.jpg")} className="d-block w-100" alt="..." />
+            <img
+              src={require("../assets/banner/banner3.jpg")}
+              className="d-block w-100"
+              alt="..."
+            />
           </div>
         </div>
         <button
@@ -146,97 +168,25 @@ const TrangChuView = () => {
         <div className="container-md py-5">
           <h2 className="text-center mb-5">Dịch vụ của chúng tôi</h2>
           <Slider {...settings} className="h-100">
-            <div className="card h-100" style={{ width: "18rem" }}>
+            {dichvus.map((item, index) => (
+              <div key={index} className="card h-100" style={{ width: "18rem" }}>
               <img
-                src={require("../assets/giupviec.jpg")}
+                src={getImage(item.Anh)}
                 className="card-img-top"
                 alt="..."
                 style={{ height: "171px" }}
               />
               <div className="card-body">
-                <h5 className="card-title">Giúp việc theo giờ</h5>
+                <h5 className="card-title">{item.tenDichVu}</h5>
                 <p className="card-text">
-                  Giờ đây công việc dọn dẹp không còn là nỗi bận tâm, bạn sẽ có
-                  nhiều thời gian nghỉ ngơi và tận hưởng cuộc sống.
+                {item.MoTa}
                 </p>
                 <a href="#d" className="text-secondary">
                   Chi tiết dịch vụ
                 </a>
               </div>
             </div>
-            <div className="card h-100" style={{ width: "18rem" }}>
-              <img
-                src={require("../assets/TongVeSinh.jpg")}
-                className="card-img-top"
-                alt="..."
-                style={{ height: "171px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">Tổng vệ sinh</h5>
-                <p className="card-text">
-                  Xử lý chuyên sâu mọi vết bẩn trong căn nhà của bạn với từ 2
-                  cộng tác viên giúp việc nhà trở lên.
-                </p>
-                <a href="#d" className="text-secondary">
-                  Chi tiết dịch vụ
-                </a>
-              </div>
-            </div>
-            <div className="card h-100" style={{ width: "18rem" }}>
-              <img
-                src={require("../assets/vesinhmaylanh.png")}
-                className="card-img-top"
-                alt="..."
-                style={{ height: "171px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">Vệ sinh máy lạnh</h5>
-                <p className="card-text">
-                  Giúp cải thiện chất lượng không khí, giảm mức tiêu thụ điện
-                  năng và tăng tuổi thọ máy lạnh tại nhà hay phòng làm việc của
-                  bạn.
-                </p>
-                <a href="#d" className="text-secondary">
-                  Chi tiết dịch vụ
-                </a>
-              </div>
-            </div>
-            <div className="card h-100" style={{ width: "18rem" }}>
-              <img
-                src={require("../assets/babysitting.jpg")}
-                className="card-img-top"
-                alt="..."
-                style={{ height: "171px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">Trông trẻ tại nhà</h5>
-                <p className="card-text">
-                  Mang lại sự thuận tiện và an tâm cho phụ huynh khi họ cần thời
-                  gian riêng mà không cần lo lắng về việc chăm sóc con cái.
-                </p>
-                <a href="#d" className="text-secondary">
-                  Chi tiết dịch vụ
-                </a>
-              </div>
-            </div>
-            <div className="card h-100" style={{ width: "18rem" }}>
-              <img
-                src={require("../assets/sofaclean.jpg")}
-                className="card-img-top"
-                alt="..."
-                style={{ height: "171px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">Vệ sinh sofa, rèm, nệm</h5>
-                <p className="card-text">
-                  Đánh bay vết bẩn và mầm bệnh gây hại từ chính sofa, nệm hay
-                  rèm cửa nhà bạn.
-                </p>
-                <a href="#d" className="text-secondary">
-                  Chi tiết dịch vụ
-                </a>
-              </div>
-            </div>
+            ))}
           </Slider>
         </div>
       </div>

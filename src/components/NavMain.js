@@ -1,11 +1,9 @@
 import React from "react";
 import logo from "../assets/Logo.png";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
+
 
 const Header = ({ dangxuat, message }) => {
-  const navigate = useNavigate();
   
   return (
     <nav className="navbar navbar-expand-md navbar-light">
