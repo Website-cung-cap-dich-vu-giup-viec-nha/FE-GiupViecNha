@@ -1,23 +1,37 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import banner1 from "../assets/banner/banner1.jpg";
-import banner2 from "../assets/banner/banner2.jpg";
-import banner3 from "../assets/banner/banner3.jpg";
 import cleaners from "../assets/icon/cleaners.svg";
-import dv1 from "../assets/giupviec.jpg";
-import dv2 from "../assets/TongVeSinh.jpg";
-import dv3 from "../assets/vesinhmaylanh.png";
-import dv4 from "../assets/babysitting.jpg";
-import dv5 from "../assets/sofaclean.jpg";
 import anhnen from "../assets/background/anhnen.png";
 import fast from "../assets/icon/fast.svg";
 import quality from "../assets/icon/quality.svg";
 import secure from "../assets/icon/secure.svg";
 import supplies from "../assets/icon/supplies.svg";
+import axios from "axios";
 const TrangChuView = () => {
+
+  const [dichvus, setDichvus] = useState([]);
+
+  useEffect(() => {
+    const layDanhSachDV = async () => {
+      const response = await axios.get('http://127.0.0.1:8000/api/dichvu');
+      setDichvus(response.data);
+    };
+
+    layDanhSachDV();
+  }, []);
+
+  const getImage = (imageName) => {
+    try {
+      return require(`../assets/${imageName}`);
+    } catch (err) {
+      console.error('Image not found:', imageName);
+      return null; // hoặc một hình ảnh mặc định nếu cần
+    }
+  };
+
   const settings = {
     dots: true,
     infinite: false,
@@ -62,13 +76,25 @@ const TrangChuView = () => {
       >
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <img src={banner1} className="d-block w-100" alt="..." />
+            <img
+              src={require("../assets/banner/banner1.jpg")}
+              className="d-block w-100"
+              alt="..."
+            />
           </div>
           <div className="carousel-item">
-            <img src={banner2} className="d-block w-100" alt="..." />
+            <img
+              src={require("../assets/banner/banner2.jpg")}
+              className="d-block w-100"
+              alt="..."
+            />
           </div>
           <div className="carousel-item">
-            <img src={banner3} className="d-block w-100" alt="..." />
+            <img
+              src={require("../assets/banner/banner3.jpg")}
+              className="d-block w-100"
+              alt="..."
+            />
           </div>
         </div>
         <button
@@ -142,97 +168,25 @@ const TrangChuView = () => {
         <div className="container-md py-5">
           <h2 className="text-center mb-5">Dịch vụ của chúng tôi</h2>
           <Slider {...settings} className="h-100">
-            <div className="card h-100" style={{ width: "18rem" }}>
+            {dichvus.map((item, index) => (
+              <div key={index} className="card h-100" style={{ width: "18rem" }}>
               <img
-                src={dv1}
+                src={getImage(item.Anh)}
                 className="card-img-top"
                 alt="..."
                 style={{ height: "171px" }}
               />
               <div className="card-body">
-                <h5 className="card-title">Giúp việc theo giờ</h5>
+                <h5 className="card-title">{item.tenDichVu}</h5>
                 <p className="card-text">
-                  Giờ đây công việc dọn dẹp không còn là nỗi bận tâm, bạn sẽ có
-                  nhiều thời gian nghỉ ngơi và tận hưởng cuộc sống.
+                {item.MoTa}
                 </p>
                 <a href="#d" className="text-secondary">
                   Chi tiết dịch vụ
                 </a>
               </div>
             </div>
-            <div className="card h-100" style={{ width: "18rem" }}>
-              <img
-                src={dv2}
-                className="card-img-top"
-                alt="..."
-                style={{ height: "171px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">Tổng vệ sinh</h5>
-                <p className="card-text">
-                  Xử lý chuyên sâu mọi vết bẩn trong căn nhà của bạn với từ 2
-                  cộng tác viên giúp việc nhà trở lên.
-                </p>
-                <a href="#d" className="text-secondary">
-                  Chi tiết dịch vụ
-                </a>
-              </div>
-            </div>
-            <div className="card h-100" style={{ width: "18rem" }}>
-              <img
-                src={dv3}
-                className="card-img-top"
-                alt="..."
-                style={{ height: "171px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">Vệ sinh máy lạnh</h5>
-                <p className="card-text">
-                  Giúp cải thiện chất lượng không khí, giảm mức tiêu thụ điện
-                  năng và tăng tuổi thọ máy lạnh tại nhà hay phòng làm việc của
-                  bạn.
-                </p>
-                <a href="#d" className="text-secondary">
-                  Chi tiết dịch vụ
-                </a>
-              </div>
-            </div>
-            <div className="card h-100" style={{ width: "18rem" }}>
-              <img
-                src={dv4}
-                className="card-img-top"
-                alt="..."
-                style={{ height: "171px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">Trông trẻ tại nhà</h5>
-                <p className="card-text">
-                  Mang lại sự thuận tiện và an tâm cho phụ huynh khi họ cần thời
-                  gian riêng mà không cần lo lắng về việc chăm sóc con cái.
-                </p>
-                <a href="#d" className="text-secondary">
-                  Chi tiết dịch vụ
-                </a>
-              </div>
-            </div>
-            <div className="card h-100" style={{ width: "18rem" }}>
-              <img
-                src={dv5}
-                className="card-img-top"
-                alt="..."
-                style={{ height: "171px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">Vệ sinh sofa, rèm, nệm</h5>
-                <p className="card-text">
-                  Đánh bay vết bẩn và mầm bệnh gây hại từ chính sofa, nệm hay
-                  rèm cửa nhà bạn.
-                </p>
-                <a href="#d" className="text-secondary">
-                  Chi tiết dịch vụ
-                </a>
-              </div>
-            </div>
+            ))}
           </Slider>
         </div>
       </div>
@@ -242,28 +196,28 @@ const TrangChuView = () => {
         <h2 className="text-center">Những con số ấn tượng</h2>
         <div className="row mt-5 justify-content-center">
           <div className="col-sm-6 col-lg-3 d-flex flex-column p-4">
-            <i class="fa-solid fa-user-group fs-3"></i>
+            <i className="fa-solid fa-user-group fs-3"></i>
             <span className="fs-1 fw-bolder" style={{ color: "#FF8227" }}>
               500.000+
             </span>
             <p className="fw-bold">Khách hàng sử dụng dịch vụ</p>
           </div>
           <div className="col-sm-6 col-lg-3 d-flex flex-column p-4">
-            <i class="fa-solid fa-face-smile fs-3"></i>
+            <i className="fa-solid fa-face-smile fs-3"></i>
             <span className="fs-1 fw-bolder" style={{ color: "#FF8227" }}>
               97%
             </span>
             <p className="fw-bold">Khách hàng hài lòng</p>
           </div>
           <div className="col-sm-6 col-lg-3 d-flex flex-column p-4">
-            <i class="fa-solid fa-list-check fs-3 "></i>
+            <i className="fa-solid fa-list-check fs-3 "></i>
             <span className="fs-1 fw-bolder" style={{ color: "#FF8227" }}>
               2.600.000+
             </span>
             <p className="fw-bold">Công việc được hoàn thành</p>
           </div>
           <div className="col-sm-6 col-lg-3 d-flex flex-column p-4">
-            <i class="fa-solid fa-clock fs-3 "></i>
+            <i className="fa-solid fa-clock fs-3 "></i>
             <span className="fs-1 fw-bolder" style={{ color: "#FF8227" }}>
               8.000.000+
             </span>

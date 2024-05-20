@@ -1,4 +1,3 @@
-import bg2 from "../assets/background/bg2.png"
 import DangKy from "../components/DangKy";
 const DangKyView = () => {
   return (
