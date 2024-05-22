@@ -63,6 +63,12 @@ function App() {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
+  const handleReloadHeader = (data) => {
+    setUser(data)
+  };
+
+ 
+
   useEffect(() => {
     ktraDangNhap();
   }, [location]);
@@ -104,7 +110,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/dangky" element={<DangKyView />} />
         <Route path="/sorry" element={<Sorry />} />
-        <Route path="/hoso" element={user ? <HoSoView user={user}/> : <Navigate to="/dangnhap" />} />
+        <Route path="/hoso" element={user ? <HoSoView user={user} handleReloadHeader={handleReloadHeader}/> : <Navigate to="/dangnhap" />} />
       </Routes>
       <Footer />
     </>

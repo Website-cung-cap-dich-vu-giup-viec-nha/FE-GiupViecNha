@@ -126,34 +126,34 @@ const TrangChuView = () => {
       {/* Lý do vì sao nên chọn chúng tôi */}
       <div className="container-md py-5">
         <h2 className="text-center">Những lý do bạn nên chọn chúng tôi</h2>
-        <div className="row justify-content-center mt-5">
-          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3">
+        <div className="row justify-content-center">
+          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3 mt-5">
             <img src={supplies} height={40} alt="" />
-            <div className="text-center mt-4 text-secondary">
+            <div className="text-center mt-3 text-secondary">
               Chúng tôi mang theo tất cả vật tư và thiết bị của riêng mình
             </div>
           </div>
-          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3">
+          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3 mt-5">
             <img src={cleaners} height={40} alt="" />
-            <div className="text-center mt-4 text-secondary">
+            <div className="text-center mt-3 text-secondary">
               Người giúp việc đáng tin cậy, mỗi khi bạn đặt chỗ
             </div>
           </div>
-          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3">
+          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3 mt-5">
             <img src={quality} height={40} alt="" />
-            <div className="text-center mt-4 text-secondary">
+            <div className="text-center mt-3 text-secondary">
               Sử dụng các giải pháp làm sạch chất lượng cao, an toàn và hiệu quả
             </div>
           </div>
-          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3">
+          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3 mt-5">
             <img src={fast} height={40} alt="" />
-            <div className="text-center mt-4 text-secondary">
+            <div className="text-center mt-3 text-secondary">
               Đặt dịch vụ đơn giản chưa đầy 60 giây
             </div>
           </div>
-          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3">
+          <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3 mt-5">
             <img src={secure} height={40} alt="" />
-            <div className="text-center mt-4 text-secondary">
+            <div className="text-center mt-3 text-secondary">
               Bảo mật thanh toán trực tuyến 100%
             </div>
           </div>
@@ -167,9 +167,9 @@ const TrangChuView = () => {
       >
         <div className="container-md py-5">
           <h2 className="text-center mb-5">Dịch vụ của chúng tôi</h2>
-          <Slider {...settings} className="h-100">
-            {dichvus.map((item, index) => (
-              <div key={index} className="card h-100" style={{ width: "18rem" }}>
+          <Slider {...settings}>
+            {dichvus && dichvus.map((item, index) => (
+              <div key={index} className="card" style={{ width: "18rem" }}>
               <img
                 src={getImage(item.Anh)}
                 className="card-img-top"

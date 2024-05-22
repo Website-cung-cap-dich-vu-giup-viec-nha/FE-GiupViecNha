@@ -58,7 +58,7 @@ const DangKy = () => {
                 onChange={(e) => setUser({...user, name: e.target.value})}
                 required
               />
-              <label for="hoTenInput" >Họ và tên</label>
+              <label htmlFor="hoTenInput" >Họ và tên</label>
             </div> 
             <div className="form-floating mb-3">
               <input
@@ -70,7 +70,7 @@ const DangKy = () => {
                 onChange={(e) => setUser({...user, email: e.target.value})}
                 required
               />
-              <label for="emailInput">Email</label>
+              <label htmlFor="emailInput">Email</label>
             </div>
             <div className="form-floating mb-3">
               <input
@@ -82,7 +82,7 @@ const DangKy = () => {
                 onChange={(e) => setUser({...user, SDT: e.target.value})}
                 required
               />
-              <label for="phoneInput">Số điện thoại </label>
+              <label htmlFor="phoneInput">Số điện thoại </label>
             </div>
             <div className="form-floating mb-3">
               <input
@@ -94,7 +94,7 @@ const DangKy = () => {
                 onChange={(e) => setUser({...user, password: e.target.value})}
                 required
               />
-              <label for="passwordInput">Mật khẩu</label>
+              <label htmlFor="passwordInput">Mật khẩu</label>
             </div>
             <div className="form-floating mb-3">
               <input
@@ -106,7 +106,7 @@ const DangKy = () => {
                 onChange={(e) => setUser({...user, password_confirmation: e.target.value})}
                 required
               />
-              <label for="passwordConfirmInput">Nhập lại mật khẩu</label>
+              <label htmlFor="passwordConfirmInput">Nhập lại mật khẩu</label>
             </div>
 
             
