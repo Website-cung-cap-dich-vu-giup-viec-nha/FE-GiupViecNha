@@ -2,9 +2,8 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./App.css";
-import Header from "./components/Header";
 import DangNhapView from "./pages/DangNhapView";
-import Footer from "./components/Footer";
+import Users from "./pages/admin/users";
 import TrangChuView from "./pages/TrangChuView";
 import NotFound from "./components/NotFound";
 import DangKyView from "./pages/DangKyView";
@@ -13,6 +12,8 @@ import axios from "axios";
 import Sorry from "./components/Sorry";
 import HoSoView from "./pages/HoSoView";
 import DoiMatKhauView from "./pages/DoiMatKhauView";
+import DefaultLayout from "./components/Layout/DefaultLayout";
+import AdminLayout from "./components/Layout/AdminLayout";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -36,7 +37,11 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
       const refreshToken = Cookies.get("refreshToken");
       if (refreshToken) {
@@ -104,17 +109,23 @@ function App() {
 
   return (
     <>
-      <Header user={user} />
-      <Routes>
-        <Route path="/" element={<TrangChuView />} />
+    <Routes>
+        {/* Routes with Default Layout */}
+        <Route path="/" element={<DefaultLayout user={user} />}>
+          <Route path="/" element={<TrangChuView />} />
         <Route path="/dangnhap" element={<DangNhapView />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/dangky" element={<DangKyView />} />
         <Route path="/sorry" element={<Sorry />} />
         <Route path="/hoso" element={user ? <HoSoView user={user} handleReloadHeader={handleReloadHeader}/> : <Navigate to="/dangnhap" />} />
         <Route path='/doimatkhau' element={user ? <DoiMatKhauView user={user}/> : <Navigate to="/dangnhap" />} />
+        </Route>
+
+        {/* Routes with Admin Layout */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="users" element={<Users />} />
+        </Route>
       </Routes>
-      <Footer />
     </>
   );
 }
