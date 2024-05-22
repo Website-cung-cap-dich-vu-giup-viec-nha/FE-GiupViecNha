@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Sorry from "./components/Sorry";
 import HoSoView from "./pages/HoSoView";
+import DoiMatKhauView from "./pages/DoiMatKhauView";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -111,6 +112,7 @@ function App() {
         <Route path="/dangky" element={<DangKyView />} />
         <Route path="/sorry" element={<Sorry />} />
         <Route path="/hoso" element={user ? <HoSoView user={user} handleReloadHeader={handleReloadHeader}/> : <Navigate to="/dangnhap" />} />
+        <Route path='/doimatkhau' element={user ? <DoiMatKhauView user={user}/> : <Navigate to="/dangnhap" />} />
       </Routes>
       <Footer />
     </>
