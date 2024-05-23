@@ -4,9 +4,11 @@ import AdminMenuItem from "../admin/AdminMenuItem";
 
 const AdminLayout = () => {
   return (
-    <AdminMenuItem>
-      <Outlet />
-    </AdminMenuItem>
+    <>
+      <AdminMenuItem>
+        <Outlet />
+      </AdminMenuItem>
+    </>
   );
 };
 

@@ -11,13 +11,17 @@ import secure from "../assets/icon/secure.svg";
 import supplies from "../assets/icon/supplies.svg";
 import axios from "axios";
 const TrangChuView = () => {
-
   const [dichvus, setDichvus] = useState([]);
 
   useEffect(() => {
     const layDanhSachDV = async () => {
-      const response = await axios.get('http://127.0.0.1:8000/api/dichvu');
-      setDichvus(response.data);
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/dichvu");
+        setDichvus(response.data);
+      } catch (err) {
+        console.error("Lỗi lấy danh sách dịch vụ");
+        return null;
+      }
     };
 
     layDanhSachDV();
@@ -27,7 +31,7 @@ const TrangChuView = () => {
     try {
       return require(`../assets/${imageName}`);
     } catch (err) {
-      console.error('Image not found:', imageName);
+      console.error("Image not found:", imageName);
       return null; // hoặc một hình ảnh mặc định nếu cần
     }
   };
@@ -168,25 +172,24 @@ const TrangChuView = () => {
         <div className="container-md py-5">
           <h2 className="text-center mb-5">Dịch vụ của chúng tôi</h2>
           <Slider {...settings}>
-            {dichvus && dichvus.map((item, index) => (
-              <div key={index} className="card" style={{ width: "18rem" }}>
-              <img
-                src={getImage(item.Anh)}
-                className="card-img-top"
-                alt="..."
-                style={{ height: "171px" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{item.tenDichVu}</h5>
-                <p className="card-text">
-                {item.MoTa}
-                </p>
-                <a href="#d" className="text-secondary">
-                  Chi tiết dịch vụ
-                </a>
-              </div>
-            </div>
-            ))}
+            {dichvus &&
+              dichvus.map((item, index) => (
+                <div key={index} className="card" style={{ width: "18rem" }}>
+                  <img
+                    src={getImage(item.Anh)}
+                    className="card-img-top"
+                    alt="..."
+                    style={{ height: "171px" }}
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">{item.tenDichVu}</h5>
+                    <p className="card-text">{item.MoTa}</p>
+                    <a href="#d" className="text-secondary">
+                      Chi tiết dịch vụ
+                    </a>
+                  </div>
+                </div>
+              ))}
           </Slider>
         </div>
       </div>
