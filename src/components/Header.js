@@ -45,7 +45,6 @@ const Header = ({ user }) => {
                       width={40}
                       className="rounded-circle"
                     />{" "}
-                    {console.log(`http://127.0.0.1:8000/${user.Anh}`)}
                     {user.name}
                   </div>
                   <ul

@@ -14,6 +14,8 @@ import HoSoView from "./pages/HoSoView";
 import DoiMatKhauView from "./pages/DoiMatKhauView";
 import DefaultLayout from "./components/Layout/DefaultLayout";
 import AdminLayout from "./components/Layout/AdminLayout";
+import ProtectedRoute from "./ProtectedRoute";
+import ProtectedLoginAndRegister from "./ProtectedLoginAndRegister";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -114,10 +116,12 @@ function App() {
       <Routes>
         {/* Routes with Default Layout */}
         <Route path="/" element={<DefaultLayout user={user} />}>
+          <Route element={<ProtectedLoginAndRegister />}>
+            <Route path="/dangnhap" element={<DangNhapView />} />
+            <Route path="/dangky" element={<DangKyView />} />
+          </Route>
           <Route path="/" element={<TrangChuView />} />
-          <Route path="/dangnhap" element={<DangNhapView />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/dangky" element={<DangKyView />} />
           <Route path="/sorry" element={<Sorry />} />
           <Route
             path="/hoso"
@@ -142,19 +146,26 @@ function App() {
         </Route>
 
         {/* Routes with Admin Layout */}
-        <Route
-          path="/admin"
-          element={
-            <AdminLayout
-              pageName={adminPagename}
-              breadCrumb={adminBreadCrumb}
-            />
-          }
-        >
+        <Route element={<ProtectedRoute />}>
           <Route
-            path="users"
-            element={<Users setPageName={setAdminPageName} setBreadCrumb={setAdminBreadCrumb} />}
-          />
+            path="/admin"
+            element={
+              <AdminLayout
+                pageName={adminPagename}
+                breadCrumb={adminBreadCrumb}
+              />
+            }
+          >
+            <Route
+              path="users"
+              element={
+                <Users
+                  setPageName={setAdminPageName}
+                  setBreadCrumb={setAdminBreadCrumb}
+                />
+              }
+            />
+          </Route>
         </Route>
       </Routes>
     </>

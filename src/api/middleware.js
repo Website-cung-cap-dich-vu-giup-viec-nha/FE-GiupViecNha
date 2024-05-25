@@ -1,14 +1,14 @@
 /* eslint-disable */
 import axios from "axios";
 import Cookies from "js-cookie";
-import config from '../config';
+import { config, getToken, removeToken } from "../config";
 
 export const API = axios.create({
   // baseURL: process.env.REACT_APP_API_URL,
   baseURL: config.apiBaseUrl,
   timeout: 300000,
   headers: {
-    "Accept": "application/json",
+    Accept: "application/json",
   },
   validateStatus: (status) => {
     return true;
@@ -18,7 +18,7 @@ export const API = axios.create({
 API.interceptors.response.use(
   (response) => {
     if (response.status !== 200) {
-      if (response.data.title === "Unauthorized") Cookies.remove("token");
+      if (response.data.title === "Unauthorized") removeToken();
     }
     return response;
   },
@@ -28,9 +28,8 @@ API.interceptors.response.use(
 );
 
 API.interceptors.request.use((request) => {
-  const token = Cookies.get("token");
-  if (token) 
-    request.headers.Authorization = "Bearer " + token;
+  const token = getToken();
+  if (token) request.headers.Authorization = "Bearer " + token;
   return request;
 });
 

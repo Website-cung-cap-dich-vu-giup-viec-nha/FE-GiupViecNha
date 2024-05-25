@@ -25,7 +25,7 @@ import { Link, useNavigate, Outlet } from "react-router-dom";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Cookies from "js-cookie";
 import { getProfile, logout } from "../../api/admin/AuthAPI";
-import config from "../../config";
+import { config } from "../../config";
 
 const drawerWidth = 240;
 
