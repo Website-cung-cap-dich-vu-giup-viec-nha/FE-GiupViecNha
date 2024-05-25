@@ -2,10 +2,10 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import AdminMenuItem from "../admin/AdminMenuItem";
 
-const AdminLayout = () => {
+const AdminLayout = ({ pageName, breadCrumb }) => {
   return (
     <>
-      <AdminMenuItem>
+      <AdminMenuItem pageName={pageName} breadCrumb={breadCrumb}>
         <Outlet />
       </AdminMenuItem>
     </>

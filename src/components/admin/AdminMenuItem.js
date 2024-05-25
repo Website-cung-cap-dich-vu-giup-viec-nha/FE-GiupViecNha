@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   List,
@@ -12,14 +12,20 @@ import {
   AppBar,
   Toolbar,
   Typography,
+  Avatar,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import UserIcon from "@mui/icons-material/Person";
 import { styled, useTheme } from "@mui/material/styles";
 import logo from "../../assets/Logo.png";
-import { Link, Outlet } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
+import { Link, useNavigate, Outlet } from "react-router-dom";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Cookies from "js-cookie";
+import { getProfile, logout } from "../../api/admin/AuthAPI";
+import config from "../../config";
 
 const drawerWidth = 240;
 
@@ -50,7 +56,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 //   </ListItem>
 // );
 
-function AdminMenuItem() {
+const AdminMenuItem = ({ pageName, breadCrumb }) => {
   const menuItems = [
     {
       to: "/admin/users",
@@ -58,8 +64,19 @@ function AdminMenuItem() {
       text: "Quản lý nhân viên",
     },
   ];
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const [userProfile, setUserProfile] = useState({});
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -68,6 +85,28 @@ function AdminMenuItem() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        Cookies.remove("token");
+        navigate("/dangnhap");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getProfile()
+      .then((response) => {
+        setUserProfile(response.message.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -95,11 +134,13 @@ function AdminMenuItem() {
         >
           <DrawerHeader>
             {open && (
-              <img
-                src={logo}
-                alt="BTaskee Logo"
-                style={{ width: "150px", height: "auto" }}
-              />
+              <Link to="/admin">
+                <img
+                  src={logo}
+                  alt="BTaskee Logo"
+                  style={{ width: "150px", height: "auto" }}
+                />
+              </Link>
             )}
             <IconButton
               onClick={open ? handleDrawerClose : handleDrawerOpen}
@@ -156,7 +197,7 @@ function AdminMenuItem() {
                 sx={{ fontWeight: "700", color: "#0072B8", fontSize: "24px" }}
               >
                 {/* Kích hoạt xác thực 2 bước{" "} */}
-                Quản lý nhân viên
+                {pageName.length > 0 ? pageName : ""}
               </Box>
               <Box
                 sx={{
@@ -168,29 +209,81 @@ function AdminMenuItem() {
                 }}
               >
                 <Box style={{ color: "#979797" }}>
-                  {/* {childPage.length > 0 ? "Trang chủ" : ""} */}
-                  Trang chủ
+                  {breadCrumb.length > 0 ? "Trang chủ" : ""}
                 </Box>
-                {/* <Box>Kích hoạt xác thực 2 bước</Box> */}
-                {/* {Array.isArray(childPage) &&
-                  childPage.map((item, index) => (
-                    <Box key={index}>&nbsp;/&nbsp;{item}</Box>
-                  ))} */}
-                &nbsp;
-                {/* {childPage.length > 0 ? (
-                  <img
-                    src={imgVector}
-                    style={{ cursor: "pointer" }}
-                    onClick={backButton}
-                  ></img>
-                ) : (
-                  ""
-                )} */}
+                {Array.isArray(breadCrumb) &&
+                  breadCrumb.map((item, index) => (
+                    <Box style={{ color: "#979797" }} key={index}>
+                      &nbsp;/&nbsp;{item}
+                    </Box>
+                  ))}
               </Box>
             </Box>
-            <Typography variant="h6" noWrap>
-              Persistent Drawer
-            </Typography>
+            <Box
+              sx={{
+                ml: "auto",
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+                backgroundColor: "#FFFFFF",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end", // Căn văn bản về phía bên phải
+                  marginRight: "8px",
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  sx={{ color: "#979797" }}
+                  align="right"
+                >
+                  {userProfile &&
+                  userProfile.position &&
+                  userProfile.position.tenChucVu &&
+                  userProfile.position.tenChucVu.length > 0
+                    ? userProfile.position.tenChucVu
+                    : ""}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ fontWeight: "bold", color: "#333333" }}
+                  align="right"
+                >
+                  {userProfile &&
+                  userProfile.user &&
+                  userProfile.user.name &&
+                  userProfile.user.name.length > 0
+                    ? userProfile.user.name
+                    : ""}
+                </Typography>
+              </Box>
+              <Avatar
+                alt={userProfile && userProfile.user && userProfile.user.name}
+                src={
+                  userProfile &&
+                  userProfile.user &&
+                  `${config.apiBaseUrl}/${userProfile.user.Anh}`
+                }
+                sx={{ width: 40, height: 40 }}
+              />
+              <IconButton size="small" onClick={handleClick}>
+                <ArrowDropDownIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem component={Link} to="/hoso" onClick={handleClose}>
+                  Thông tin nhân viên
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
+              </Menu>
+            </Box>
           </Toolbar>
         </AppBar>
         <Main
@@ -205,6 +298,6 @@ function AdminMenuItem() {
       </Box>
     </>
   );
-}
+};
 
 export default AdminMenuItem;

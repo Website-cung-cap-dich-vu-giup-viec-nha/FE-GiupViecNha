@@ -68,12 +68,12 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const [adminPagename, setAdminPageName] = useState("");
+  const [adminBreadCrumb, setAdminBreadCrumb] = useState([]);
 
   const handleReloadHeader = (data) => {
-    setUser(data)
+    setUser(data);
   };
-
- 
 
   useEffect(() => {
     ktraDangNhap();
@@ -101,7 +101,9 @@ function App() {
     return (
       <div className="container">
         <div className="row min-vh-100 align-content-center">
-          <div className="col-12 text-center"><CircularProgress /></div>
+          <div className="col-12 text-center">
+            <CircularProgress />
+          </div>
         </div>
       </div>
     );
@@ -109,21 +111,50 @@ function App() {
 
   return (
     <>
-    <Routes>
+      <Routes>
         {/* Routes with Default Layout */}
         <Route path="/" element={<DefaultLayout user={user} />}>
           <Route path="/" element={<TrangChuView />} />
-        <Route path="/dangnhap" element={<DangNhapView />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="/dangky" element={<DangKyView />} />
-        <Route path="/sorry" element={<Sorry />} />
-        <Route path="/hoso" element={user ? <HoSoView user={user} handleReloadHeader={handleReloadHeader}/> : <Navigate to="/dangnhap" />} />
-        <Route path='/doimatkhau' element={user ? <DoiMatKhauView user={user}/> : <Navigate to="/dangnhap" />} />
+          <Route path="/dangnhap" element={<DangNhapView />} />
+          <Route path="*" element={<NotFound />} />
+          <Route path="/dangky" element={<DangKyView />} />
+          <Route path="/sorry" element={<Sorry />} />
+          <Route
+            path="/hoso"
+            element={
+              user ? (
+                <HoSoView user={user} handleReloadHeader={handleReloadHeader} />
+              ) : (
+                <Navigate to="/dangnhap" />
+              )
+            }
+          />
+          <Route
+            path="/doimatkhau"
+            element={
+              user ? (
+                <DoiMatKhauView user={user} />
+              ) : (
+                <Navigate to="/dangnhap" />
+              )
+            }
+          />
         </Route>
 
         {/* Routes with Admin Layout */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route path="users" element={<Users />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminLayout
+              pageName={adminPagename}
+              breadCrumb={adminBreadCrumb}
+            />
+          }
+        >
+          <Route
+            path="users"
+            element={<Users setPageName={setAdminPageName} setBreadCrumb={setAdminBreadCrumb} />}
+          />
         </Route>
       </Routes>
     </>

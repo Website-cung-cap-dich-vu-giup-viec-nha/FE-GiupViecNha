@@ -1,10 +1,14 @@
 import { Grid } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UsersSearching from "./components/Searching";
 
-const Users = () => {
+const Users = ({ setPageName, setBreadCrumb }) => {
   // eslint-disable-next-line
   const [searchData, setSearchData] = useState({});
+  useEffect(() => {
+    setPageName("Quản lý nhân viên");
+    setBreadCrumb(["Nhân viên"]);
+  }, []);
   return (
     <Grid container>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
