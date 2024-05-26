@@ -1,7 +1,33 @@
-import { Box, Button, Card, Paper, Table, TableBody, TableContainer, TableFooter, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import downloadIcon from "../../../../assets/icon/downloadIcon.svg";
 import uploadIcon from "../../../../assets/icon/uploadIcon.svg";
+import View from "../../../../assets/icon/View.svg";
+import Edit from "../../../../assets/icon/Edit.svg";
+import Trash from "../../../../assets/icon/Trash.svg";
 import StaffData from "../data/StaffData";
+import { config } from "../../../../config";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  tableCell: {
+    borderRight: "1px solid rgba(224, 224, 224, 1)", // Màu của đường kẻ dọc
+  },
+});
 
 const StaffList = ({
   data,
@@ -14,6 +40,13 @@ const StaffList = ({
   handleImport,
   oldSearching,
 }) => {
+  const iconStyle = {
+    fontSize: 20,
+    marginRight: 8,
+    color: "blue",
+    cursor: "pointer",
+  };
+  const classes = useStyles();
   const { columns, rows } = StaffData({ data });
   const options = [5, 10, 20, 30, 50, 100];
   return (
@@ -142,22 +175,189 @@ const StaffList = ({
         // }}
         p={3}
       >
-        <TableContainer component={Paper}>
+        <TableContainer
+          component={Paper}
+          sx={{ overflow: "scroll", height: "calc(100vh - 400px)" }}
+          style={{
+            padding: "15px",
+            boxShadow: "0px 4px 20px rgba(94, 98, 120, 0.04)",
+            borderRadius: "8px",
+            overflowX: "auto",
+          }}
+        >
           <Table>
-            <TableHead>{/* Định nghĩa các header */}</TableHead>
-            <TableBody>{/* Render các dòng dữ liệu */}</TableBody>
-            <TableFooter>
+            <TableHead>
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25]}
-                  count={data.length} // Số lượng dữ liệu trong danh sách
+                  count={totalElements} // Số lượng dữ liệu trong danh sách
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </TableRow>
-            </TableFooter>
+              <TableRow sx={{ backgroundColor: "#E1E3E9" }}>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  STT
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  ẢNH NGƯỜI DÙNG
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  HỌ VÀ TÊN
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  EMAIL
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  SỐ ĐIỆN THOẠI
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  SỐ SAO
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  HÀNH ĐỘNG
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data &&
+                Array.isArray(data) &&
+                data.length > 0 &&
+                data.map((item, index) => (
+                  <TableRow
+                    key={item.id}
+                    sx={{
+                      "&:nth-of-type(odd)": { backgroundColor: "#FFFFFF" },
+                      "&:nth-of-type(even)": { backgroundColor: "#F8F8F8" },
+                    }}
+                  >
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ color: "#606F89" }}
+                    >
+                      {page * rowsPerPage + index + 1}
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <Avatar
+                        alt={item.Anh}
+                        src={`${config.apiBaseUrl}/${item.Anh}`}
+                        sx={{ width: 40, height: 40 }}
+                      />
+                    </TableCell>
+
+                    <TableCell
+                      className={classes.tableCell}
+                      sx={{ color: "#606F89" }}
+                    >
+                      {item.name}
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      sx={{ color: "#606F89" }}
+                    >
+                      {item.email}
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ color: "#606F89" }}
+                    >
+                      {item.SDT}
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ color: "#606F89" }}
+                    >
+                      {item.SoSao}
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ color: "#606F89" }}
+                    >
+                      <IconButton
+                        key={`${item.id}-iconbutton1-icon`}
+                        onClick={() => {
+                          // setOpenDetail();
+                          // handleIcon();
+                        }}
+                      >
+                        <img
+                          src={View}
+                          alt=""
+                          key={`${item.id}-visibility-icon`}
+                          style={iconStyle}
+                        />
+                      </IconButton>
+                      <IconButton
+                        key={`${item.id}-iconbutton2-icon`}
+                        onClick={() => {
+                          // setOpenEdit();
+                          // handleIcon();
+                        }}
+                      >
+                        <img
+                          src={Edit}
+                          alt=""
+                          key={`${item.id}-edit-icon`}
+                          style={iconStyle}
+                        />
+                      </IconButton>
+
+                      <IconButton
+                        key={`${item.id}-iconbutton3-icon`}
+                        onClick={() => {
+                          // setOpenDelete();
+                          // handleIcon();
+                        }}
+                      >
+                        <img
+                          src={Trash}
+                          alt=""
+                          key={`${item.id}-delete-icon`}
+                          style={iconStyle}
+                        />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
           </Table>
         </TableContainer>
 

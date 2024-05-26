@@ -15,7 +15,7 @@ const ProtectedLoginAndRegister = () => {
     }
     try {
       const response = await getProfile();
-      if (response.message.data != null) {
+      if (response?.message?.status == 200) {
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);

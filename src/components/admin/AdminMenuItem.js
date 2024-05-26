@@ -183,7 +183,7 @@ const AdminMenuItem = ({ pageName, breadCrumb }) => {
             background: "white !important",
             width: open
               ? `calc(100% - ${drawerWidth}px)`
-              : `calc(100% - ${theme.spacing(7)} + 1px)`, // Đảm bảo rằng AppBar không bị che bởi Drawer
+              : `calc(100% - ${theme.spacing(7)} - 2px)`, // Đảm bảo rằng AppBar không bị che bởi Drawer
             transform: open
               ? `translateX(${!open ? -drawerWidth : 0}px)`
               : `translateX(${

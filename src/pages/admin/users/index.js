@@ -2,12 +2,13 @@ import { Grid } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import StaffSearching from "./components/StaffSearching";
 import StaffList from "./components/StaffList";
+import { getStaff } from "../../../api/admin/StaffAPI";
 
 const Users = ({ setPageName, setBreadCrumb }) => {
   // eslint-disable-next-line
   const [searchData, setSearchData] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsCount, setRowsCount] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [totalElements, setTotalElements] = useState(0);
   const [data, setData] = useState([]);
   const [downloadData, setDownloadData] = useState([]);
@@ -24,15 +25,30 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   const handleChange = (event) => {
     setSearchData(event.target.data);
   };
-  
+
   const handleSearching = () => {};
-  
+
   const handleDownload = () => {};
+
+  const loadStaffTable = () => {
+    getStaff(searchData)
+      .then((response) => {
+        setData(response?.message?.status === 200 ? response?.message?.data?.data : []);
+        setTotalElements(response?.message?.status === 200 ? response?.message?.data?.total : 0);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     setPageNameCallback();
     setBreadCrumbCallback();
   }, [setPageNameCallback, setBreadCrumbCallback]);
+
+  useEffect(() => {
+    loadStaffTable();
+  }, []);
   return (
     <Grid container>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
@@ -57,8 +73,8 @@ const Users = ({ setPageName, setBreadCrumb }) => {
           totalElements={totalElements}
           page={page}
           setPage={setPage}
-          rowsCount={rowsCount}
-          setRowsCount={setRowsCount}
+          rowsPerPage={rowsPerPage}
+          setRowsPerPage={setRowsPerPage}
           handleDownload={handleDownload}
           oldSearching={oldSearching}
         />
