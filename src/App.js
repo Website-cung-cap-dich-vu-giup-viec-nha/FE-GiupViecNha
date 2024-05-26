@@ -11,11 +11,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Sorry from "./components/Sorry";
 import HoSoView from "./pages/HoSoView";
-import DoiMatKhauView from "./pages/DoiMatKhauView";
 import DefaultLayout from "./components/Layout/DefaultLayout";
 import AdminLayout from "./components/Layout/AdminLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import ProtectedLoginAndRegister from "./ProtectedLoginAndRegister";
+import ThueDichVuView from "./pages/ThueDichVuView";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -124,20 +124,20 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/sorry" element={<Sorry />} />
           <Route
-            path="/hoso"
+            path="/thuedichvu/:id"
             element={
               user ? (
-                <HoSoView user={user} handleReloadHeader={handleReloadHeader} />
+                <ThueDichVuView user={user} />
               ) : (
                 <Navigate to="/dangnhap" />
               )
             }
           />
           <Route
-            path="/doimatkhau"
+            path="/hoso"
             element={
               user ? (
-                <DoiMatKhauView user={user} />
+                <HoSoView user={user} handleReloadHeader={handleReloadHeader} />
               ) : (
                 <Navigate to="/dangnhap" />
               )

@@ -2,9 +2,7 @@ import React from "react";
 import logo from "../assets/Logo.png";
 import { Link } from "react-router-dom";
 
-
 const Header = ({ dangxuat, message }) => {
-  
   return (
     <nav className="navbar navbar-expand-md navbar-light">
       <Link className="navbar-brand" to="/">
@@ -26,7 +24,7 @@ const Header = ({ dangxuat, message }) => {
             </Link>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="sd">
+            <a className="nav-link" href="#dichvu">
               Dịch vụ
             </a>
           </li>
@@ -42,8 +40,9 @@ const Header = ({ dangxuat, message }) => {
           </li>
           <li className="nav-item">
             {message ? (
-              <div 
-                className="nav-link d-md-none" role="button"
+              <div
+                className="nav-link d-md-none"
+                role="button"
                 onClick={dangxuat}
               >
                 Đăng xuất

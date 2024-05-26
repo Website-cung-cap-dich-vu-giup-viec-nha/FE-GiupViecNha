@@ -23,29 +23,25 @@ const HoSo = ({ user, handleReloadHeader }) => {
     }
   };
 
-
-
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", userData.name);
-    if(userData.GioiTinh)
-      formData.append("GioiTinh", userData.GioiTinh);
-    if(userData.NgaySinh)
-      formData.append("NgaySinh", userData.NgaySinh);
+    if (userData.GioiTinh) formData.append("GioiTinh", userData.GioiTinh);
+    if (userData.NgaySinh) formData.append("NgaySinh", userData.NgaySinh);
     if (userData) {
-      console.log(userData.Anh)
       formData.append("Anh", userData.Anh);
     }
     try {
-      console.log(formData)
-      const response = await axios.post(`http://127.0.0.1:8000/api/user/${user.id}`, formData);
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/user/${user.id}`,
+        formData
+      );
       handleReloadHeader(response.data.user);
       Swal.fire({
         title: "Đã cập nhật!",
         icon: "success",
       });
-      console.log(userData);
     } catch (error) {
       console.error(
         "Error updating user:",
@@ -66,7 +62,6 @@ const HoSo = ({ user, handleReloadHeader }) => {
 
   const handleGenderChange = (e) => {
     setUserData({ ...userData, GioiTinh: e.target.value });
-    console.log(userData.GioiTinh);
   };
 
   const handleChonAnh = (e) => {

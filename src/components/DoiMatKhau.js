@@ -49,7 +49,7 @@ const DoiMatKhau = ({ user }) => {
   return (
     <div
       style={{ maxWidth: "400px", backgroundColor: "white" }}
-      className="p-4 rounded m-auto"
+      className="p-4 rounded m-auto shadow  border"
     >
       <p className="text-start mb-3 fs-4">Đổi mật khẩu</p>
       {error && (

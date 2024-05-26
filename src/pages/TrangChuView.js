@@ -10,7 +10,8 @@ import quality from "../assets/icon/quality.svg";
 import secure from "../assets/icon/secure.svg";
 import supplies from "../assets/icon/supplies.svg";
 import axios from "axios";
-const TrangChuView = () => {
+import { Link } from "react-router-dom";
+const TrangChuView = ({ dichvu }) => {
   const [dichvus, setDichvus] = useState([]);
 
   useEffect(() => {
@@ -166,6 +167,7 @@ const TrangChuView = () => {
 
       {/* Các dịch vụ */}
       <div
+        id="dichvu"
         className="container-fluid"
         style={{ backgroundImage: `url(${anhnen})` }}
       >
@@ -184,9 +186,15 @@ const TrangChuView = () => {
                   <div className="card-body">
                     <h5 className="card-title">{item.tenDichVu}</h5>
                     <p className="card-text">{item.MoTa}</p>
-                    <a href="#d" className="text-secondary">
-                      Chi tiết dịch vụ
-                    </a>
+                    <Link
+                      to={"/thuedichvu/" + item.idDichVu}
+                      onClick={() => {
+                        dichvu(item.idDichVu);
+                      }}
+                      className="btn btn-secondary"
+                    >
+                      Đặt dịch vụ
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -254,15 +262,11 @@ const TrangChuView = () => {
                   data-bs-parent="#accordionExample"
                 >
                   <div className="accordion-body">
-                    <strong>This is the first item's accordion body.</strong> It
-                    is shown by default, until the collapse plugin adds the
-                    appropriate classes that we use to style each element. These
-                    classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any
-                    of this with custom CSS or overriding our default variables.
-                    It's also worth noting that just about any HTML can go
-                    within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
+                    bTaskee hoạt động xuyên suốt tất cả các ngày trong tuần và
+                    lễ Tết nên bạn hoàn toàn có thể đặt dịch vụ vào những ngày
+                    này. Để đảm bảo luôn có người nhận công việc của bạn vào
+                    cuối tuần, lễ Tết, bTaskee khuyến khích bạn nên đặt lịch sớm
+                    từ 1 – 2 ngày.
                   </div>
                 </div>
               </div>
