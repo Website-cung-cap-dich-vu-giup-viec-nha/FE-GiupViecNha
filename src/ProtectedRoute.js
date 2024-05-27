@@ -14,7 +14,7 @@ const ProtectedRoute = () => {
     }
     try {
       const response = await getProfile();
-      if (response?.message?.status == 200) {
+      if (response?.message?.status === 200) {
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);

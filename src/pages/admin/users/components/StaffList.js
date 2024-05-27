@@ -19,13 +19,12 @@ import uploadIcon from "../../../../assets/icon/uploadIcon.svg";
 import View from "../../../../assets/icon/View.svg";
 import Edit from "../../../../assets/icon/Edit.svg";
 import Trash from "../../../../assets/icon/Trash.svg";
-import StaffData from "../data/StaffData";
 import { config } from "../../../../config";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
   tableCell: {
-    borderRight: "1px solid rgba(224, 224, 224, 1)", // Màu của đường kẻ dọc
+    border: "1px solid rgba(224, 224, 224, 1)", // Màu của đường kẻ dọc
   },
 });
 
@@ -33,12 +32,11 @@ const StaffList = ({
   data,
   totalElements,
   page,
-  handleChangePage,
+  setPage,
   rowsPerPage,
-  handleChangeRowsPerPage,
+  setRowsPerPage,
   handleDownload,
   handleImport,
-  oldSearching,
 }) => {
   const iconStyle = {
     fontSize: 20,
@@ -47,8 +45,6 @@ const StaffList = ({
     cursor: "pointer",
   };
   const classes = useStyles();
-  const { columns, rows } = StaffData({ data });
-  const options = [5, 10, 20, 30, 50, 100];
   return (
     <Card>
       <Box
@@ -193,8 +189,10 @@ const StaffList = ({
                   count={totalElements} // Số lượng dữ liệu trong danh sách
                   rowsPerPage={rowsPerPage}
                   page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  onPageChange={setPage}
+                  onRowsPerPageChange={setRowsPerPage}
+                  labelRowsPerPage={`Số dòng mỗi trang`}
+                  labelDisplayedRows={() => ""}
                 />
               </TableRow>
               <TableRow sx={{ backgroundColor: "#E1E3E9" }}>

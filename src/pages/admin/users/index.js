@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import StaffSearching from "./components/StaffSearching";
 import StaffList from "./components/StaffList";
 import { getStaff } from "../../../api/admin/StaffAPI";
+import * as XLSX from "xlsx";
 
 const Users = ({ setPageName, setBreadCrumb }) => {
   // eslint-disable-next-line
@@ -13,6 +14,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   const [data, setData] = useState([]);
   const [downloadData, setDownloadData] = useState([]);
   const [oldSearching, setOldSearching] = useState("");
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const setPageNameCallback = useCallback(
     () => setPageName("Quản lý nhân viên"),
     [setPageName]
@@ -23,18 +25,43 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   );
 
   const handleChange = (event) => {
-    setSearchData(event.target.data);
+    setSearchData(event.target.value);
   };
 
-  const handleSearching = () => {};
+  const handleChangeRowsPerPage = (e) => {
+    setRowsPerPage(e.target.value);
+  };
 
-  const handleDownload = () => {};
+  const handleChangePage = (e, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleSearching = () => {
+    setOldSearching(searchData);
+  };
+
+  const handleDownload = () => {
+    getStaff(oldSearching, "", "")
+      .then((response) => {
+        console.log(response);
+        setDownloadData(
+          response?.message?.status === 200 ? response?.message?.data?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const loadStaffTable = () => {
-    getStaff(searchData)
+    getStaff(oldSearching, page * rowsPerPage, rowsPerPage)
       .then((response) => {
-        setData(response?.message?.status === 200 ? response?.message?.data?.data : []);
-        setTotalElements(response?.message?.status === 200 ? response?.message?.data?.total : 0);
+        setData(
+          response?.message?.status === 200 ? response?.message?.data?.data : []
+        );
+        setTotalElements(
+          response?.message?.status === 200 ? response?.message?.data?.total : 0
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -47,8 +74,35 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   }, [setPageNameCallback, setBreadCrumbCallback]);
 
   useEffect(() => {
+    if (isFirstLoad) return;
+    loadStaffTable();
+  }, [page]);
+
+  useEffect(() => {
+    if (isFirstLoad) return;
+    setPage(0);
+    loadStaffTable();
+  }, [rowsPerPage, oldSearching]);
+
+  useEffect(() => {
+    setIsFirstLoad(false);
     loadStaffTable();
   }, []);
+
+  useEffect(() => {
+    if (downloadData.length !== 0) {
+      const ws = XLSX.utils.json_to_sheet(downloadData, {
+        skipHeader: true,
+      });
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+      // Xuất file Excel
+      // const filename = `${moment(new Date()).format("YYYYddMMHHmmss")}.xlsx`;
+      const filename = `DanhSachNhanVien.xlsx`;
+      XLSX.writeFile(wb, filename);
+    }
+  }, [downloadData]);
   return (
     <Grid container>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
@@ -72,9 +126,9 @@ const Users = ({ setPageName, setBreadCrumb }) => {
           data={data}
           totalElements={totalElements}
           page={page}
-          setPage={setPage}
+          setPage={handleChangePage}
           rowsPerPage={rowsPerPage}
-          setRowsPerPage={setRowsPerPage}
+          setRowsPerPage={handleChangeRowsPerPage}
           handleDownload={handleDownload}
           oldSearching={oldSearching}
         />
