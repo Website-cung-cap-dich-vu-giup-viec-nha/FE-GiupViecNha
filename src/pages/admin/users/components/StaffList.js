@@ -37,6 +37,7 @@ const StaffList = ({
   setRowsPerPage,
   handleDownload,
   handleImport,
+  handleExportExampleHeader,
 }) => {
   const iconStyle = {
     fontSize: 20,
@@ -131,7 +132,7 @@ const StaffList = ({
           <Box color="text" px={1}>
             <Button
               variant="contained"
-              onClick={null}
+              onClick={handleExportExampleHeader}
               sx={{
                 flex: 1,
                 height: "100%",
