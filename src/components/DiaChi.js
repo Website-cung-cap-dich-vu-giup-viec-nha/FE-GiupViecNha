@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Swal from "sweetalert2";
 import {
   capNhatMacDinh,
@@ -20,15 +19,17 @@ const DiaChi = ({ user }) => {
   const [selectedWard, setSelectedWard] = useState("");
   const [duong, setDuong] = useState("");
   const [diaChis, setDiaChis] = useState([]);
+  const modalRef = useRef(null); // Create a ref for the modal
 
-  const layDSDiaChi = async () => {
+  const layDSDiaChi = useCallback(async () => {
     try {
       const response = await layDiaChiByIdNguoiDung(user.id);
+      console.log(response.message.data)
       setDiaChis(response.message.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [user.id]);
 
   useEffect(() => {
     layDSDiaChi();
@@ -42,7 +43,7 @@ const DiaChi = ({ user }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [layDSDiaChi]);
 
   const handleCityChange = async (event) => {
     const cityId = event.target.value;
@@ -82,7 +83,7 @@ const DiaChi = ({ user }) => {
         icon: "success",
         title: response.message.data.message,
       });
-      layDSDiaChi();
+      await layDSDiaChi(); // Ensure the address list is updated after deletion
     } catch (error) {
       console.log(error);
     }
@@ -91,8 +92,7 @@ const DiaChi = ({ user }) => {
   const handleMacDinh = async (e) => {
     try {
       await capNhatMacDinh(e.target.value);
-
-      layDSDiaChi();
+      await layDSDiaChi(); // Ensure the address list is updated after setting default
     } catch (error) {
       console.log(error);
     }
@@ -101,11 +101,12 @@ const DiaChi = ({ user }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const macDinhValue = diaChis.length === 0 ? 1 : 0;
       const response = await themDiaChi({
         Duong: duong,
         Phuong: selectedWard,
         idNguoiDung: user.id,
-        MacDinh: 0,
+        MacDinh: macDinhValue,
       });
       const Toast = Swal.mixin({
         toast: true,
@@ -126,7 +127,13 @@ const DiaChi = ({ user }) => {
       setSelectedDistrict("");
       setSelectedWard("");
       setDuong("");
-      layDSDiaChi();
+      await layDSDiaChi(); // Ensure the address list is updated after adding new address
+      
+      // Hide the modal
+      if (modalRef.current) {
+        const modalInstance = window.bootstrap.Modal.getInstance(modalRef.current);
+        modalInstance.hide();
+      }
     } catch (error) {
       console.error("Error adding address:", error);
       alert("Thêm địa chỉ thất bại");
@@ -170,6 +177,7 @@ const DiaChi = ({ user }) => {
                   className="btn border-0 link-primary"
                   value={item.idDiaChi}
                   onClick={handleXoaDiaChi}
+                  disabled={item.MacDinh === 1}
                 >
                   Xóa
                 </button>{" "}
@@ -178,6 +186,7 @@ const DiaChi = ({ user }) => {
                   className="btn btn-outline-secondary"
                   onClick={handleMacDinh}
                   value={item.idDiaChi}
+                  disabled={item.MacDinh === 1}
                 >
                   Thiết lập mặc định
                 </button>
@@ -194,6 +203,7 @@ const DiaChi = ({ user }) => {
         role="dialog"
         aria-labelledby="lbThemDiaChi"
         aria-hidden="true"
+        ref={modalRef} // Attach the ref to the modal
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
