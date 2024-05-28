@@ -22,7 +22,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   };
 
   const getIconAndColor = (message) => {
-    if (message === "success") {
+    if (message === 200) {
       return {
         icon: <CheckCircleOutlineIcon style={{ color: "white" }} />,
         color: "#39ac39",
@@ -175,15 +175,9 @@ const Users = ({ setPageName, setBreadCrumb }) => {
 
   useEffect(() => {
     if (importData.length !== 0) {
-      console.log(importData);
       importStaffData(importData)
         .then((response) => {
-          console.log(response);
-          setMsg(
-            response?.message?.status === 200
-              ? response?.message?.data
-              : response?.message?.errors[0]
-          );
+          setMsg(response);
           handleCloseAlert();
           setPage(0);
         })
@@ -250,7 +244,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
       </Grid>
       <Snackbar
         open={openAlert}
-        autoHideDuration={1500}
+        // autoHideDuration={3600}  
         onClose={handleCloseAlert}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
@@ -259,11 +253,11 @@ const Users = ({ setPageName, setBreadCrumb }) => {
           variant="filled"
           sx={{
             width: "100%",
-            backgroundColor: getIconAndColor(msg.message).color,
+            backgroundColor: getIconAndColor(msg?.message?.status).color,
           }}
-          icon={getIconAndColor(msg.message).icon}
+          icon={getIconAndColor(msg?.message?.status).icon}
         >
-          {msg.object}
+          {msg.message?.data?.message[0]}
         </Alert>
       </Snackbar>
     </Grid>
