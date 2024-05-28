@@ -9,13 +9,14 @@ const ProtectedLoginAndRegister = () => {
 
   const checkToken = async () => {
     const token = getToken();
+    console.log(token);
     if (!token) {
       setIsAuthenticated(false);
       return;
     }
     try {
       const response = await getProfile();
-      if (response?.message?.status == 200) {
+      if (response?.message?.status === 200) {
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
