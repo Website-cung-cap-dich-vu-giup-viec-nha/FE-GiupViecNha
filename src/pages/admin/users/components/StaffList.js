@@ -38,6 +38,8 @@ const StaffList = ({
   handleDownload,
   handleImport,
   handleExportExampleHeader,
+  setSelectedRow,
+  setOpenDetail
 }) => {
   const iconStyle = {
     fontSize: 20,
@@ -46,6 +48,9 @@ const StaffList = ({
     cursor: "pointer",
   };
   const classes = useStyles();
+  const handleIcon = (item) => {
+    setSelectedRow(item);
+  }
   return (
     <Card>
       <Box
@@ -237,6 +242,20 @@ const StaffList = ({
                   align="center"
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
+                  NGÀY SINH
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  CHỨC VỤ
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
                   SỐ SAO
                 </TableCell>
                 <TableCell
@@ -303,6 +322,20 @@ const StaffList = ({
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
+                      {item.NgaySinh}
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ color: "#606F89" }}
+                    >
+                      {item.tenChucVu}
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ color: "#606F89" }}
+                    >
                       {item.SoSao}
                     </TableCell>
                     <TableCell
@@ -313,8 +346,8 @@ const StaffList = ({
                       <IconButton
                         key={`${item.id}-iconbutton1-icon`}
                         onClick={() => {
-                          // setOpenDetail();
-                          // handleIcon();
+                          setOpenDetail();
+                          handleIcon(item);
                         }}
                       >
                         <img

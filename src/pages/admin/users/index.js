@@ -10,7 +10,7 @@ import {
   importStaffData,
 } from "../../../api/admin/StaffAPI";
 import * as XLSX from "xlsx";
-// import moment from "moment";
+import StaffDetail from "./components/StaffDetail";
 
 const Users = ({ setPageName, setBreadCrumb }) => {
   // -- Start Alerts Setting -- //
@@ -46,6 +46,8 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   const [exampleExportData, setExampleExportData] = useState([]);
   const [oldSearching, setOldSearching] = useState("");
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [selectedRow, setSelectedRow] = useState({});
+  const [openDetail, setOpenDetail] = useState(false);
   const setPageNameCallback = useCallback(
     () => setPageName("Quản lý nhân viên"),
     [setPageName]
@@ -54,6 +56,10 @@ const Users = ({ setPageName, setBreadCrumb }) => {
     () => setBreadCrumb(["Nhân viên"]),
     [setBreadCrumb]
   );
+
+  const handleOpenDetail = () => {
+    setOpenDetail((prev) => !prev);
+  };
 
   const handleChange = (event) => {
     setSearchData(event.target.value);
@@ -237,6 +243,8 @@ const Users = ({ setPageName, setBreadCrumb }) => {
           handleImport={handleImport}
           oldSearching={oldSearching}
           handleExportExampleHeader={handleExportExampleHeader}
+          setSelectedRow={setSelectedRow}
+          setOpenDetail={handleOpenDetail}
         />
       </Grid>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
@@ -260,6 +268,11 @@ const Users = ({ setPageName, setBreadCrumb }) => {
           {msg.message?.data?.message[0]}
         </Alert>
       </Snackbar>
+      <StaffDetail
+        selectedRow={selectedRow}
+        open={openDetail}
+        setOpen={handleOpenDetail}
+      />
     </Grid>
   );
 };
