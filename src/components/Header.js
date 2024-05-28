@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import NavMain from "./NavMain";
+import { config } from "../config";
 
 const Header = ({ user }) => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const Header = ({ user }) => {
                     aria-expanded="false"
                   >
                     <img
-                      src={user.Anh?`http://127.0.0.1:8000/${user.Anh}`:require("../assets/icon/user.png")}
+                      src={user.Anh?`${config.apiBaseUrl}/${user.Anh}`:require("../assets/icon/user.png")}
                       alt=""
                       width={40}
                       className="rounded-circle"
@@ -58,7 +59,7 @@ const Header = ({ user }) => {
                     </li>
                     <li>
                       <Link className="dropdown-item" to="/giohang">
-                        Giỏ hàng
+                        Thông báo
                       </Link>
                     </li>
                     <li>

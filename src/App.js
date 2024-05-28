@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./App.css";
@@ -16,6 +16,7 @@ import AdminLayout from "./components/Layout/AdminLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import ProtectedLoginAndRegister from "./ProtectedLoginAndRegister";
 import ThueDichVuView from "./pages/ThueDichVuView";
+import CamOn from "./components/CamOn";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -53,6 +54,7 @@ axiosInstance.interceptors.response.use(
             { refresh_token: refreshToken }
           );
           Cookies.set("token", response.data.access_token);
+          console.log("Hello I'm here")
           originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
           return axiosInstance(originalRequest);
         } catch (refreshError) {
@@ -72,7 +74,7 @@ function App() {
   const location = useLocation();
   const [adminPagename, setAdminPageName] = useState("");
   const [adminBreadCrumb, setAdminBreadCrumb] = useState([]);
-
+  const navigate = useNavigate()
   const handleReloadHeader = (data) => {
     setUser(data);
   };
@@ -90,6 +92,7 @@ function App() {
         setUser(response.data.user);
       } catch (error) {
         console.error(error);
+        handleTokenExpired();
       } finally {
         setLoading(false);
       }
@@ -97,6 +100,14 @@ function App() {
       setUser(null);
       setLoading(false);
     }
+  };
+
+  const handleTokenExpired = () => {
+    // Xóa token ở đây (ví dụ: xóa cookie)
+    Cookies.remove("token");
+    // Đặt user thành null và chuyển hướng đến trang đăng nhập
+    setUser(null);
+    navigate("/dangnhap"); // Sử dụng navigate từ thư viện react-router-dom
   };
 
   if (loading) {
@@ -121,6 +132,7 @@ function App() {
             <Route path="/dangky" element={<DangKyView />} />
           </Route>
           <Route path="/" element={<TrangChuView />} />
+          <Route path="/camon" element={<CamOn />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/sorry" element={<Sorry />} />
           <Route
