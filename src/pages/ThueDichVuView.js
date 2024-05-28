@@ -20,7 +20,6 @@ const ThueDichVuView = ({ user }) => {
 
     layDanhSachChiTietDVTheoId();
   }, [id]);
-  console.log(dsChiTietDV);
   return (
     <div style={{ backgroundImage: `url(${pattern})` }}>
       {id === "1" && <GiupViec dsChiTietDV={dsChiTietDV} user={user} />}

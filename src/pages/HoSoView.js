@@ -3,6 +3,7 @@ import HoSo from "../components/HoSo";
 import pattern from "../assets/background/pattern.jpg";
 import DoiMatKhau from "../components/DoiMatKhau";
 import DiaChi from "../components/DiaChi";
+import HoaDonKH from "../components/HoaDonKH";
 const HoSoView = ({ user, handleReloadHeader }) => {
   const [activeComponent, setActiveComponent] = useState("HoSo");
   return (
@@ -26,7 +27,7 @@ const HoSoView = ({ user, handleReloadHeader }) => {
                       onClick={() => setActiveComponent("HoSo")}
                     >
                       {" "}
-                      <i class="fa-solid fa-address-card me-2"></i> Hồ sơ
+                      <i className="fa-solid fa-address-card me-2"></i> Hồ sơ
                     </span>
                   </li>
                   <li className="nav-item border-bottom border-secondary">
@@ -38,13 +39,22 @@ const HoSoView = ({ user, handleReloadHeader }) => {
                       <i className="fa-solid fa-key me-2"></i> Đổi mật khẩu
                     </span>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item border-bottom border-secondary">
                     <span
                       className="nav-link"
                       onClick={() => setActiveComponent("DiaChi")}
                     >
                       {" "}
-                      <i class="fa-solid fa-map-location-dot me-2"></i> Địa chỉ
+                      <i className="fa-solid fa-map-location-dot me-2"></i> Địa chỉ
+                    </span>
+                  </li>
+                  <li className="nav-item">
+                    <span
+                      className="nav-link"
+                      onClick={() => setActiveComponent("PhieuDichVu")}
+                    >
+                      {" "}
+                      <i className="fa-solid fa-file-invoice me-2"></i> Phiếu dịch vụ
                     </span>
                   </li>
                 </ul>
@@ -57,6 +67,7 @@ const HoSoView = ({ user, handleReloadHeader }) => {
             )}
             {activeComponent === "DoiMatKhau" && <DoiMatKhau user={user} />}
             {activeComponent === "DiaChi" && <DiaChi user={user} />}
+            {activeComponent === "PhieuDichVu" && <HoaDonKH user={user} />}
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -13,6 +13,21 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 const TrangChuView = ({ dichvu }) => {
   const [dichvus, setDichvus] = useState([]);
+  const dichvuRef = useRef(null);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (window.location.hash === "#dichvu") {
+        if (dichvuRef.current) {
+          window.scrollTo({
+            top: dichvuRef.current.offsetTop,
+            behavior: "smooth",
+          });
+        }
+      }
+    }, 500);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   useEffect(() => {
     const layDanhSachDV = async () => {
@@ -168,6 +183,7 @@ const TrangChuView = ({ dichvu }) => {
       {/* Các dịch vụ */}
       <div
         id="dichvu"
+        ref={dichvuRef}
         className="container-fluid"
         style={{ backgroundImage: `url(${anhnen})` }}
       >

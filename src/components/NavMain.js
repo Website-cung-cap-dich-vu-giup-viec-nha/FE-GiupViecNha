@@ -24,7 +24,7 @@ const Header = ({ dangxuat, message }) => {
             </Link>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#dichvu">
+            <a className="nav-link" href="/#dichvu">
               Dịch vụ
             </a>
           </li>

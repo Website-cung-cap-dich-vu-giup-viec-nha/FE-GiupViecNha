@@ -24,7 +24,6 @@ const DangNhap = () => {
         secure: true,
         sameSite: "Strict",
       });
-      console.log(response.data);
       navigate("/");
     } catch (error) {
       const errorMessage = "Số điện thoại không hợp lệ!";
