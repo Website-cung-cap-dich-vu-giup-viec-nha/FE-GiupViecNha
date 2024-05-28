@@ -48,7 +48,7 @@ export async function capNhatMacDinh(id) {
     .catch((error) => standardResponse(false, error.response?.data));
 }
 
-export async function themDiaChi({ diachi }) {
+export async function themDiaChi(diachi) {
   const url = `/api/diachi/`;
 
   return API.post(url, diachi)
