@@ -132,7 +132,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
-  const loadStaffTable = () => {
+  const loadStaffTable = useCallback(() => {
     getStaff(oldSearching, page * rowsPerPage, rowsPerPage)
       .then((response) => {
         setData(
@@ -145,7 +145,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
       .catch((error) => {
         console.log(error);
       });
-  };
+  }, [oldSearching, page, rowsPerPage]);
 
   useEffect(() => {
     setPageNameCallback();
@@ -155,13 +155,13 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   useEffect(() => {
     if (isFirstLoad) return;
     loadStaffTable();
-  }, [page]);
+  }, [page, isFirstLoad, loadStaffTable]);
 
   useEffect(() => {
     if (isFirstLoad) return;
     setPage(0);
     loadStaffTable();
-  }, [rowsPerPage, oldSearching]);
+  }, [rowsPerPage, oldSearching, isFirstLoad, loadStaffTable]);
 
   useEffect(() => {
     if (downloadData.length !== 0) {
@@ -212,7 +212,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   useEffect(() => {
     setIsFirstLoad(false);
     loadStaffTable();
-  }, []);
+  }, [loadStaffTable]);
   return (
     <Grid container>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
@@ -252,7 +252,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
       </Grid>
       <Snackbar
         open={openAlert}
-        // autoHideDuration={3600}  
+        // autoHideDuration={3600}
         onClose={handleCloseAlert}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >

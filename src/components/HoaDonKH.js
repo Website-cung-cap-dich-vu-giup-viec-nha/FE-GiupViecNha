@@ -16,7 +16,7 @@ const HoaDonKH = ({ user }) => {
       setPhieuDVs(response.data);
     };
     layDSPhieuDV();
-  }, []);
+  }, [user.id]);
   const handleClick = async (e) => {
     const value = e.currentTarget.getAttribute("value");
     const response = await axios.get(
