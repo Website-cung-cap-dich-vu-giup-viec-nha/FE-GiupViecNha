@@ -1,4 +1,10 @@
-import { Routes, Route, useLocation, Navigate, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import Cookies from "js-cookie";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./App.css";
@@ -54,7 +60,6 @@ axiosInstance.interceptors.response.use(
             { refresh_token: refreshToken }
           );
           Cookies.set("token", response.data.access_token);
-          console.log("Hello I'm here")
           originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
           return axiosInstance(originalRequest);
         } catch (refreshError) {
@@ -74,41 +79,41 @@ function App() {
   const location = useLocation();
   const [adminPagename, setAdminPageName] = useState("");
   const [adminBreadCrumb, setAdminBreadCrumb] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleReloadHeader = (data) => {
     setUser(data);
   };
 
   useEffect(() => {
-    ktraDangNhap();
-  }, [location]);
-
-  const ktraDangNhap = async () => {
-    const token = Cookies.get("token");
-    if (token) {
-      setLoading(true);
-      try {
-        const response = await axiosInstance.get("/auth/profile");
-        setUser(response.data.user);
-      } catch (error) {
-        console.error(error);
-        handleTokenExpired();
-      } finally {
+    const ktraDangNhap = async () => {
+      const token = Cookies.get("token");
+      if (token) {
+        setLoading(true);
+        try {
+          const response = await axiosInstance.get("/auth/profile");
+          setUser(response.data.user);
+        } catch (error) {
+          console.error(error);
+          handleTokenExpired();
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setUser(null);
         setLoading(false);
       }
-    } else {
-      setUser(null);
-      setLoading(false);
-    }
-  };
+    };
 
-  const handleTokenExpired = () => {
-    // Xóa token ở đây (ví dụ: xóa cookie)
-    Cookies.remove("token");
-    // Đặt user thành null và chuyển hướng đến trang đăng nhập
-    setUser(null);
-    navigate("/dangnhap"); // Sử dụng navigate từ thư viện react-router-dom
-  };
+    const handleTokenExpired = () => {
+      // Xóa token ở đây (ví dụ: xóa cookie)
+      Cookies.remove("token");
+      // Đặt user thành null và chuyển hướng đến trang đăng nhập
+      setUser(null);
+      navigate("/dangnhap"); // Sử dụng navigate từ thư viện react-router-dom
+    };
+
+    ktraDangNhap();
+  }, [location, navigate]);
 
   if (loading) {
     return (

@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  layDanhSachChiTietDVTheoId,
+  layChiTietDVTheoIdKieuDV,
   layIdKhachHang,
+  layKieuDVByIdDV,
   taoPhieuDichVu,
 } from "../api/GiupViecAPI";
 import {
@@ -35,6 +36,8 @@ const ThueDichVu = ({ user }) => {
   const [selectedWard, setSelectedWard] = useState("");
   const [duong, setDuong] = useState("");
   const [dsChiTietDV, setDSChiTietDV] = useState([]);
+  const [dsKieuDV, setDSKieuDV] = useState([]);
+  const [selectedDT, setselectedDT] = useState("");
   const { id } = useParams();
   const modalRef = useRef(null);
 
@@ -59,6 +62,30 @@ const ThueDichVu = ({ user }) => {
     }
 
     setNgayBD("");
+  };
+
+  const handleDTChange = async (e) => {
+    const selectedOption = e.target.selectedOptions[0];
+    const selectedKey = selectedOption.textContent;
+    const gioPattern = /(\d+)\sgiờ/;
+    const ketQua = selectedKey.match(gioPattern);
+    if (ketQua && ketQua.length > 1) {
+      const soGio = parseInt(ketQua[1]);
+      setSoGio(soGio);
+    }
+
+    const selectedDT = e.target.value;
+    setselectedDT(selectedDT);
+    try {
+      if (selectedDT !== "") {
+        const response = await layChiTietDVTheoIdKieuDV(selectedDT);
+        setDSChiTietDV(response.message.data);
+      }else{
+        setDSChiTietDV([]);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const handleNgayBDChange = (e) => {
@@ -115,10 +142,10 @@ const ThueDichVu = ({ user }) => {
   }, [user.id]);
 
   useEffect(() => {
-    const loadCombobox = async () => {
+    const loadComboboxDT = async () => {
       try {
-        const response = await layDanhSachChiTietDVTheoId(id);
-        setDSChiTietDV(response.message.data);
+        const response = await layKieuDVByIdDV(id);
+        setDSKieuDV(response.message.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -133,7 +160,7 @@ const ThueDichVu = ({ user }) => {
       }
     };
 
-    loadCombobox();
+    loadComboboxDT();
     fetchData();
     layDSDiaChi();
   }, [layDSDiaChi, id]);
@@ -155,11 +182,6 @@ const ThueDichVu = ({ user }) => {
 
   const handleSoBuoiChange = (event) => {
     setSoBuoi(Number(event.target.value));
-  };
-
-  const handleSoGioChange = (event) => {
-    setSoGio(Number(event.target.value));
-    setGioBatDau("");
   };
 
   const handleGioBatDauChange = (event) => {
@@ -288,6 +310,27 @@ const ThueDichVu = ({ user }) => {
             onSubmit={handleDatDichVu}
           >
             <h3 className="text-center mb-3">Giúp việc theo giờ</h3>
+
+            <label className="form-label" htmlFor="KieuDV">
+              Chọn diện tích
+            </label>
+            <select
+              id="KieuDV"
+              className="form-select mb-3"
+              value={selectedDT}
+              onChange={handleDTChange}
+              required
+            >
+              <option defaultValue={true} value="">
+                Tùy chọn
+              </option>
+              {dsKieuDV.map((item) => (
+                <option key={item?.idKieuDichVu} value={item.idKieuDichVu}>
+                  {item.tenKieuDichVu}
+                </option>
+              ))}
+            </select>
+
             <label className="form-label" htmlFor="NgayLamViec">
               Chọn ngày làm việc trong tuần
             </label>
@@ -310,6 +353,7 @@ const ThueDichVu = ({ user }) => {
                 </option>
               ))}
             </select>
+
             <div className="row">
               <div className="col-md-6 mb-3">
                 <label htmlFor="NgayBatDau" className="form-label">
@@ -346,23 +390,7 @@ const ThueDichVu = ({ user }) => {
                   required
                 />
               </div>
-              <div className="col-md-6 mb-3">
-                <label htmlFor="SoGioLamViec" className="form-label">
-                  Số giờ làm việc <br />
-                  <small className="text-danger">(Từ 2 - 4 giờ)</small>
-                </label>
-                <input
-                  type="number"
-                  id="SoGioLamViec"
-                  className="form-control"
-                  min={2}
-                  max={4}
-                  value={soGio}
-                  onChange={handleSoGioChange}
-                  required
-                />
-              </div>
-              <div className="col-md-6 mb-3">
+              <div className="col-md-12 mb-3">
                 <label htmlFor="GioBatDau" className="form-label">
                   Giờ bắt đầu <br />
                   <small className="text-danger">(Trong khoảng 7h - 22h)</small>
