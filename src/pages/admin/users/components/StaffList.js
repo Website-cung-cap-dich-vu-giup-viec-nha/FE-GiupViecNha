@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  // Icon,
   IconButton,
   Paper,
   Table,
@@ -21,6 +22,9 @@ import Edit from "../../../../assets/icon/Edit.svg";
 import Trash from "../../../../assets/icon/Trash.svg";
 import { config } from "../../../../config";
 import { makeStyles } from "@mui/styles";
+import moment from "moment";
+import dayjs from "dayjs";
+// import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const useStyles = makeStyles({
   tableCell: {
@@ -39,7 +43,10 @@ const StaffList = ({
   handleImport,
   handleExportExampleHeader,
   setSelectedRow,
-  setOpenDetail
+  setOpenDetail,
+  setOpenDelete,
+  setOpenInsert,
+  setOpenEdit,
 }) => {
   const iconStyle = {
     fontSize: 20,
@@ -50,7 +57,9 @@ const StaffList = ({
   const classes = useStyles();
   const handleIcon = (item) => {
     setSelectedRow(item);
-  }
+    setSelectedRow({ ...item, "NgaySinh": dayjs(item?.NgaySinh) });
+    setSelectedRow({ ...item, "password": "" });
+  };
   return (
     <Card>
       <Box
@@ -164,6 +173,35 @@ const StaffList = ({
               </Typography>
             </Button>
           </Box>
+          <Box color="text" px={1}>
+            <Button
+              variant="contained"
+              onClick={setOpenInsert}
+              sx={{
+                flex: 1,
+                height: "100%",
+                marginTop: 0,
+                marginBottom: 0,
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#80d4ff",
+                color: "white",
+              }}
+            >
+              <Typography
+                whiteSpace="nowrap"
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "16px",
+                  textTransform: "none",
+                  alignItems: "center",
+                  marginLeft: "8px",
+                }}
+              >
+                Thêm mới
+              </Typography>
+            </Button>
+          </Box>
         </div>
       </Box>
       <Box
@@ -263,6 +301,13 @@ const StaffList = ({
                   align="center"
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
+                  TÌNH TRẠNG
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
                   HÀNH ĐỘNG
                 </TableCell>
               </TableRow>
@@ -343,6 +388,30 @@ const StaffList = ({
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
+                      <Box>
+                        <span
+                          style={{
+                            backgroundColor: item?.status
+                              ? "#F0FFF0"
+                              : "#FFE4E1",
+                            color: item?.status ? "green" : "red",
+                          }}
+                        >
+                          <Typography
+                            variant="caption"
+                            color={item?.status ? "green" : "red"}
+                            fontWeight="bold"
+                          >
+                            {item?.status ? "Hoạt động" : "Khóa"}
+                          </Typography>
+                        </span>
+                      </Box>
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ color: "#606F89" }}
+                    >
                       <IconButton
                         key={`${item.id}-iconbutton1-icon`}
                         onClick={() => {
@@ -360,8 +429,8 @@ const StaffList = ({
                       <IconButton
                         key={`${item.id}-iconbutton2-icon`}
                         onClick={() => {
-                          // setOpenEdit();
-                          // handleIcon();
+                          setOpenEdit();
+                          handleIcon(item);
                         }}
                       >
                         <img
@@ -375,8 +444,8 @@ const StaffList = ({
                       <IconButton
                         key={`${item.id}-iconbutton3-icon`}
                         onClick={() => {
-                          // setOpenDelete();
-                          // handleIcon();
+                          setOpenDelete();
+                          handleIcon(item);
                         }}
                       >
                         <img
