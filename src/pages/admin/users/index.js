@@ -5,16 +5,25 @@ import { useCallback, useEffect, useState } from "react";
 import StaffSearching from "./components/StaffSearching";
 import StaffList from "./components/StaffList";
 import {
+  deleteStaff,
+  editStaff,
   getExampleExportStaffData,
   getStaff,
   importStaffData,
+  insertStaff,
 } from "../../../api/admin/StaffAPI";
 import * as XLSX from "xlsx";
 import StaffDetail from "./components/StaffDetail";
+import StaffDelete from "./components/StaffDelete";
+import StaffInsert from "./components/StaffInsert";
+import { getDepartment } from "../../../api/admin/DepartmentAPI";
+import { getPositionByDepartment } from "../../../api/admin/PositionAPI";
+import StaffEdit from "./components/StaffEdit";
 
 const Users = ({ setPageName, setBreadCrumb }) => {
   // -- Start Alerts Setting -- //
-  const [msg, setMsg] = useState({});
+  const [msg, setMsg] = useState("");
+  const [status, setStatus] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
 
   const handleCloseAlert = () => {
@@ -47,7 +56,23 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   const [oldSearching, setOldSearching] = useState("");
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [selectedRow, setSelectedRow] = useState({});
+  const [openInsert, setOpenInsert] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [insertData, setInsertData] = useState({
+    name: "",
+    email: "",
+    SDT: "",
+    password: "",
+    password_confirmation: "",
+    GioiTinh: "Nữ",
+    idPhongBan: "",
+    idChucVu: "",
+    NgaySinh: null,
+  });
+  const [dataPhongBan, setDataPhongBan] = useState([]);
+  const [dataChucVu, setDataChucVu] = useState([]);
   const setPageNameCallback = useCallback(
     () => setPageName("Quản lý nhân viên"),
     [setPageName]
@@ -57,8 +82,121 @@ const Users = ({ setPageName, setBreadCrumb }) => {
     [setBreadCrumb]
   );
 
+  const handleDataChucVu = (idPhongBan) => {
+    getPositionByDepartment(idPhongBan)
+      .then((response) => {
+        setDataChucVu(
+          response?.message?.status === 200 ? response?.message?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleDataPhongBan = () => {
+    getDepartment()
+      .then((response) => {
+        setDataPhongBan(
+          response?.message?.status === 200 ? response?.message?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleInsertData = (event, propertyName) => {
+    if (propertyName === "NgaySinh")
+      setInsertData({ ...insertData, [propertyName]: event });
+    else if (propertyName === "idChucVu" || propertyName === "idPhongBan")
+      setInsertData({ ...insertData, [propertyName]: event.target.value });
+    else if (propertyName === "GioiTinh")
+      setInsertData({
+        ...insertData,
+        [propertyName]: event.target.checked ? "Nam" : "Nữ",
+      });
+    else setInsertData({ ...insertData, [propertyName]: event.target.value });
+  };
+
+  const handleEditData = (event, propertyName) => {
+    if (propertyName === "NgaySinh")
+      setSelectedRow({ ...selectedRow, [propertyName]: event });
+    else if (propertyName === "idChucVu" || propertyName === "idPhongBan")
+      setSelectedRow({ ...selectedRow, [propertyName]: event.target.value });
+    else if (propertyName === "GioiTinh")
+      setSelectedRow({
+        ...selectedRow,
+        [propertyName]: event.target.checked ? "Nam" : "Nữ",
+      });
+    else setSelectedRow({ ...selectedRow, [propertyName]: event.target.value });
+  };
+
+  const handleOpenInsert = () => {
+    setOpenInsert((prev) => !prev);
+  };
+
+  const handleOpenEdit = () => {
+    setOpenEdit((prev) => !prev);
+  };
+
   const handleOpenDetail = () => {
     setOpenDetail((prev) => !prev);
+  };
+
+  const handleOpenDelete = () => {
+    setOpenDelete((prev) => !prev);
+  };
+
+  const handleInsert = () => {
+    insertStaff(insertData)
+      .then((response) => {
+        setMsg(response?.message?.data?.message);
+        setStatus(response?.message?.status);
+        handleCloseAlert();
+        if(response?.message?.status === 200) handleOpenInsert();
+        if (response?.message?.status === 200) {
+          if (page === 0) loadStaffTable();
+          else setPage(0);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleEdit = () => {
+    editStaff(selectedRow, selectedRow?.idNhanVien)
+      .then((response) => {
+        setMsg(response?.message?.data?.message);
+        setStatus(response?.message?.status);
+        handleCloseAlert();
+        if(response?.message?.status === 200) handleOpenEdit();
+        if (response?.message?.status === 200) {
+          if (page === 0) loadStaffTable();
+          else setPage(0);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleDelete = () => {
+    deleteStaff(selectedRow.id)
+      .then((response) => {
+        setMsg(response?.message?.data?.message[0]);
+        setStatus(response?.message?.status);
+        handleCloseAlert();
+        if(response?.message?.status === 200) handleOpenDelete();
+        if (response?.message?.status === 200) {
+          if (page === 0) loadStaffTable();
+          else setPage(0);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleChange = (event) => {
@@ -132,7 +270,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
-  const loadStaffTable = useCallback(() => {
+  const loadStaffTable = () => {
     getStaff(oldSearching, page * rowsPerPage, rowsPerPage)
       .then((response) => {
         setData(
@@ -145,7 +283,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [oldSearching, page, rowsPerPage]);
+  };
 
   useEffect(() => {
     setPageNameCallback();
@@ -155,13 +293,13 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   useEffect(() => {
     if (isFirstLoad) return;
     loadStaffTable();
-  }, [page, isFirstLoad, loadStaffTable]);
+  }, [page]);
 
   useEffect(() => {
     if (isFirstLoad) return;
     setPage(0);
     loadStaffTable();
-  }, [rowsPerPage, oldSearching, isFirstLoad, loadStaffTable]);
+  }, [rowsPerPage, oldSearching]);
 
   useEffect(() => {
     if (downloadData.length !== 0) {
@@ -183,7 +321,9 @@ const Users = ({ setPageName, setBreadCrumb }) => {
     if (importData.length !== 0) {
       importStaffData(importData)
         .then((response) => {
-          setMsg(response);
+          console.log(response);
+          setMsg(response?.message?.data?.message[0]);
+          setStatus(response?.message?.status);
           handleCloseAlert();
           setPage(0);
         })
@@ -210,9 +350,38 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   }, [exampleExportData]);
 
   useEffect(() => {
+    if (isFirstLoad) return;
+    handleDataChucVu(insertData?.idPhongBan);
+  }, [insertData?.idPhongBan]);
+
+  useEffect(() => {
+    if (isFirstLoad) return;
+    if (selectedRow?.idPhongBan !== null || selectedRow?.idPhongBan !== "") {
+      handleDataChucVu(selectedRow?.idPhongBan);
+    }
+  }, [openEdit]);
+
+  useEffect(() => {
+    if (openInsert) {
+      setInsertData({
+        name: "",
+        email: "",
+        SDT: "",
+        password: "",
+        password_confirmation: "",
+        GioiTinh: "Nữ",
+        idPhongBan: "",
+        idChucVu: "",
+        NgaySinh: null,
+      });
+    }
+  }, [openInsert]);
+
+  useEffect(() => {
     setIsFirstLoad(false);
     loadStaffTable();
-  }, [loadStaffTable]);
+    handleDataPhongBan();
+  }, []);
   return (
     <Grid container>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
@@ -245,6 +414,9 @@ const Users = ({ setPageName, setBreadCrumb }) => {
           handleExportExampleHeader={handleExportExampleHeader}
           setSelectedRow={setSelectedRow}
           setOpenDetail={handleOpenDetail}
+          setOpenDelete={handleOpenDelete}
+          setOpenInsert={handleOpenInsert}
+          setOpenEdit={handleOpenEdit}
         />
       </Grid>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
@@ -261,17 +433,40 @@ const Users = ({ setPageName, setBreadCrumb }) => {
           variant="filled"
           sx={{
             width: "100%",
-            backgroundColor: getIconAndColor(msg?.message?.status).color,
+            backgroundColor: getIconAndColor(status).color,
           }}
-          icon={getIconAndColor(msg?.message?.status).icon}
+          icon={getIconAndColor(status).icon}
         >
-          {msg.message?.data?.message[0]}
+          {msg}
         </Alert>
       </Snackbar>
+      <StaffInsert
+        open={openInsert}
+        setOpen={handleOpenInsert}
+        data={insertData}
+        handleChange={handleInsertData}
+        dataPhongBan={dataPhongBan}
+        dataChucVu={dataChucVu}
+        handleInsert={handleInsert}
+      />
+      <StaffEdit
+        open={openEdit}
+        setOpen={handleOpenEdit}
+        data={selectedRow}
+        handleChange={handleEditData}
+        dataPhongBan={dataPhongBan}
+        dataChucVu={dataChucVu}
+        handleEdit={handleEdit}
+      />
       <StaffDetail
         selectedRow={selectedRow}
         open={openDetail}
         setOpen={handleOpenDetail}
+      />
+      <StaffDelete
+        open={openDelete}
+        setOpen={handleOpenDelete}
+        handleDelete={handleDelete}
       />
     </Grid>
   );

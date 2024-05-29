@@ -12,7 +12,6 @@ import {
 import { config } from "../../../../config";
 
 const StaffDetail = ({ selectedRow, open, setOpen }) => {
-  console.log(selectedRow);
   return (
     <Dialog open={open} onClose={setOpen} maxWidth="md" fullWidth>
       <DialogTitle style={{ textAlign: "center", fontWeight: "bold" }}>
@@ -126,7 +125,7 @@ const StaffDetail = ({ selectedRow, open, setOpen }) => {
                 </Typography>
               </Grid>
 
-              {/* <Grid item xs={12} sm={6} xl={2}>
+              <Grid item xs={12} sm={6} xl={2}>
                 <Typography variant="caption" color="text" fontWeight="regular">
                   Trạng Thái:
                 </Typography>
@@ -141,15 +140,6 @@ const StaffDetail = ({ selectedRow, open, setOpen }) => {
                       color: selectedRow?.status ? "green" : "red",
                     }}
                   >
-                    <Icon
-                      style={{
-                        marginRight: 8,
-                      }}
-                    >
-                      <FiberManualRecordIcon
-                        style={{ marginTop: "6px", fontSize: "16px" }}
-                      />
-                    </Icon>
                     <Typography
                       variant="caption"
                       color={selectedRow?.status ? "green" : "red"}
@@ -159,7 +149,7 @@ const StaffDetail = ({ selectedRow, open, setOpen }) => {
                     </Typography>
                   </span>
                 </Box>
-              </Grid> */}
+              </Grid>
             </Grid>
           </Box>
         </Box>
