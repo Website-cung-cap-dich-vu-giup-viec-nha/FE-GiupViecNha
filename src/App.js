@@ -23,6 +23,9 @@ import ProtectedRoute from "./ProtectedRoute";
 import ProtectedLoginAndRegister from "./ProtectedLoginAndRegister";
 import ThueDichVuView from "./pages/ThueDichVuView";
 import CamOn from "./components/CamOn";
+import PhuongThucThanhToan from "./components/PhuongThucThanhToan";
+import KetQuaThanhToan from "./components/KetQuaThanhToan";
+
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -140,6 +143,8 @@ function App() {
           <Route path="/camon" element={<CamOn />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/sorry" element={<Sorry />} />
+          <Route path="/phuongthucthanhtoan" element={<PhuongThucThanhToan />} />
+          <Route path="/ketquathanhtoan" element={<KetQuaThanhToan />} />
           <Route
             path="/thuedichvu/:id"
             element={

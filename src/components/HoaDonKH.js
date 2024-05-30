@@ -1,11 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { layIdKhachHang } from "../api/GiupViecAPI";
+import { config } from "../config";
 
 const HoaDonKH = ({ user }) => {
   const [phieuDVs, setPhieuDVs] = useState([]);
   const [phieuDV, setPhieuDV] = useState({});
   const [dchi, setDChi] = useState({});
+  const [chiTietNL, setChiTietNL] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const layDSPhieuDV = async () => {
       const idKH = await layIdKhachHang(user.id);
@@ -16,7 +21,8 @@ const HoaDonKH = ({ user }) => {
       setPhieuDVs(response.data);
     };
     layDSPhieuDV();
-  }, [user.id]);
+  }, []);
+
   const handleClick = async (e) => {
     const value = e.currentTarget.getAttribute("value");
     const response = await axios.get(
@@ -28,10 +34,27 @@ const HoaDonKH = ({ user }) => {
     );
     setDChi(dc.data);
   };
+
+  const handleChiTiet = async (e) => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/layChiTietNLTheoIdPDV/" +
+          phieuDV.idPhieuDichVu
+      );
+      setChiTietNL(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleThanhToan = () =>{
+    navigate("/phuongthucthanhtoan", { state: { phieuDV } })
+  }
+
   return (
     <div className="container-fluid bg-light border p-3 rounded">
       <div className="row">
-        {phieuDVs  ? (
+        {phieuDVs ? (
           phieuDVs.map((item) => {
             return (
               <div key={item.idPhieuDichVu} className="col-lg-4 mb-3">
@@ -83,130 +106,147 @@ const HoaDonKH = ({ user }) => {
         )}
 
         <div
-          class="modal fade"
+          className="modal fade"
           id="xemThongTin"
-          tabindex="-1"
+          tabIndex="-1"
           aria-labelledby="xemThongTin"
           aria-hidden="true"
         >
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="xemThongTin">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="xemThongTin">
                   Thông tin phiếu dịch vụ
                 </h5>
                 <button
                   type="button"
-                  class="btn-close"
+                  className="btn-close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 ></button>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 <h3 className="text-center mb-3">{phieuDV.tenDichVu}</h3>
-                {/* <label className="form-label" htmlFor="NgayLamViec">
-                  Ngày làm việc trong tuần
-                </label>
-                <input
-                  type="text"
-                  className="form-control mb-3"
-                  value={phieuDV.BuoiDangKyDichVu}
-                  readOnly
-                /> */}
                 <p>Ngày làm việc trong tuần: {phieuDV.BuoiDangKyDichVu}</p>
-
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    {/* <label htmlFor="NgayBatDau" className="form-label">
-                      Ngày bắt đầu
-                    </label>
-                    <input
-                      type="date"
-                      id="NgayBatDau"
-                      className="form-control"
-                      value={phieuDV.NgayBatDau}
-                      disabled
-                    /> */}
                     <p>Ngày bắt đầu: {phieuDV.NgayBatDau}</p>
                   </div>
                   <div className="col-md-6 mb-3">
-                    {/* <label htmlFor="SoBuoi" className="form-label">
-                      Số buổi
-                    </label>
-                    <input
-                      type="text"
-                      id="SoBuoi"
-                      className="form-control"
-                      value={phieuDV.SoBuoi}
-                      readOnly
-                    /> */}
                     <p>Số buổi: {phieuDV.SoBuoi}</p>
                   </div>
                   <div className="col-md-6 mb-3">
-                    {/* <label htmlFor="SoGioLamViec" className="form-label">
-                      Số giờ làm việc
-                    </label>
-                    <input
-                      type="text"
-                      id="SoGioLamViec"
-                      className="form-control"
-                      value={phieuDV.SoGio}
-                      readOnly
-                    /> */}
                     <p>Số giờ làm việc: {phieuDV.SoGio}</p>
                   </div>
                   <div className="col-md-6 mb-3">
-                    {/* <label htmlFor="GioBatDau" className="form-label">
-                      Giờ bắt đầu
-                    </label>
-                    <input
-                      type="text"
-                      id="GioBatDau"
-                      className="form-control"
-                      value={phieuDV.GioBatDau}
-                      readOnly
-                    /> */}
                     <p>Giờ bắt đầu: {phieuDV.GioBatDau}</p>
                   </div>
                 </div>
                 <div className="mb-3">
-                  {/* <label htmlFor="GhiChu" className="form-label">
-                    Ghi chú
-                  </label> */}
                   <p>Ghi chú: {phieuDV.GhiChu ? phieuDV.GhiChu : ""}</p>
-                  {/* <textarea
-                    className="form-control"
-                    id="GhiChu"
-                    rows={5}
-                    value={phieuDV.GhiChu ? phieuDV.GhiChu : ""}
-                    readOnly
-                  ></textarea> */}
                 </div>
-                {/* <label className="form-label"></label> */}
-                {/* <input
-                  type="text"
-                  className="form-control"
-                  readOnly
-                  value={`${dchi.Duong}, ${dchi.ward_name}, ${dchi.district_name}, ${dchi.province_name}`}
-                /> */}
+
                 <p>
                   Địa chỉ:{" "}
                   {`${dchi.Duong}, ${dchi.ward_name}, ${dchi.district_name}, ${dchi.province_name}`}
                 </p>
                 <p>Tổng tiền: {phieuDV.Tongtien}</p>
               </div>
-              <div className="modal-footer d-flex justify-content-between">
-                <button className="btn btn-primary">Chi tiết ngày làm</button>
-                {phieuDV.TinhTrang === 1 ? (
-                  ""
-                ) : phieuDV.TinhTrangThanhToan === 1 ? (
-                  <button className="btn btn-primary">Thanh toán</button>
-                ) : (
-                  <button className="btn btn-primary" disabled>
-                    Thanh toán
+
+              {phieuDV.TinhTrang === 1 ? (
+                ""
+              ) : (
+                <div className="modal-footer d-flex justify-content-between">
+                  <button
+                    className="btn btn-primary"
+                    data-bs-target="#xemThongTinChiTiet"
+                    data-bs-toggle="modal"
+                    onClick={handleChiTiet}
+                  >
+                    Chi tiết dịch vụ
                   </button>
-                )}
+                  {phieuDV.TinhTrangThanhToan === 1 ? (
+                    <button className="btn btn-primary" data-bs-dismiss="modal" onClick={handleThanhToan}>Thanh toán</button>
+                  ) : (
+                    <button className="btn btn-secondary" disabled>
+                      Thanh toán
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="modal fade"
+          id="xemThongTinChiTiet"
+          tabIndex="-1"
+          aria-labelledby="xemThongTinChiTiet"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="xemThongTinChiTiet">
+                  Thông tin chi tiết ngày thực hiện dịch vụ
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-target="#xemThongTin"
+                  data-bs-toggle="modal"
+                  aria-label="Close"
+                ></button>
               </div>
+              <div className="modal-body bg-light">
+                <div className="container-fluid">
+                  <div className="row">
+                    {chiTietNL.map((item) => {
+                      return (
+                        <div key={item.idChiTietNgayLam} className="col-md-6">
+                          <table className="table">
+                            <tbody>
+                              <tr>
+                                <td colSpan={2}>Ngày làm: {item.NgayLam}</td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <img
+                                    src={`${config.apiBaseUrl}/${item.Anh}`}
+                                    alt=""
+                                    width={40}
+                                    className="rounded-circle"
+                                  />
+                                </td>
+                                <td>{item.name}</td>
+                              </tr>
+                              <tr>
+                                {item.TinhTrangDichVu === 1 && (
+                                  <td colSpan={2} className="text-danger text-end">
+                                    Chưa thực hiện
+                                  </td>
+                                )}
+                                {item.TinhTrangDichVu === 2 && (
+                                  <td colSpan={2} className="text-warning text-end">
+                                    Đang thực hiện
+                                  </td>
+                                )}
+                                {item.TinhTrangDichVu === 3 && (
+                                  <td colSpan={2} className="text-success text-end">
+                                    Đã xong
+                                  </td>
+                                )}
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer d-flex justify-content-between"></div>
             </div>
           </div>
         </div>
