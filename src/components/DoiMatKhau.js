@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { doiMatKhau } from "../api/admin/AuthAPI";
 const DoiMatKhau = ({ user }) => {
   const [doimatkhau, setDoiMatKhau] = useState({
     id: user.id,
@@ -15,12 +15,9 @@ const DoiMatKhau = ({ user }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        "http://localhost:8000/api/auth/doimatkhau",
-        doimatkhau
-      );
-      if (!response.data.status) {
-        setError(response.data.message);
+      const response = await doiMatKhau(doimatkhau)
+      if (!response?.message?.data?.status) {
+        setError(response?.message?.data?.message);
         return;
       }
 
@@ -37,7 +34,7 @@ const DoiMatKhau = ({ user }) => {
       });
       Toast.fire({
         icon: "success",
-        title: response.data.message,
+        title: response?.data?.message,
       });
 
       navigate("/hoso");

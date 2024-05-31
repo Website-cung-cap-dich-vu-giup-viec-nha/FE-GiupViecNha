@@ -79,7 +79,7 @@ const ThueDichVu = ({ user }) => {
     try {
       if (selectedDT !== "") {
         const response = await layChiTietDVTheoIdKieuDV(selectedDT);
-        setDSChiTietDV(response.message.data);
+        setDSChiTietDV(response?.message?.data);
       }else{
         setDSChiTietDV([]);
       }
@@ -129,8 +129,8 @@ const ThueDichVu = ({ user }) => {
   const layDSDiaChi = useCallback(async () => {
     try {
       const response = await layDiaChiByIdNguoiDung(user.id);
-      setDiaChis(response.message.data);
-      const dc = response.message.data.find((item) => item.MacDinh === 1);
+      setDiaChis(response?.message?.data);
+      const dc = response?.message?.data.find((item) => item.MacDinh === 1);
       if (dc) {
         setIdAddress(dc.idDiaChi);
       } else {
@@ -145,7 +145,7 @@ const ThueDichVu = ({ user }) => {
     const loadComboboxDT = async () => {
       try {
         const response = await layKieuDVByIdDV(id);
-        setDSKieuDV(response.message.data);
+        setDSKieuDV(response?.message?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -154,7 +154,7 @@ const ThueDichVu = ({ user }) => {
     const fetchData = async () => {
       try {
         const response = await getProvince();
-        setCities(response.message.data);
+        setCities(response?.message?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -224,7 +224,7 @@ const ThueDichVu = ({ user }) => {
         SoGio: soGio,
         GioBatDau: gioBatDau,
         GhiChu: ghiChu,
-        idKhachHang: response.message.data[0],
+        idKhachHang: response?.message?.data[0],
         Thu: selectedDay,
         idChiTietDichVu: idChiTietDV,
         idDiaChi: idAddress,
@@ -260,7 +260,7 @@ const ThueDichVu = ({ user }) => {
       });
       Toast.fire({
         icon: "success",
-        title: response.message.data.message,
+        title: response?.message?.data?.message,
       });
       setSelectedCity("");
       setSelectedDistrict("");
@@ -286,7 +286,7 @@ const ThueDichVu = ({ user }) => {
     setSelectedCity(cityId);
 
     const selectedCityData = await layHuyenByProvinceId(cityId);
-    setDistricts(selectedCityData.message.data);
+    setDistricts(selectedCityData?.message?.data);
     setSelectedDistrict("");
     setWards([]);
     setSelectedWard("");
@@ -297,7 +297,7 @@ const ThueDichVu = ({ user }) => {
     setSelectedDistrict(districtId);
 
     const selectedDistrictData = await layXaByDistrictId(districtId);
-    setWards(selectedDistrictData.message.data);
+    setWards(selectedDistrictData?.message?.data);
     setSelectedWard("");
   };
 
@@ -309,7 +309,7 @@ const ThueDichVu = ({ user }) => {
             className="mx-auto bg-white border rounded py-3 px-5 shadow"
             onSubmit={handleDatDichVu}
           >
-            <h3 className="text-center mb-3">Giúp việc theo giờ</h3>
+            <h3 className="text-center mb-3">Tổng vệ sinh</h3>
 
             <label className="form-label" htmlFor="KieuDV">
               Chọn diện tích
