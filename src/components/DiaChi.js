@@ -24,8 +24,8 @@ const DiaChi = ({ user }) => {
   const layDSDiaChi = useCallback(async () => {
     try {
       const response = await layDiaChiByIdNguoiDung(user.id);
-      console.log(response.message.data)
-      setDiaChis(response.message.data);
+      console.log(response?.message?.data)
+      setDiaChis(response?.message?.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -37,7 +37,7 @@ const DiaChi = ({ user }) => {
     const fetchData = async () => {
       try {
         const response = await getProvince();
-        setCities(response.message.data);
+        setCities(response?.message?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -50,7 +50,7 @@ const DiaChi = ({ user }) => {
     setSelectedCity(cityId);
 
     const selectedCityData = await layHuyenByProvinceId(cityId);
-    setDistricts(selectedCityData.message.data);
+    setDistricts(selectedCityData?.message?.data);
     setSelectedDistrict("");
     setWards([]);
     setSelectedWard("");
@@ -61,7 +61,7 @@ const DiaChi = ({ user }) => {
     setSelectedDistrict(districtId);
 
     const selectedDistrictData = await layXaByDistrictId(districtId);
-    setWards(selectedDistrictData.message.data);
+    setWards(selectedDistrictData?.message?.data);
     setSelectedWard("");
   };
 
@@ -81,7 +81,7 @@ const DiaChi = ({ user }) => {
       });
       Toast.fire({
         icon: "success",
-        title: response.message.data.message,
+        title: response?.message?.data?.message,
       });
       await layDSDiaChi(); // Ensure the address list is updated after deletion
     } catch (error) {
@@ -121,7 +121,7 @@ const DiaChi = ({ user }) => {
       });
       Toast.fire({
         icon: "success",
-        title: response.message.data.message,
+        title: response?.message?.data?.message,
       });
       setSelectedCity("");
       setSelectedDistrict("");

@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  layDanhSachChiTietDVTheoId,
+  layChiTietDVTheoIdKieuDV,
   layIdKhachHang,
+  layKieuDVByIdDV,
   taoPhieuDichVu,
 } from "../api/GiupViecAPI";
 import {
@@ -15,18 +16,12 @@ import {
 import Swal from "sweetalert2";
 
 const ThueDichVu = ({ user }) => {
-  const [selectedDay, setSelectedDay] = useState("");
   const [ngayBD, setNgayBD] = useState("");
-  const [allowedDates, setAllowedDates] = useState([]);
   const [tongTien, setTongTien] = useState(0);
-  const [soBuoi, setSoBuoi] = useState(1);
-  const [soGio, setSoGio] = useState(2);
   const [gioBatDau, setGioBatDau] = useState("");
   const [ghiChu, setGhiChu] = useState("");
-  const [minBuoi, setMinBuoi] = useState(1);
   const [diaChis, setDiaChis] = useState([]);
   const [idAddress, setIdAddress] = useState();
-  const [idChiTietDV, setIdChiTietDV] = useState();
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
   const [districts, setDistricts] = useState([]);
@@ -34,69 +29,31 @@ const ThueDichVu = ({ user }) => {
   const [wards, setWards] = useState([]);
   const [selectedWard, setSelectedWard] = useState("");
   const [duong, setDuong] = useState("");
-  const [dsChiTietDV, setDSChiTietDV] = useState([]);
+  const [chiTietDV, setChiTietDV] = useState([]);
+  const [dsKieuDV, setDSKieuDV] = useState([]);
+  const [selectedLoaiML, setselectedLoaiML] = useState("");
   const { id } = useParams();
   const modalRef = useRef(null);
 
   const navigate = useNavigate();
 
-  const handleDayChange = (event) => {
-    const selectedDayOfWeek = event.target.value;
-    setSelectedDay(selectedDayOfWeek);
-
-    if (selectedDayOfWeek !== "") {
-      const chiTietDichVu = dsChiTietDV.find(
-        (item) => item.BuoiDangKyDichVu === selectedDayOfWeek
-      );
-      setIdChiTietDV(chiTietDichVu.idChiTietDichVu);
-      const daysOfWeek = selectedDayOfWeek.split(" - ");
-      setSoBuoi(daysOfWeek.length);
-      setMinBuoi(daysOfWeek.length);
-      const nextAvailableDates = getNextAvailableDates(daysOfWeek);
-      setAllowedDates(nextAvailableDates);
-    } else {
-      setAllowedDates([]);
+  const handleLoaiMLChange = async (e) => {
+    const selectedDT = e.target.value;
+    setselectedLoaiML(selectedDT);
+    try {
+      if (selectedDT !== "") {
+        const response = await layChiTietDVTheoIdKieuDV(selectedDT);
+        setChiTietDV(response?.message?.data[0]);
+      } else {
+        setChiTietDV([]);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-
-    setNgayBD("");
   };
 
   const handleNgayBDChange = (e) => {
-    if (allowedDates.includes(e.target.value)) {
-      setNgayBD(e.target.value);
-    } else {
-      setNgayBD("");
-    }
-  };
-
-  const getNextAvailableDates = (daysOfWeek) => {
-    const currentDate = new Date();
-    const dayMap = {
-      "chủ nhật": 0,
-      "thứ 2": 1,
-      "thứ 3": 2,
-      "thứ 4": 3,
-      "thứ 5": 4,
-      "thứ 6": 5,
-      "thứ 7": 6,
-    };
-
-    const daysOfWeekNumbers = daysOfWeek.map(
-      (day) => dayMap[day.toLowerCase()]
-    );
-    let nextDates = [];
-
-    for (let i = 0; i < 60; i++) {
-      // Looking ahead 60 days
-      let tempDate = new Date(currentDate);
-      tempDate.setDate(tempDate.getDate() + i);
-
-      if (daysOfWeekNumbers.includes(tempDate.getDay())) {
-        nextDates.push(tempDate.toISOString().split("T")[0]);
-      }
-    }
-
-    return nextDates;
+    setNgayBD(e.target.value);
   };
 
   const layDSDiaChi = useCallback(async () => {
@@ -115,10 +72,10 @@ const ThueDichVu = ({ user }) => {
   }, [user.id]);
 
   useEffect(() => {
-    const loadCombobox = async () => {
+    const loadComboboxLoaiML = async () => {
       try {
-        const response = await layDanhSachChiTietDVTheoId(id);
-        setDSChiTietDV(response?.message?.data);
+        const response = await layKieuDVByIdDV(id);
+        setDSKieuDV(response?.message?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -133,34 +90,28 @@ const ThueDichVu = ({ user }) => {
       }
     };
 
-    loadCombobox();
+    loadComboboxLoaiML();
     fetchData();
     layDSDiaChi();
   }, [layDSDiaChi, id]);
 
   useEffect(() => {
     const tinhTongTien = () => {
-      const selectedService = dsChiTietDV.find(
-        (item) => item.BuoiDangKyDichVu === selectedDay
-      );
-      if (selectedService) {
-        const total = selectedService.GiaTien * soBuoi * soGio;
+      if (chiTietDV.length !== 0) {
+        let total = chiTietDV.GiaTien;
+        if (ngayBD) {
+          const ngay = new Date(ngayBD).getDay(); // 0 là chủ nhật, 6 là thứ bảy
+          if (ngay === 0 || ngay === 6) {
+            total *= 1.2; // Tăng 20%
+          }
+        }
         setTongTien(total);
       } else {
         setTongTien(0);
       }
     };
     tinhTongTien();
-  }, [selectedDay, soBuoi, soGio, dsChiTietDV]);
-
-  const handleSoBuoiChange = (event) => {
-    setSoBuoi(Number(event.target.value));
-  };
-
-  const handleSoGioChange = (event) => {
-    setSoGio(Number(event.target.value));
-    setGioBatDau("");
-  };
+  }, [chiTietDV, ngayBD]);
 
   const handleGioBatDauChange = (event) => {
     const selectedTime = event.target.value;
@@ -168,15 +119,10 @@ const ThueDichVu = ({ user }) => {
     // Kiểm tra nếu giờ bắt đầu nằm trong khoảng từ 7h sáng đến bé hơn 10h tối
     if (gioBatDauHour >= 7 && gioBatDauHour < 22) {
       // Kiểm tra số giờ làm việc để đảm bảo không vượt quá 10h tối
-      if (gioBatDauHour + soGio <= 22) {
-        // Thực hiện cập nhật giờ bắt đầu
-        const formattedHour =
-          gioBatDauHour < 10 ? `0${gioBatDauHour}` : gioBatDauHour;
-        setGioBatDau(`${formattedHour}:00`);
-      } else {
-        // Nếu số giờ làm việc vượt quá 10h tối, cần thông báo hoặc xử lý tương ứng
-        setGioBatDau("");
-      }
+      // Thực hiện cập nhật giờ bắt đầu
+      const formattedHour =
+        gioBatDauHour < 10 ? `0${gioBatDauHour}` : gioBatDauHour;
+      setGioBatDau(`${formattedHour}:00`);
     } else {
       // Nếu giờ bắt đầu không nằm trong khoảng cho phép, thông báo hoặc xử lý tương ứng
       setGioBatDau("");
@@ -198,13 +144,10 @@ const ThueDichVu = ({ user }) => {
       const phieuDVData = {
         Tongtien: tongTien,
         NgayBatDau: ngayBD,
-        SoBuoi: soBuoi,
-        SoGio: soGio,
         GioBatDau: gioBatDau,
         GhiChu: ghiChu,
-        idKhachHang: response.message.data[0],
-        Thu: selectedDay,
-        idChiTietDichVu: idChiTietDV,
+        idKhachHang: response?.message?.data[0],
+        idChiTietDichVu: chiTietDV.idChiTietDichVu,
         idDiaChi: idAddress,
       };
       console.log(phieuDVData);
@@ -287,29 +230,28 @@ const ThueDichVu = ({ user }) => {
             className="mx-auto bg-white border rounded py-3 px-5 shadow"
             onSubmit={handleDatDichVu}
           >
-            <h3 className="text-center mb-3">Giúp việc theo giờ</h3>
-            <label className="form-label" htmlFor="NgayLamViec">
-              Chọn ngày làm việc trong tuần
+            <h3 className="text-center mb-3">Vệ sinh SoFa</h3>
+
+            <label className="form-label" htmlFor="KieuDV">
+              Chọn loại SoFa
             </label>
             <select
-              id="NgayLamViec"
+              id="KieuDV"
               className="form-select mb-3"
-              value={selectedDay}
-              onChange={handleDayChange}
+              value={selectedLoaiML}
+              onChange={handleLoaiMLChange}
               required
             >
               <option defaultValue={true} value="">
                 Tùy chọn
               </option>
-              {dsChiTietDV.map((item) => (
-                <option
-                  key={item?.idChiTietDichVu}
-                  value={item.BuoiDangKyDichVu}
-                >
-                  {item.BuoiDangKyDichVu}
+              {dsKieuDV.map((item) => (
+                <option key={item?.idKieuDichVu} value={item.idKieuDichVu}>
+                  {item.tenKieuDichVu}
                 </option>
               ))}
             </select>
+
             <div className="row">
               <div className="col-md-6 mb-3">
                 <label htmlFor="NgayBatDau" className="form-label">
@@ -323,48 +265,11 @@ const ThueDichVu = ({ user }) => {
                   onChange={handleNgayBDChange}
                   min={new Date().toISOString().split("T")[0]} // Disallow past dates
                   required
-                  list="allowed-dates"
-                />
-                <datalist id="allowed-dates">
-                  {allowedDates.map((date) => (
-                    <option key={date} value={date} />
-                  ))}
-                </datalist>
-              </div>
-              <div className="col-md-6 mb-3">
-                <label htmlFor="SoBuoi" className="form-label">
-                  Số buổi
-                </label>
-                <input
-                  type="number"
-                  id="SoBuoi"
-                  className="form-control"
-                  min={minBuoi}
-                  max={182}
-                  value={soBuoi}
-                  onChange={handleSoBuoiChange}
-                  required
-                />
-              </div>
-              <div className="col-md-6 mb-3">
-                <label htmlFor="SoGioLamViec" className="form-label">
-                  Số giờ làm việc <br />
-                  <small className="text-danger">(Từ 2 - 4 giờ)</small>
-                </label>
-                <input
-                  type="number"
-                  id="SoGioLamViec"
-                  className="form-control"
-                  min={2}
-                  max={4}
-                  value={soGio}
-                  onChange={handleSoGioChange}
-                  required
                 />
               </div>
               <div className="col-md-6 mb-3">
                 <label htmlFor="GioBatDau" className="form-label">
-                  Giờ bắt đầu <br />
+                  Giờ bắt đầu{" "}
                   <small className="text-danger">(Trong khoảng 7h - 22h)</small>
                 </label>
                 <input

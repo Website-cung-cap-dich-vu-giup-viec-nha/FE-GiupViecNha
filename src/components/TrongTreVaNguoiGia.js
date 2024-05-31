@@ -20,7 +20,7 @@ const ThueDichVu = ({ user }) => {
   const [allowedDates, setAllowedDates] = useState([]);
   const [tongTien, setTongTien] = useState(0);
   const [soBuoi, setSoBuoi] = useState(1);
-  const [soGio, setSoGio] = useState(2);
+  const [soGio, setSoGio] = useState(4);
   const [gioBatDau, setGioBatDau] = useState("");
   const [ghiChu, setGhiChu] = useState("");
   const [minBuoi, setMinBuoi] = useState(1);
@@ -35,6 +35,7 @@ const ThueDichVu = ({ user }) => {
   const [selectedWard, setSelectedWard] = useState("");
   const [duong, setDuong] = useState("");
   const [dsChiTietDV, setDSChiTietDV] = useState([]);
+  const [soLg, setSoLg] = useState(1);
   const { id } = useParams();
   const modalRef = useRef(null);
 
@@ -144,17 +145,24 @@ const ThueDichVu = ({ user }) => {
         (item) => item.BuoiDangKyDichVu === selectedDay
       );
       if (selectedService) {
-        const total = selectedService.GiaTien * soBuoi * soGio;
+        let total = selectedService.GiaTien * soBuoi * soGio;
+        if (soLg >= 2) {
+          total += 0.3 * total * (soLg - 1);
+        }
         setTongTien(total);
       } else {
         setTongTien(0);
       }
     };
     tinhTongTien();
-  }, [selectedDay, soBuoi, soGio, dsChiTietDV]);
+  }, [selectedDay, soBuoi, soGio, soLg, dsChiTietDV]);
 
   const handleSoBuoiChange = (event) => {
     setSoBuoi(Number(event.target.value));
+  };
+
+  const handleSoLgChange = (event) => {
+    setSoLg(Number(event.target.value));
   };
 
   const handleSoGioChange = (event) => {
@@ -200,9 +208,10 @@ const ThueDichVu = ({ user }) => {
         NgayBatDau: ngayBD,
         SoBuoi: soBuoi,
         SoGio: soGio,
+        SoNguoiDuocChamSoc: soLg,
         GioBatDau: gioBatDau,
         GhiChu: ghiChu,
-        idKhachHang: response.message.data[0],
+        idKhachHang: response?.message?.data[0],
         Thu: selectedDay,
         idChiTietDichVu: idChiTietDV,
         idDiaChi: idAddress,
@@ -287,7 +296,9 @@ const ThueDichVu = ({ user }) => {
             className="mx-auto bg-white border rounded py-3 px-5 shadow"
             onSubmit={handleDatDichVu}
           >
-            <h3 className="text-center mb-3">Giúp việc theo giờ</h3>
+            <h3 className="text-center mb-3">
+              {id === "3" ? "Trông trẻ" : "Chăm sóc người cao tuổi"}
+            </h3>
             <label className="form-label" htmlFor="NgayLamViec">
               Chọn ngày làm việc trong tuần
             </label>
@@ -349,14 +360,14 @@ const ThueDichVu = ({ user }) => {
               <div className="col-md-6 mb-3">
                 <label htmlFor="SoGioLamViec" className="form-label">
                   Số giờ làm việc <br />
-                  <small className="text-danger">(Từ 2 - 4 giờ)</small>
+                  <small className="text-danger">(Từ 4 - 8 giờ)</small>
                 </label>
                 <input
                   type="number"
                   id="SoGioLamViec"
                   className="form-control"
-                  min={2}
-                  max={4}
+                  min={4}
+                  max={8}
                   value={soGio}
                   onChange={handleSoGioChange}
                   required
@@ -377,6 +388,21 @@ const ThueDichVu = ({ user }) => {
                   required
                 />
               </div>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="SoLg" className="form-label">
+                {id === "3" ? "Số Trẻ" : "Số người"} <small className="text-danger">(Tối đa 2)</small>
+              </label>
+              <input
+                type="number"
+                id="SoLg"
+                className="form-control"
+                min={1}
+                max={2}
+                value={soLg}
+                onChange={handleSoLgChange}
+                required
+              />
             </div>
             <div className="mb-3">
               <label htmlFor="GhiChu" className="form-label">
