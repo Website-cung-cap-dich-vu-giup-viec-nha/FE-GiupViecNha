@@ -13,7 +13,7 @@ const KetQuaThanhToan = () => {
       setKetQua(response.message.data.data);
     };
     ktraKetQua();
-  }, []);
+  }, [queryParams]);
 
   return (
     <div className="container">

@@ -1,5 +1,17 @@
 .slick-slide > div{
     margin: 0 10px;
+    height: 100%;
+}
+
+.maucam{
+    color:#FF8228;
+}
+
+.maylanh{
+    border-radius: 12px;
+    background-color: #F5F5F5;
+    padding: 14px 0px;
+
 }
 
 #sideBarUser > li > span{
