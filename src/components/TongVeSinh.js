@@ -392,8 +392,7 @@ const ThueDichVu = ({ user }) => {
               </div>
               <div className="col-md-12 mb-3">
                 <label htmlFor="GioBatDau" className="form-label">
-                  Giờ bắt đầu <br />
-                  <small className="text-danger">(Trong khoảng 7h - 22h)</small>
+                  Giờ bắt đầu <small className="text-danger">(Trong khoảng 7h - 22h)</small>
                 </label>
                 <input
                   type="time"

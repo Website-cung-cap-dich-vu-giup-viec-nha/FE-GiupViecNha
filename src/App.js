@@ -25,6 +25,7 @@ import ThueDichVuView from "./pages/ThueDichVuView";
 import CamOn from "./components/CamOn";
 import PhuongThucThanhToan from "./components/PhuongThucThanhToan";
 import KetQuaThanhToan from "./components/KetQuaThanhToan";
+import ThongKeView from "./pages/ThongKeView";
 
 
 const axiosInstance = axios.create({
@@ -145,6 +146,7 @@ function App() {
           <Route path="/sorry" element={<Sorry />} />
           <Route path="/phuongthucthanhtoan" element={<PhuongThucThanhToan />} />
           <Route path="/ketquathanhtoan" element={<KetQuaThanhToan />} />
+          <Route path="/thongke" element={<ThongKeView />} />
           <Route
             path="/thuedichvu/:id"
             element={
