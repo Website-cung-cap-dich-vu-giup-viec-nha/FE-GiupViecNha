@@ -26,6 +26,12 @@ import CamOn from "./components/CamOn";
 import PhuongThucThanhToan from "./components/PhuongThucThanhToan";
 import KetQuaThanhToan from "./components/KetQuaThanhToan";
 import ThongKeView from "./pages/ThongKeView";
+import GiupViecTheoGioView from "./pages/GiupViecTheoGioView";
+import TongVeSinhView from "./pages/TongVeSinhView";
+import TrongTreView from "./pages/TrongTreView";
+import ChamSocNgCaoTuoiView from "./pages/ChamSocNgCaoTuoiView";
+import VeSinhMayLanhView from "./pages/VeSinhMayLanhView";
+import VeSinhSoFa from "./pages/VeSinhSoFa";
 
 
 const axiosInstance = axios.create({
@@ -147,6 +153,12 @@ function App() {
           <Route path="/phuongthucthanhtoan" element={<PhuongThucThanhToan />} />
           <Route path="/ketquathanhtoan" element={<KetQuaThanhToan />} />
           <Route path="/thongke" element={<ThongKeView />} />
+          <Route path="/giupviectheogio" element={<GiupViecTheoGioView />} />
+          <Route path="/tongvesinh" element={<TongVeSinhView />} />
+          <Route path="/trongtre" element={<TrongTreView />} />
+          <Route path="/vesinhmaylanh" element={<VeSinhMayLanhView />} />
+          <Route path="/vesinhsofa" element={<VeSinhSoFa />} />
+          <Route path="/chamsocnguoicaotuoi" element={<ChamSocNgCaoTuoiView />} />
           <Route
             path="/thuedichvu/:id"
             element={

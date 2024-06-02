@@ -9,6 +9,9 @@ import fast from "../assets/icon/fast.svg";
 import quality from "../assets/icon/quality.svg";
 import secure from "../assets/icon/secure.svg";
 import supplies from "../assets/icon/supplies.svg";
+import pattern from "../assets/background/pattern.jpg";
+import bannernew from "../assets/banner/banner-new.jpg";
+
 import axios from "axios";
 import { Link } from "react-router-dom";
 const TrangChuView = ({ dichvu }) => {
@@ -56,6 +59,41 @@ const TrangChuView = ({ dichvu }) => {
     dots: true,
     infinite: false,
     speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  const settings2 = {
+    dots: true,
+    infinite: false,
+    speed: 500,
     slidesToShow: 4,
     slidesToScroll: 4,
     initialSlide: 0,
@@ -87,9 +125,42 @@ const TrangChuView = ({ dichvu }) => {
     ],
   };
   return (
-    <>
+    <div style={{backgroundImage:`url(${pattern})`}}>
       {/* banner */}
+
       <div
+        className="container-fluid"
+        style={{
+          backgroundImage: `url(${bannernew})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          padding: "15% 0% 15% 0%",
+        }}
+      >
+        <div className="m-auto" style={{ maxWidth: "1140px" }}>
+          <div className="text-white text-center">
+            <p className="m-0" style={{textShadow: ".13em .02em .1em rgba(0, 0, 0, .4)", letterSpacing:"2px"}}>DỊCH VỤ VIỆC NHÀ VÀ VỆ SINH ĐƯỢC ĐÁNH GIÁ CAO NHẤT</p>
+            <h1
+              className="lh-lg"
+              style={{
+                textShadow: ".03em .02em .1em rgba(0, 0, 0, .4)",
+                fontWeight: "700",
+                fontSize: "3rem"
+              }}
+            >
+              HÃY ĐỂ VIỆC NHÀ CHO CHÚNG TÔI
+            </h1>
+            <p style={{
+              textShadow:"-.06em .07em .1em rgba(0, 0, 0, .4)",
+              lineHeight:"1.4em",
+              fontWeight: "500",}}>
+              Bạn có thể tập trung vào những việc quan trọng hơn.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* <div
         id="carouselBanner"
         className="carousel slide"
         data-bs-ride="carousel"
@@ -141,11 +212,11 @@ const TrangChuView = ({ dichvu }) => {
           ></span>
           <span className="visually-hidden">Next</span>
         </button>
-      </div>
+      </div> */}
 
       {/* Lý do vì sao nên chọn chúng tôi */}
       <div className="container-md py-5">
-        <h2 className="text-center">Những lý do bạn nên chọn chúng tôi</h2>
+        <h2 className="text-center maucam">Những lý do bạn nên chọn chúng tôi</h2>
         <div className="row justify-content-center">
           <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3 mt-5">
             <img src={supplies} height={40} alt="" />
@@ -188,8 +259,8 @@ const TrangChuView = ({ dichvu }) => {
         style={{ backgroundImage: `url(${anhnen})` }}
       >
         <div className="container-md py-5">
-          <h2 className="text-center mb-5">Dịch vụ của chúng tôi</h2>
-          <Slider {...settings}>
+          <h2 className="text-center mb-5 maucam">Dịch vụ của chúng tôi</h2>
+          <Slider {...settings2}>
             {dichvus &&
               dichvus.map((item, index) => (
                 <div key={index} className="card" style={{ width: "18rem" }}>
@@ -202,15 +273,54 @@ const TrangChuView = ({ dichvu }) => {
                   <div className="card-body">
                     <h5 className="card-title">{item.tenDichVu}</h5>
                     <p className="card-text">{item.MoTa}</p>
-                    <Link
-                      to={"/thuedichvu/" + item.idDichVu}
-                      onClick={() => {
-                        dichvu(item.idDichVu);
-                      }}
-                      className="btn btn-secondary"
-                    >
-                      Đặt dịch vụ
-                    </Link>
+                    {item.idDichVu === 1 && (
+                      <Link
+                        to="/giupviectheogio"
+                        className="text-secondary text-decoration-underline"
+                      >
+                        Chi tiết dịch vụ
+                      </Link>
+                    )}
+                    {item.idDichVu === 2 && (
+                      <Link
+                        to="/tongvesinh"
+                        className="text-secondary text-decoration-underline"
+                      >
+                        Chi tiết dịch vụ
+                      </Link>
+                    )}
+                    {item.idDichVu === 3 && (
+                      <Link
+                        to="/trongtre"
+                        className="text-secondary text-decoration-underline"
+                      >
+                        Chi tiết dịch vụ
+                      </Link>
+                    )}
+                    {item.idDichVu === 4 && (
+                      <Link
+                        to="chamsocnguoicaotuoi"
+                        className="text-secondary text-decoration-underline"
+                      >
+                        Chi tiết dịch vụ
+                      </Link>
+                    )}
+                    {item.idDichVu === 5 && (
+                      <Link
+                        to="/vesinhmaylanh"
+                        className="text-secondary text-decoration-underline"
+                      >
+                        Chi tiết dịch vụ
+                      </Link>
+                    )}
+                    {item.idDichVu === 6 && (
+                      <Link
+                        to="/vesinhsofa"
+                        className="text-secondary text-decoration-underline"
+                      >
+                        Chi tiết dịch vụ
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}
@@ -220,7 +330,7 @@ const TrangChuView = ({ dichvu }) => {
 
       {/* About */}
       <div className="container-md py-5">
-        <h2 className="text-center">Những con số ấn tượng</h2>
+        <h2 className="text-center maucam">Những con số ấn tượng</h2>
         <div className="row mt-5 justify-content-center">
           <div className="col-sm-6 col-lg-3 d-flex flex-column p-4">
             <i className="fa-solid fa-user-group fs-3"></i>
@@ -253,9 +363,103 @@ const TrangChuView = ({ dichvu }) => {
         </div>
       </div>
 
+      {/*Phản hồi của khách hàng*/}
+      <div
+        className="container-fluid py-5"
+        style={{ backgroundColor: "#F5F5F5" }}
+      >
+        <div className="container">
+          <h2 className="text-center mb-4 maucam">Phản hồi của khách hàng</h2>
+
+          <div
+            className="slider-container"
+            style={{ maxWidth: "900px", margin: "auto" }}
+          >
+            <Slider {...settings}>
+              <div className="bg-white rounded p-2 me-lg-3 mb-3">
+                <div className="border rounded py-3 px-2 h-100 d-flex flex-column justify-content-between align-items-center">
+                  <img
+                    src={require("../assets/user/people-1-420x420.jpg")}
+                    width={80}
+                    height={80}
+                    className="rounded-circle"
+                    alt=""
+                  />
+                  <p className="text-center mt-2">
+                    Nhân viên nhiệt tình, lễ phép, dọn dẹp sạch; nhà mình rất
+                    hài lòng. Các bạn tư vấn cũng nhiệt tình và trả lời nhanh
+                    chóng. Mong các bạn luôn duy trì được chất lượng như vậy
+                  </p>
+                  <h4 className="">Kim Kim</h4>
+                  <div className="text-warning">
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star-half-stroke"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded p-2 me-lg-3 mb-3">
+                <div className="border rounded py-3 px-2 h-100 d-flex flex-column justify-content-between align-items-center">
+                  <img
+                    src={require("../assets/user/people-2-420x420.jpg")}
+                    width={80}
+                    height={80}
+                    className="rounded-circle"
+                    alt=""
+                  />
+                  <p className="text-center mt-2">
+                    Dịch vụ khá linh động phù hợp với những gia đình bận rộn như
+                    nhà mình, giá cả hợp lý.... mình có nhiều thời gian hơn để
+                    dành cho gia đình và công việc. Mình đã giới thiệu với nhiều
+                    bạn bè mình và mọi người cũng thấy rất hài lòng. Chúc quý
+                    công ty ngày càng phục vụ được nhiều Khách hàng hơn.
+                  </p>
+                  <h4 className="">Khuê Ngọc</h4>
+                  <div className="text-warning">
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded p-2 me-lg-3 mb-3">
+                <div className="border rounded py-3 px-2 h-100 d-flex flex-column justify-content-between align-items-center">
+                  <img
+                    src={require("../assets/user/people-3-420x420.jpg")}
+                    width={80}
+                    height={80}
+                    className="rounded-circle"
+                    alt=""
+                  />
+                  <p className="text-center mt-2">
+                    Tôi đã sử dụng dịch vụ của công ty rất hài lòng về chất
+                    lượng dịch vụ và nhân viên tư vấn rất vừa ý cảm ơn công ty
+                    tôi sẽ sử dụng lâu dài.
+                  </p>
+                  <h4 className="">Vũ Bình</h4>
+                  <div className="text-warning">
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star me-1"></i>
+                    <i className="fa-solid fa-star-half-stroke"></i>
+                  </div>
+                </div>
+              </div>
+            </Slider>
+          </div>
+        </div>
+      </div>
+
       {/* Câu hỏi thường gặp */}
-      <div className="container-md pb-5">
-        <h2 className="text-center">Các câu hỏi thường gặp</h2>
+      <div className="container mt-5">
+        <h2 className="text-center maucam">Các câu hỏi thường gặp</h2>
         <div className="row justify-content-center py-5">
           <div className="col-lg-6">
             <div className="accordion" id="accordionExample">
@@ -352,7 +556,7 @@ const TrangChuView = ({ dichvu }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
