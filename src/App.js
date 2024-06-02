@@ -32,7 +32,7 @@ import TrongTreView from "./pages/TrongTreView";
 import ChamSocNgCaoTuoiView from "./pages/ChamSocNgCaoTuoiView";
 import VeSinhMayLanhView from "./pages/VeSinhMayLanhView";
 import VeSinhSoFa from "./pages/VeSinhSoFa";
-
+import ProductManager from "./pages/admin/ProductManager";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -196,6 +196,15 @@ function App() {
               path="users"
               element={
                 <Users
+                  setPageName={setAdminPageName}
+                  setBreadCrumb={setAdminBreadCrumb}
+                />
+              }
+            />
+            <Route
+              path="productmanager"
+              element={
+                <ProductManager
                   setPageName={setAdminPageName}
                   setBreadCrumb={setAdminBreadCrumb}
                 />

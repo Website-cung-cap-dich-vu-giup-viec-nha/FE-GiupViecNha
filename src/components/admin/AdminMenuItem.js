@@ -19,6 +19,7 @@ import {
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import UserIcon from "@mui/icons-material/Person";
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import { styled, useTheme } from "@mui/material/styles";
 import logo from "../../assets/Logo.png";
 import { Link, useNavigate, Outlet } from "react-router-dom";
@@ -62,6 +63,11 @@ const AdminMenuItem = ({ pageName, breadCrumb }) => {
       to: "/admin/users",
       icon: UserIcon,
       text: "Quản lý nhân viên",
+    },
+    {
+      to: "/admin/productmanager",
+      icon: ReceiptIcon,
+      text: "Quản lý phiếu dịch vụ",
     },
   ];
   const navigate = useNavigate();
