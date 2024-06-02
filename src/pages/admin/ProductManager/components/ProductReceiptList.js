@@ -1,9 +1,7 @@
 import {
-  Avatar,
   Box,
   Button,
   Card,
-  // Icon,
   IconButton,
   Paper,
   Table,
@@ -15,15 +13,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import downloadIcon from "../../../../assets/icon/downloadIcon.svg";
-import uploadIcon from "../../../../assets/icon/uploadIcon.svg";
 import View from "../../../../assets/icon/View.svg";
 import Edit from "../../../../assets/icon/Edit.svg";
 import Trash from "../../../../assets/icon/Trash.svg";
-import { config } from "../../../../config";
-import { makeStyles } from "@mui/styles";
 import dayjs from "dayjs";
-// import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { makeStyles } from "@mui/styles";
+import moment from "moment";
 
 const useStyles = makeStyles({
   tableCell: {
@@ -31,21 +26,21 @@ const useStyles = makeStyles({
   },
 });
 
-const StaffList = ({
+const ProductReceiptList = ({
   data,
   totalElements,
   page,
   setPage,
   rowsPerPage,
   setRowsPerPage,
-  handleDownload,
-  handleImport,
-  handleExportExampleHeader,
   setSelectedRow,
   setOpenDetail,
   setOpenDelete,
   setOpenInsert,
   setOpenEdit,
+  handleTinhTrangLabel,
+  handleTinhTrangThanhToanLabel,
+  setOpenCustomerDetail,
 }) => {
   const iconStyle = {
     fontSize: 20,
@@ -56,8 +51,8 @@ const StaffList = ({
   const classes = useStyles();
   const handleIcon = (item) => {
     setSelectedRow(item);
-    setSelectedRow({ ...item, "NgaySinh": dayjs(item?.NgaySinh) });
-    setSelectedRow({ ...item, "password": "" });
+    setSelectedRow({ ...item, NgaySinh: dayjs(item?.NgaySinh) });
+    setSelectedRow({ ...item, password: "" });
   };
   return (
     <Card>
@@ -69,109 +64,10 @@ const StaffList = ({
       >
         <Box>
           <Typography variant="h4" gutterBottom>
-            Danh sách nhân viên
+            Danh sách phiếu dịch vụ
           </Typography>
         </Box>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Box color="text" px={1}>
-            <Button
-              variant="contained"
-              onClick={handleDownload}
-              sx={{
-                flex: 1,
-                height: "100%",
-                marginTop: 0,
-                marginBottom: 0,
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: "#80d4ff",
-                color: "white",
-              }}
-            >
-              <img src={downloadIcon} alt="" />
-              <Typography
-                whiteSpace="nowrap"
-                sx={{
-                  fontWeight: 600,
-                  fontSize: "16px",
-                  textTransform: "none",
-                  alignItems: "center",
-                  marginLeft: "8px",
-                }}
-              >
-                Xuất dữ liệu
-              </Typography>
-            </Button>
-          </Box>
-          <Box color="text" px={1}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                document.getElementById("fileInput").click();
-              }}
-              sx={{
-                flex: 1,
-                height: "100%",
-                marginTop: 0,
-                marginBottom: 0,
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: "#80d4ff",
-                color: "white",
-              }}
-            >
-              <img src={uploadIcon} alt="" />
-              <Typography
-                whiteSpace="nowrap"
-                sx={{
-                  fontWeight: 600,
-                  fontSize: "16px",
-                  textTransform: "none",
-                  alignItems: "center",
-                  marginLeft: "8px",
-                }}
-              >
-                Nhập dữ liệu
-              </Typography>
-              <input
-                type="file"
-                id="fileInput"
-                accept=".xlsx, .xls"
-                style={{ display: "none" }}
-                onChange={handleImport}
-              />
-            </Button>
-          </Box>
-          <Box color="text" px={1}>
-            <Button
-              variant="contained"
-              onClick={handleExportExampleHeader}
-              sx={{
-                flex: 1,
-                height: "100%",
-                marginTop: 0,
-                marginBottom: 0,
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: "#80d4ff",
-                color: "white",
-              }}
-            >
-              <img src={downloadIcon} alt="" />
-              <Typography
-                whiteSpace="nowrap"
-                sx={{
-                  fontWeight: 600,
-                  fontSize: "16px",
-                  textTransform: "none",
-                  alignItems: "center",
-                  marginLeft: "8px",
-                }}
-              >
-                Xuất file mẫu
-              </Typography>
-            </Button>
-          </Box>
           <Box color="text" px={1}>
             <Button
               variant="contained"
@@ -251,49 +147,56 @@ const StaffList = ({
                   align="center"
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
-                  ẢNH NGƯỜI DÙNG
+                  MÃ PHIẾU DỊCH VỤ
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
                   align="center"
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
-                  HỌ VÀ TÊN
+                  TỔNG TIỀN
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
                   align="center"
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
-                  EMAIL
+                  NGÀY BẮT ĐẦU
+                </TableCell>
+                {/* <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  SỐ BUỔI
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
                   align="center"
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
-                  SỐ ĐIỆN THOẠI
+                  SỐ GIỜ
+                </TableCell> */}
+                {/* <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  SỐ NGƯỜI ĐƯỢC CHĂM SÓC
+                </TableCell> */}
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  GIỜ BẮT ĐẦU
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
                   align="center"
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
-                  NGÀY SINH
-                </TableCell>
-                <TableCell
-                  className={classes.tableCell}
-                  align="center"
-                  sx={{ fontWeight: "bold", color: "#606F89" }}
-                >
-                  CHỨC VỤ
-                </TableCell>
-                <TableCell
-                  className={classes.tableCell}
-                  align="center"
-                  sx={{ fontWeight: "bold", color: "#606F89" }}
-                >
-                  SỐ SAO
+                  GHI CHÚ
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
@@ -301,6 +204,34 @@ const StaffList = ({
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
                   TÌNH TRẠNG
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  TÌNH TRẠNG THANH TOÁN
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  ĐỊA CHỈ
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  KHÁCH HÀNG
+                </TableCell>
+                <TableCell
+                  className={classes.tableCell}
+                  align="center"
+                  sx={{ fontWeight: "bold", color: "#606F89" }}
+                >
+                  DỊCH VỤ
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
@@ -333,78 +264,87 @@ const StaffList = ({
                     <TableCell
                       className={classes.tableCell}
                       align="center"
-                      sx={{ display: "flex", justifyContent: "center" }}
+                      sx={{ color: "#606F89" }}
                     >
-                      <Avatar
-                        alt={item.Anh}
-                        src={`${config.apiBaseUrl}/${item.Anh}`}
-                        sx={{ width: 40, height: 40 }}
-                      />
+                      {item?.idPhieuDichVu}
                     </TableCell>
 
                     <TableCell
                       className={classes.tableCell}
+                      align="center"
                       sx={{ color: "#606F89" }}
                     >
-                      {item.name}
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableCell}
-                      sx={{ color: "#606F89" }}
-                    >
-                      {item.email}
+                      {item?.Tongtien.toLocaleString("vi-VN")} đ
                     </TableCell>
                     <TableCell
                       className={classes.tableCell}
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
-                      {item.SDT}
+                      {item?.NgayBatDau && moment(item?.NgayBatDau).format('DD/MM/YYYY')}
                     </TableCell>
                     <TableCell
                       className={classes.tableCell}
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
-                      {item.NgaySinh}
+                      {item?.GioBatDau}
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      sx={{ color: "#606F89" }}
+                    >
+                      {item?.GhiChu}
                     </TableCell>
                     <TableCell
                       className={classes.tableCell}
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
-                      {item.tenChucVu}
+                      {handleTinhTrangLabel(item?.TinhTrang)}
                     </TableCell>
                     <TableCell
                       className={classes.tableCell}
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
-                      {item.SoSao}
+                      {handleTinhTrangThanhToanLabel(item?.TinhTrangThanhToan)}
                     </TableCell>
                     <TableCell
                       className={classes.tableCell}
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
-                      <Box>
-                        <span
-                          style={{
-                            backgroundColor: item?.status
-                              ? "#F0FFF0"
-                              : "#FFE4E1",
-                            color: item?.status ? "green" : "red",
-                          }}
-                        >
-                          <Typography
-                            variant="caption"
-                            color={item?.status ? "green" : "red"}
-                            fontWeight="bold"
-                          >
-                            {item?.status ? "Hoạt động" : "Khóa"}
-                          </Typography>
-                        </span>
-                      </Box>
+                      {item?.Duong ?? ""}, {item?.ward_name ?? ""}
+                      {", "}
+                      {item?.district_name ?? ""}, {item?.province_name ?? ""}
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ color: "#606F89" }}
+                    >
+                      <IconButton
+                        key={`${item.id}-iconbutton1-icon`}
+                        onClick={() => {
+                          setOpenCustomerDetail();
+                          handleIcon(item);
+                        }}
+                      >
+                        <img
+                          src={View}
+                          alt=""
+                          key={`${item.id}-visibility-icon`}
+                          style={iconStyle}
+                        />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell
+                      className={classes.tableCell}
+                      align="center"
+                      sx={{ color: "#606F89" }}
+                    >
+                      {item?.tenDichVu}
                     </TableCell>
                     <TableCell
                       className={classes.tableCell}
@@ -462,17 +402,17 @@ const StaffList = ({
         </TableContainer>
 
         {/* <Table
-          key={`${rowsCount}--${oldSearching.fromDate}--${oldSearching.untilDate}--${oldSearching.agent}--${oldSearching.content}`}
-          columns={columns}
-          rows={rows}
-          isPagination={true}
-          totalElements={totalElements}
-          rowsPerPageOptions={options}
-          rowsCount={rowsCount}
-          setRowsCount={setRowsCount}
-          curPage={page}
-          setCurPage={setPage}
-        /> */}
+              key={`${rowsCount}--${oldSearching.fromDate}--${oldSearching.untilDate}--${oldSearching.agent}--${oldSearching.content}`}
+              columns={columns}
+              rows={rows}
+              isPagination={true}
+              totalElements={totalElements}
+              rowsPerPageOptions={options}
+              rowsCount={rowsCount}
+              setRowsCount={setRowsCount}
+              curPage={page}
+              setCurPage={setPage}
+            /> */}
         <Typography
           whiteSpace="nowrap"
           sx={{
@@ -493,4 +433,4 @@ const StaffList = ({
   );
 };
 
-export default StaffList;
+export default ProductReceiptList;

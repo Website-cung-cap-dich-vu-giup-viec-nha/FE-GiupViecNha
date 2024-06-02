@@ -94,7 +94,7 @@ import dayjs from "dayjs";
                   textAlign="center"
                 />
               </Grid>
-              <Grid item xs={12} sm={6} xl={4}>
+              {/* <Grid item xs={12} sm={6} xl={4}>
                 <TextField
                   label="Mật khẩu"
                   placeholder="Nhập mật khẩu"
@@ -125,7 +125,7 @@ import dayjs from "dayjs";
                   }}
                   textAlign="center"
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={6} xl={4}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer

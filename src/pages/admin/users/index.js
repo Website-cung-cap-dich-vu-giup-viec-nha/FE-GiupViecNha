@@ -154,7 +154,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
         setMsg(response?.message?.data?.message);
         setStatus(response?.message?.status);
         handleCloseAlert();
-        if(response?.message?.status === 200) handleOpenInsert();
+        if (response?.message?.status === 200) handleOpenInsert();
         if (response?.message?.status === 200) {
           if (page === 0) loadStaffTable();
           else setPage(0);
@@ -171,7 +171,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
         setMsg(response?.message?.data?.message);
         setStatus(response?.message?.status);
         handleCloseAlert();
-        if(response?.message?.status === 200) handleOpenEdit();
+        if (response?.message?.status === 200) handleOpenEdit();
         if (response?.message?.status === 200) {
           if (page === 0) loadStaffTable();
           else setPage(0);
@@ -188,7 +188,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
         setMsg(response?.message?.data?.message[0]);
         setStatus(response?.message?.status);
         handleCloseAlert();
-        if(response?.message?.status === 200) handleOpenDelete();
+        if (response?.message?.status === 200) handleOpenDelete();
         if (response?.message?.status === 200) {
           if (page === 0) loadStaffTable();
           else setPage(0);
@@ -351,8 +351,14 @@ const Users = ({ setPageName, setBreadCrumb }) => {
 
   useEffect(() => {
     if (isFirstLoad) return;
-    handleDataChucVu(insertData?.idPhongBan);
-  }, [insertData?.idPhongBan]);
+    if (openInsert) {
+      handleDataChucVu(insertData?.idPhongBan);
+      setInsertData({ ...insertData, "idChucVu": null });
+    } else if (openEdit) {
+      handleDataChucVu(selectedRow?.idPhongBan);
+      setSelectedRow({ ...selectedRow, "idChucVu": null });
+    }
+  }, [insertData?.idPhongBan, selectedRow?.idPhongBan]);
 
   useEffect(() => {
     if (isFirstLoad) return;
