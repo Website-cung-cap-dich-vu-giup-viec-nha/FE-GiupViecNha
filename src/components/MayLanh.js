@@ -67,6 +67,7 @@ const ThueDichVu = ({ user }) => {
 
   const handleNgayBDChange = (e) => {
     setNgayBD(e.target.value);
+    setGioBatDau("");
   };
 
   const layDSDiaChi = useCallback(async () => {
@@ -127,20 +128,35 @@ const ThueDichVu = ({ user }) => {
       }
     };
     tinhTongTien();
-  }, [selectedLoaiVS, dsChiTietDV, ngayBD]);  
+  }, [selectedLoaiVS, dsChiTietDV, ngayBD]);
 
   const handleGioBatDauChange = (event) => {
     const selectedTime = event.target.value;
     const gioBatDauHour = parseInt(selectedTime.split(":")[0], 10);
-    // Kiểm tra nếu giờ bắt đầu nằm trong khoảng từ 7h sáng đến bé hơn 10h tối
+    const now = new Date();
+    let currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
+    const selectedDate = new Date(ngayBD);
+
+    if (currentMinute > 0) {
+      currentHour += 1;
+    }
+    if (
+      selectedDate.toDateString() === now.toDateString() &&
+      gioBatDauHour <= currentHour
+    ) {
+      setGioBatDau("");
+      return;
+    }
+
+    const formattedHour =
+      gioBatDauHour < 10 ? `0${gioBatDauHour}` : gioBatDauHour;
+    const formattedTime = `${formattedHour}:00`;
+
     if (gioBatDauHour >= 7 && gioBatDauHour < 22) {
-      // Kiểm tra số giờ làm việc để đảm bảo không vượt quá 10h tối
-      // Thực hiện cập nhật giờ bắt đầu
-      const formattedHour =
-        gioBatDauHour < 10 ? `0${gioBatDauHour}` : gioBatDauHour;
-      setGioBatDau(`${formattedHour}:00`);
+      setGioBatDau(formattedTime);
     } else {
-      // Nếu giờ bắt đầu không nằm trong khoảng cho phép, thông báo hoặc xử lý tương ứng
       setGioBatDau("");
     }
   };
@@ -308,7 +324,8 @@ const ThueDichVu = ({ user }) => {
               </div>
               <div className="col-md-6 mb-3">
                 <label htmlFor="GioBatDau" className="form-label">
-                  Giờ bắt đầu <small className="text-danger">(Trong khoảng 7h - 22h)</small>
+                  Giờ bắt đầu{" "}
+                  <small className="text-danger">(Trong khoảng 7h - 22h)</small>
                 </label>
                 <input
                   type="time"
