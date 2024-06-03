@@ -184,7 +184,7 @@ const ProductReceiptList = ({
                 >
                   SỐ NGƯỜI ĐƯỢC CHĂM SÓC
                 </TableCell> */}
-                <TableCell
+                {/* <TableCell
                   className={classes.tableCell}
                   align="center"
                   sx={{ fontWeight: "bold", color: "#606F89" }}
@@ -197,7 +197,7 @@ const ProductReceiptList = ({
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
                   GHI CHÚ
-                </TableCell>
+                </TableCell> */}
                 <TableCell
                   className={classes.tableCell}
                   align="center"
@@ -283,7 +283,7 @@ const ProductReceiptList = ({
                     >
                       {item?.NgayBatDau && moment(item?.NgayBatDau).format('DD/MM/YYYY')}
                     </TableCell>
-                    <TableCell
+                    {/* <TableCell
                       className={classes.tableCell}
                       align="center"
                       sx={{ color: "#606F89" }}
@@ -295,7 +295,7 @@ const ProductReceiptList = ({
                       sx={{ color: "#606F89" }}
                     >
                       {item?.GhiChu}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell
                       className={classes.tableCell}
                       align="center"

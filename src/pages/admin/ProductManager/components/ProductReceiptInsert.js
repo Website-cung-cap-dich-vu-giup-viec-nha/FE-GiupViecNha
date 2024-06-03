@@ -24,6 +24,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import CheckIcon from "@mui/icons-material/Check";
 import { TimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import moment from "moment";
 
 const ProductReceiptInsert = ({
   data,
@@ -36,6 +37,7 @@ const ProductReceiptInsert = ({
   dataKhachHang,
   dataDiaChi,
   setOpenAddress,
+  dataKieuDichVu,
 }) => {
   const commonComboboxLabelStyle = {
     backgroundColor: "#FFF",
@@ -102,7 +104,7 @@ const ProductReceiptInsert = ({
                   sx={commonComboboxLabelStyle}
                   id="ward-label"
                 >
-                  Ngày làm việc trong tuần
+                  {data?.idDichVu !== 6 ? "Ngày làm việc trong tuần" : "Loại sofa"}
                 </InputLabel>
                 <Select
                   value={data?.idChiTietDichVu}
@@ -116,9 +118,15 @@ const ProductReceiptInsert = ({
                     style: { maxHeight: "40VH", overflow: "auto !important" },
                   }}
                   displayEmpty
+                  disabled={
+                    // data?.idDichVu === 2 ||
+                    // data?.idDichVu === 5 ||
+                    // data?.idDichVu === 6 ||
+                    data?.idDichVu === ""
+                  }
                 >
                   <MenuItem value="" disabled>
-                    Chọn ngày làm việc trong tuần
+                    {data?.idDichVu !== 6 ? "Chọn ngày làm việc trong tuần" : "Chọn loại sofa"}
                   </MenuItem>
                   {dataChiTietDichVu ? (
                     dataChiTietDichVu.map((item) => (
@@ -126,7 +134,58 @@ const ProductReceiptInsert = ({
                         key={item?.idChiTietDichVu}
                         value={item?.idChiTietDichVu}
                       >
-                        {item?.BuoiDangKyDichVu}
+                        {data?.idDichVu === 5 ||
+                        data?.idDichVu === 6 ||
+                        data?.idDichVu === ""
+                          ? item?.tenChiTietDichVu
+                          : item?.BuoiDangKyDichVu}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem>nothing</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6} xl={4}>
+              <FormControl fullWidth className="formControl">
+                <InputLabel
+                  shrink={true}
+                  sx={commonComboboxLabelStyle}
+                  id="ward-label"
+                >
+                  Loại dịch vụ
+                </InputLabel>
+                <Select
+                  value={data?.idKieuDichVu}
+                  onChange={(event) => handleChange(event, "idKieuDichVu")}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        overflow: "auto !important",
+                      },
+                    },
+                    style: { maxHeight: "40VH", overflow: "auto !important" },
+                  }}
+                  displayEmpty
+                  disabled={
+                    data?.idDichVu === 1 ||
+                    data?.idDichVu === 3 ||
+                    data?.idDichVu === 4 ||
+                    data?.idDichVu === 5 ||
+                    data?.idDichVu === ""
+                  }
+                >
+                  <MenuItem value="" disabled>
+                    Chọn loại dịch vụ
+                  </MenuItem>
+                  {dataKieuDichVu ? (
+                    dataKieuDichVu.map((item) => (
+                      <MenuItem
+                        key={item?.idKieuDichVu}
+                        value={item?.idKieuDichVu}
+                      >
+                        {item?.tenKieuDichVu}
                       </MenuItem>
                     ))
                   ) : (
@@ -174,7 +233,9 @@ const ProductReceiptInsert = ({
                     label="Giờ bắt đầu"
                     // defaultValue={dayjs(new Date())}
                     // format="DD/MM/YYYY"
-                    value={data?.GioBatDau}
+                    value={
+                      data?.GioBatDau ? dayjs(data.GioBatDau, "HH:mm:ss") : null
+                    }
                     onChange={(event) => handleChange(event, "GioBatDau")}
                     sx={{
                       width: "100%",
@@ -206,6 +267,11 @@ const ProductReceiptInsert = ({
                   shrink: true,
                 }}
                 textAlign="center"
+                disabled={
+                  data?.idDichVu === 5 ||
+                  data?.idDichVu === 6 ||
+                  data?.idDichVu === ""
+                }
               />
             </Grid>
             <Grid item xs={12} sm={6} xl={4}>
@@ -221,6 +287,12 @@ const ProductReceiptInsert = ({
                   shrink: true,
                 }}
                 textAlign="center"
+                disabled={
+                  data?.idDichVu === 2 ||
+                  data?.idDichVu === 5 ||
+                  data?.idDichVu === 6 ||
+                  data?.idDichVu === ""
+                }
               />
             </Grid>
             <Grid item xs={12} sm={6} xl={4}>
@@ -236,6 +308,13 @@ const ProductReceiptInsert = ({
                   shrink: true,
                 }}
                 textAlign="center"
+                disabled={
+                  data?.idDichVu === 1 ||
+                  data?.idDichVu === 2 ||
+                  data?.idDichVu === 5 ||
+                  data?.idDichVu === 6 ||
+                  data?.idDichVu === ""
+                }
               />
             </Grid>
             <Grid item xs={12} sm={6} xl={4}>
@@ -357,16 +436,28 @@ const ProductReceiptInsert = ({
                 </Typography>
               </Button>
             </Grid>
+            <Grid item xs={12} sm={6} xl={5}></Grid>
             <Grid item xs={12} sm={6} xl={1}>
-              <Typography variant="caption" color="text" fontWeight="regular" fontSize={16}>
+              <Typography
+                variant="caption"
+                color="text"
+                fontWeight="regular"
+                fontSize={16}
+              >
                 Tổng tiền:
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={6} xl={3}>
-              <Typography variant="caption" color="red" fontWeight="bold" fontSize={16}>
+            <Grid item xs={12} sm={6} xl={1}>
+              <Typography
+                variant="caption"
+                color="red"
+                fontWeight="bold"
+                fontSize={16}
+              >
                 {data?.Tongtien && data?.Tongtien.toLocaleString("vi-VN")} đ
               </Typography>
             </Grid>
+            <Grid item xs={12} sm={6} xl={5}></Grid>
           </Grid>
         </Box>
       </DialogContent>

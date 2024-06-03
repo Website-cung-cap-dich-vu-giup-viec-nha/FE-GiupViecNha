@@ -26,8 +26,11 @@ import {
 } from "../../../api/DiaChiAPI";
 import {
   layDanhSachChiTietDVTheoId,
+  layKieuDVByIdDV,
   taoPhieuDichVu,
 } from "../../../api/GiupViecAPI";
+import moment from "moment";
+import { getProfile } from "../../../api/admin/AuthAPI";
 
 const ProductManager = ({ setPageName, setBreadCrumb }) => {
   // -- Start Alerts Setting -- //
@@ -96,30 +99,36 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   const [openDetail, setOpenDetail] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openInsert, setOpenInsert] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
   const [insertData, setInsertData] = useState({
     Tongtien: 0,
     idDichVu: "",
     idChiTietDichVu: "",
-    NgayBatDau: null,
+    NgayBatDau: moment(new Date()).format("YYYY-MM-DD"),
     GioBatDau: null,
     SoBuoi: 1,
     SoGio: 1,
+    SoNguoiDuocChamSoc: null,
     idKhachHang: null,
     GhiChu: "",
     idDiaChi: null,
+    idNhanVienQuanLyDichVu: "",
+    idKieuDichVu: "",
   });
   const [addressData, setAddressData] = useState({
     province_id: null,
     district_id: null,
     Phuong: null,
     Duong: "",
+    idNguoiDung: "",
   });
   const [dataProvince, setDataProvince] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
   const [dataWard, setDataWard] = useState([]);
   const [dataChiTietDichVu, setDataChiTietDichVu] = useState([]);
   const [dataDiaChi, setDataDiaChi] = useState([]);
+  const [dataKieuDichVu, setDataKieuDichVu] = useState([]);
 
   const handleChangeRowsPerPage = (e) => {
     setRowsPerPage(e.target.value);
@@ -133,6 +142,10 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
     setOpenCustomerDetail((prev) => !prev);
   };
 
+  const handleOpenEdit = () => {
+    setOpenEdit((prev) => !prev);
+  };
+
   const handleOpenDetail = () => {
     setOpenDetail((prev) => !prev);
   };
@@ -143,6 +156,19 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
 
   const handleOpenInsert = () => {
     setOpenInsert((prev) => !prev);
+    setInsertData({
+      Tongtien: 0,
+      idDichVu: "",
+      idChiTietDichVu: "",
+      NgayBatDau: moment(new Date()).format("YYYY-MM-DD"),
+      GioBatDau: null,
+      SoBuoi: 1,
+      SoGio: 1,
+      SoNguoiDuocChamSoc: null,
+      idKhachHang: null,
+      GhiChu: "",
+      idDiaChi: null,
+    });
   };
 
   const handleOpenAddress = () => {
@@ -174,11 +200,15 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   };
 
   const handleInsertAddress = () => {
-    themDiaChi()
+    themDiaChi(addressData)
       .then((response) => {
         setMsg(response?.message?.data?.message);
         setStatus(response?.message?.status);
         handleCloseAlert();
+        if (response?.message?.status === 200) {
+          loadAddressByCustomer(insertData?.idNguoiDung);
+          handleOpenAddress();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -186,12 +216,22 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   };
 
   const handleInsertData = (event, propertyName) => {
-    if (propertyName === "NgayBatDau" || propertyName === "GioBatDau")
-      setInsertData({ ...insertData, [propertyName]: event });
+    console.log(event);
+    if (propertyName === "NgayBatDau")
+      setInsertData({
+        ...insertData,
+        [propertyName]: moment(event).format("YYYY-MM-DD"),
+      });
+    else if (propertyName === "GioBatDau")
+      setInsertData({
+        ...insertData,
+        [propertyName]: dayjs(event).format("HH:mm:ss"),
+      });
     else if (
       propertyName === "idDichVu" ||
       propertyName === "idChiTietDichVu" ||
-      propertyName === "idDiaChi"
+      propertyName === "idDiaChi" ||
+      propertyName === "idKieuDichVu"
     )
       setInsertData({ ...insertData, [propertyName]: event.target.value });
     else if (propertyName === "GioiTinh")
@@ -200,11 +240,13 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
         [propertyName]: event.target.checked ? "Nam" : "Nữ",
       });
     else if (propertyName === "idKhachHang") {
+      console.log(event);
       setInsertData({
         ...insertData,
         [propertyName]: event?.idKhachHang,
         idNguoiDung: event?.idNguoiDung,
       });
+      setAddressData({ ...addressData, idNguoiDung: event?.idNguoiDung });
     } else setInsertData({ ...insertData, [propertyName]: event.target.value });
   };
 
@@ -310,6 +352,18 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
+  const loadProductTypeData = (id) => {
+    layKieuDVByIdDV(id)
+      .then((response) => {
+        setDataKieuDichVu(
+          response?.message?.status === 200 ? response?.message?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const loadCustomerData = () => {
     getAllCustomer()
       .then((response) => {
@@ -369,6 +423,19 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
+  const getCurrentLoginUser = () => {
+    getProfile()
+      .then((response) => {
+        setInsertData({
+          ...insertData,
+          idNhanVienQuanLyDichVu: response?.message?.data?.idNhanVien,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     if (isFirstLoad) return;
     loadProductReceiptData();
@@ -400,22 +467,62 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
 
   useEffect(() => {
     loadProductDetailData(insertData?.idDichVu);
+    loadProductTypeData(insertData?.idDichVu);
+    setInsertData({
+      ...insertData,
+      idChiTietDichVu: "",
+      idKieuDichVu: "",
+      SoBuoi: 1,
+      SoGio: 1,
+      SoNguoiDuocChamSoc: 1,
+    });
   }, [insertData?.idDichVu]);
 
   useEffect(() => {
     if (isFirstLoad) return;
     if (dataChiTietDichVu.length <= 0) return;
     const tinhTongTien = () => {
-      const selectedService = dataChiTietDichVu.find(
-        (item) => item.idChiTietDichVu === insertData?.idChiTietDichVu
-      );
-      console.log(selectedService);
-      if (selectedService) {
-        const total =
-          selectedService.GiaTien * insertData?.SoBuoi * insertData?.SoGio;
-        setInsertData({ ...insertData, Tongtien: total });
-      } else {
-        setInsertData({ ...insertData, Tongtien: 0 });
+      if (insertData?.idDichVu === 1 || insertData?.idDichVu === 2) {
+        const selectedService = dataChiTietDichVu.find(
+          (item) => item.idChiTietDichVu === insertData?.idChiTietDichVu
+        );
+        if (selectedService) {
+          const total =
+            selectedService.GiaTien * insertData?.SoBuoi * insertData?.SoGio;
+          setInsertData({ ...insertData, Tongtien: total });
+        } else {
+          setInsertData({ ...insertData, Tongtien: 0 });
+        }
+      } else if (insertData?.idDichVu === 3 || insertData?.idDichVu === 4) {
+        const selectedService = dataChiTietDichVu.find(
+          (item) => item.idChiTietDichVu === insertData?.idChiTietDichVu
+        );
+        if (selectedService) {
+          let total =
+            selectedService.GiaTien * insertData?.SoBuoi * insertData?.SoGio;
+          if (insertData?.SoNguoiDuocChamSoc >= 2) {
+            total += 0.3 * total * (insertData?.SoNguoiDuocChamSoc - 1);
+          }
+          setInsertData({ ...insertData, Tongtien: total });
+        } else {
+          setInsertData({ ...insertData, Tongtien: 0 });
+        }
+      } else if (insertData?.idDichVu === 5 || insertData?.idDichVu === 6) {
+        const selectedService = dataChiTietDichVu.find(
+          (item) => item.idChiTietDichVu === insertData?.idChiTietDichVu
+        );
+        if (selectedService) {
+          let total = selectedService.GiaTien;
+          if (insertData?.NgayBatDau) {
+            const ngay = new Date(insertData?.NgayBatDau).getDay(); // 0 là chủ nhật, 6 là thứ bảy
+            if (ngay === 0 || ngay === 6) {
+              total *= 1.2; // Tăng 20%
+            }
+          }
+          setInsertData({ ...insertData, Tongtien: total });
+        } else {
+          setInsertData({ ...insertData, Tongtien: 0 });
+        }
       }
     };
     tinhTongTien();
@@ -423,7 +530,9 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
     insertData?.NgayBatDau,
     insertData?.SoBuoi,
     insertData?.SoGio,
-    dataChiTietDichVu,
+    insertData?.idChiTietDichVu,
+    insertData?.SoNguoiDuocChamSoc,
+    insertData?.idKieuDichVu,
   ]);
 
   useEffect(() => {
@@ -432,11 +541,28 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   }, [insertData?.idNguoiDung]);
 
   useEffect(() => {
+    if (isFirstLoad) return;
+    if (dataKieuDichVu.length <= 0) return;
+    if (insertData?.idDichVu !== 2) return;
+    const selectedOption = dataKieuDichVu.find(
+      (item) => item.idKieuDichVu === insertData?.idKieuDichVu
+    );
+    const selectedKey = selectedOption?.tenKieuDichVu;
+    const gioPattern = /(\d+)\sgiờ/;
+    const ketQua = selectedKey.match(gioPattern);
+    if (ketQua && ketQua.length > 1) {
+      const soGio = parseInt(ketQua[1]);
+      setInsertData({ ...insertData, SoGio: soGio });
+    }
+  }, [insertData?.idKieuDichVu]);
+
+  useEffect(() => {
     loadProductData();
     loadProductReceiptData();
     setIsFirstLoad(false);
     loadCustomerData();
     loadProvinceData();
+    getCurrentLoginUser();
   }, []);
 
   // --------- End Product Receipt -------- //
@@ -484,6 +610,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
               setOpenDetail={handleOpenDetail}
               setOpenDelete={handleOpenDelete}
               setOpenInsert={handleOpenInsert}
+              setOpenEdit={handleOpenEdit}
             />
           </TabPanel>
           <TabPanel value="1">Nội dung Tab 2</TabPanel>
@@ -538,6 +665,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
         dataDichVu={dataDichVu}
         dataChiTietDichVu={dataChiTietDichVu}
         dataDiaChi={dataDiaChi}
+        dataKieuDichVu={dataKieuDichVu}
       />
       <Address
         open={openAddress}
