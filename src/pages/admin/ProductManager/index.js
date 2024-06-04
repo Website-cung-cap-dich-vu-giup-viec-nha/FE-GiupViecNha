@@ -31,6 +31,14 @@ import {
 } from "../../../api/GiupViecAPI";
 import moment from "moment";
 import { getProfile } from "../../../api/admin/AuthAPI";
+import ProductReceiptDetailData from "./components/ProductReceiptDetailData";
+import { getDataByIdPhieuDichVu } from "../../../api/admin/ProductReceiptWorkDayAPI";
+import { getStaffIsNotAddChiTietNgayLam } from "../../../api/admin/StaffAPI";
+import {
+  getProductReceiptStaff,
+  getProductReceiptStaffByIDChiTietNgayLam,
+  insertProductReceiptStaff,
+} from "../../../api/admin/ProductReceiptStaff";
 
 const ProductManager = ({ setPageName, setBreadCrumb }) => {
   // -- Start Alerts Setting -- //
@@ -99,7 +107,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   const [openDetail, setOpenDetail] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openInsert, setOpenInsert] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
+  // const [openEdit, setOpenEdit] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
   const [insertData, setInsertData] = useState({
     Tongtien: 0,
@@ -129,6 +137,12 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   const [dataChiTietDichVu, setDataChiTietDichVu] = useState([]);
   const [dataDiaChi, setDataDiaChi] = useState([]);
   const [dataKieuDichVu, setDataKieuDichVu] = useState([]);
+  const [isFirstTabDisabled, setIsFirstTabDisabled] = useState(false);
+  const [dataWorkDay, setDataWorkDay] = useState([]);
+  const [selectedWorkDayItem, setSelectedWorkDayItem] = useState({});
+  const [data_StaffWorking, setData_StaffWorking] = useState([]);
+  const [selectedStaffItem, setSelectedStaffItem] = useState({});
+  const [data_Staff, setData_Staff] = useState([]);
 
   const handleChangeRowsPerPage = (e) => {
     setRowsPerPage(e.target.value);
@@ -142,8 +156,15 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
     setOpenCustomerDetail((prev) => !prev);
   };
 
-  const handleOpenEdit = () => {
-    setOpenEdit((prev) => !prev);
+  const handleOpenEdit = (isFirstTabOpen, item) => {
+    setIsFirstTabDisabled(isFirstTabOpen);
+    if (isFirstTabOpen) {
+      setCurrentTab("1");
+      console.log(selectedRow);
+      loadProductReceiptDataWorkDay(item?.idPhieuDichVu);
+    } else {
+      setCurrentTab("0");
+    }
   };
 
   const handleOpenDetail = () => {
@@ -157,6 +178,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   const handleOpenInsert = () => {
     setOpenInsert((prev) => !prev);
     setInsertData({
+      ...insertData,
       Tongtien: 0,
       idDichVu: "",
       idChiTietDichVu: "",
@@ -240,7 +262,6 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
         [propertyName]: event.target.checked ? "Nam" : "Nữ",
       });
     else if (propertyName === "idKhachHang") {
-      console.log(event);
       setInsertData({
         ...insertData,
         [propertyName]: event?.idKhachHang,
@@ -248,6 +269,16 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
       });
       setAddressData({ ...addressData, idNguoiDung: event?.idNguoiDung });
     } else setInsertData({ ...insertData, [propertyName]: event.target.value });
+  };
+
+  const handleChange_Staff = (event, propertyName) => {
+    console.log(selectedWorkDayItem);
+    if (propertyName === "idNhanVien") {
+      setSelectedWorkDayItem({
+        ...selectedWorkDayItem,
+        [propertyName]: event?.idNhanVien,
+      });
+    }
   };
 
   const handleTinhTrangLabel = (idTinhTrang) => {
@@ -294,6 +325,19 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
 
   const handleSearching = () => {
     setOldSearching(searchData);
+  };
+
+  const handleSearching_Staff = () => {
+    insertProductReceiptStaff(selectedWorkDayItem)
+      .then((response) => {
+        console.log("dddd", response);
+        setMsg(response?.message?.data?.message[0]);
+        setStatus(response?.message?.status);
+        handleCloseAlert();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const loadProductReceiptData = () => {
@@ -428,8 +472,32 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
       .then((response) => {
         setInsertData({
           ...insertData,
-          idNhanVienQuanLyDichVu: response?.message?.data?.idNhanVien,
+          idNhanVienQuanLyDichVu: response?.message?.data?.staff?.idNhanVien,
         });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const loadProductReceiptDataWorkDay = (idPhieuDichVu) => {
+    getDataByIdPhieuDichVu(idPhieuDichVu)
+      .then((response) => {
+        setDataWorkDay(
+          response?.message?.status === 200 ? response?.message?.data?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const loadStaffIsNotAddChiTietNgayLam = () => {
+    getStaffIsNotAddChiTietNgayLam()
+      .then((response) => {
+        setData_StaffWorking(
+          response?.message?.status === 200 ? response?.message?.data?.data : []
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -557,12 +625,29 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   }, [insertData?.idKieuDichVu]);
 
   useEffect(() => {
+    if (isFirstLoad) return;
+    getProductReceiptStaffByIDChiTietNgayLam(
+      selectedWorkDayItem?.idChiTietNgayLam
+    )
+      .then((response) => {
+        console.log("bbb", response);
+        setData_Staff(
+          response?.message?.status === 200 ? response?.message?.data?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [selectedWorkDayItem?.idChiTietNgayLam]);
+
+  useEffect(() => {
     loadProductData();
     loadProductReceiptData();
     setIsFirstLoad(false);
     loadCustomerData();
     loadProvinceData();
     getCurrentLoginUser();
+    loadStaffIsNotAddChiTietNgayLam();
   }, []);
 
   // --------- End Product Receipt -------- //
@@ -585,8 +670,16 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
         <TabContext value={currentTab}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChangeTab} aria-label="basic tabs example">
-              <Tab label="Phiếu dịch vụ" value="0" />
-              <Tab label="Chi tiết phiếu dịch vụ" value="1" />
+              <Tab
+                label="Phiếu dịch vụ"
+                value="0"
+                disabled={isFirstTabDisabled}
+              />
+              <Tab
+                label="Chi tiết phiếu dịch vụ"
+                value="1"
+                disabled={!isFirstTabDisabled}
+              />
             </TabList>
           </Box>
           <TabPanel value="0">
@@ -613,7 +706,19 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
               setOpenEdit={handleOpenEdit}
             />
           </TabPanel>
-          <TabPanel value="1">Nội dung Tab 2</TabPanel>
+          <TabPanel value="1">
+            <ProductReceiptDetailData
+              data_WorkDay={dataWorkDay}
+              selectedWorkDayItem={selectedWorkDayItem}
+              setSelectedWorkDayItem={setSelectedWorkDayItem}
+              dataNhanVien={data_StaffWorking}
+              handleChange={handleChange_Staff}
+              handleSearching={handleSearching_Staff}
+              selectedStaffItem={selectedStaffItem}
+              setSelectedStaffItem={setSelectedStaffItem}
+              data_Staff={data_Staff}
+            />
+          </TabPanel>
         </TabContext>
       </Grid>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
