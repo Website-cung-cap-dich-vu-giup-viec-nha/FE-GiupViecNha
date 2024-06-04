@@ -51,8 +51,6 @@ const ProductReceiptList = ({
   const classes = useStyles();
   const handleIcon = (item) => {
     setSelectedRow(item);
-    setSelectedRow({ ...item, NgaySinh: dayjs(item?.NgaySinh) });
-    setSelectedRow({ ...item, password: "" });
   };
   return (
     <Card>
@@ -368,8 +366,8 @@ const ProductReceiptList = ({
                       <IconButton
                         key={`${item.id}-iconbutton2-icon`}
                         onClick={() => {
-                          setOpenEdit();
                           handleIcon(item);
+                          setOpenEdit(true, item);
                         }}
                       >
                         <img

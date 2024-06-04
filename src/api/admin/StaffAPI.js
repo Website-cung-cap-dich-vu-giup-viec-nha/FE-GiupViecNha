@@ -47,3 +47,11 @@ export async function importStaffData(data) {
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
+
+export async function getStaffIsNotAddChiTietNgayLam() {
+  const url = `/api/NhanVien/getStaffIsNotAddChiTietNgayLam`;
+
+  return API.get(url)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}
