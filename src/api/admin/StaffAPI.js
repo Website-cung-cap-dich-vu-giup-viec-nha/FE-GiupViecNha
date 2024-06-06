@@ -48,8 +48,8 @@ export async function importStaffData(data) {
     .catch((error) => standardResponse(false, error.response?.data));
 }
 
-export async function getStaffIsNotAddChiTietNgayLam() {
-  const url = `/api/NhanVien/getStaffIsNotAddChiTietNgayLam`;
+export async function getStaffIsNotAddChiTietNgayLam(idChiTietNgayLam) {
+  const url = `/api/NhanVien/getStaffIsNotAddChiTietNgayLam?idChiTietNgayLam=${idChiTietNgayLam}`;
 
   return API.get(url)
     .then((response) => standardResponse(true, response))

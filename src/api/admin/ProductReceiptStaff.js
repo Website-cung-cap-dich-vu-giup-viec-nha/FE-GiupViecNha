@@ -15,3 +15,11 @@ export async function insertProductReceiptStaff(data) {
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
+
+export async function deleteProductReceiptStaff(id) {
+  const url = `/api/ChiTietNhanVienLamDichVu/${id}`;
+
+  return API.delete(url)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}

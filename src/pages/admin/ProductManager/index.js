@@ -6,6 +6,7 @@ import ProductReceiptList from "./components/ProductReceiptList";
 import {
   deleteProductReceipt,
   getProductReceipt,
+  updateProductReceiptTinhTrang,
 } from "../../../api/admin/ProductReceiptAPI";
 import dayjs from "dayjs";
 import { getProduct } from "../../../api/admin/ProductAPI";
@@ -35,10 +36,12 @@ import ProductReceiptDetailData from "./components/ProductReceiptDetailData";
 import { getDataByIdPhieuDichVu } from "../../../api/admin/ProductReceiptWorkDayAPI";
 import { getStaffIsNotAddChiTietNgayLam } from "../../../api/admin/StaffAPI";
 import {
+  deleteProductReceiptStaff,
   getProductReceiptStaff,
   getProductReceiptStaffByIDChiTietNgayLam,
   insertProductReceiptStaff,
 } from "../../../api/admin/ProductReceiptStaff";
+import ProductReceiptConfim from "./components/ProductReceiptConfim";
 
 const ProductManager = ({ setPageName, setBreadCrumb }) => {
   // -- Start Alerts Setting -- //
@@ -143,6 +146,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   const [data_StaffWorking, setData_StaffWorking] = useState([]);
   const [selectedStaffItem, setSelectedStaffItem] = useState({});
   const [data_Staff, setData_Staff] = useState([]);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const handleChangeRowsPerPage = (e) => {
     setRowsPerPage(e.target.value);
@@ -160,7 +164,6 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
     setIsFirstTabDisabled(isFirstTabOpen);
     if (isFirstTabOpen) {
       setCurrentTab("1");
-      console.log(selectedRow);
       loadProductReceiptDataWorkDay(item?.idPhieuDichVu);
     } else {
       setCurrentTab("0");
@@ -169,6 +172,10 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
 
   const handleOpenDetail = () => {
     setOpenDetail((prev) => !prev);
+  };
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm((prev) => !prev);
   };
 
   const handleOpenDelete = () => {
@@ -202,6 +209,24 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
     }
     setAddressData({ ...addressData, idKhachHang: insertData?.idKhachHang });
     setOpenAddress((prev) => !prev);
+  };
+
+  const handleDeleteStaffWork = (item) => {
+    deleteProductReceiptStaff(item?.idChiTietNhanVienLamDichVu)
+      .then((response) => {
+        setMsg(response?.message?.data?.message);
+        setStatus(response?.message?.status);
+        handleCloseAlert();
+        if (response?.message?.status === 200) {
+          loadProductReceiptStaffWorkDay();
+          loadStaffIsNotAddChiTietNgayLam(
+            selectedWorkDayItem?.idChiTietNgayLam
+          );
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleInsert = () => {
@@ -272,7 +297,6 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   };
 
   const handleChange_Staff = (event, propertyName) => {
-    console.log(selectedWorkDayItem);
     if (propertyName === "idNhanVien") {
       setSelectedWorkDayItem({
         ...selectedWorkDayItem,
@@ -330,14 +354,19 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   const handleSearching_Staff = () => {
     insertProductReceiptStaff(selectedWorkDayItem)
       .then((response) => {
-        console.log("dddd", response);
         setMsg(response?.message?.data?.message[0]);
         setStatus(response?.message?.status);
         handleCloseAlert();
+        setSelectedWorkDayItem({
+          ...selectedWorkDayItem,
+          idNhanVien: null,
+        });
+        loadStaffIsNotAddChiTietNgayLam(selectedWorkDayItem?.idChiTietNgayLam);
       })
       .catch((error) => {
         console.log(error);
       });
+    loadProductReceiptStaffWorkDay();
   };
 
   const loadProductReceiptData = () => {
@@ -349,6 +378,30 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
         setTotalElements(
           response?.message?.status === 200 ? response?.message?.data?.total : 0
         );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleUpdateTinhTrang = (item, TinhTrang) => {
+    if (item?.TinhTrang === TinhTrang && TinhTrang === 2) {
+      setMsg("Phiếu dịch vụ này đã được duyệt");
+      setStatus(422);
+      handleCloseAlert();
+      handleOpenConfirm();
+      return;
+    }
+    updateProductReceiptTinhTrang(item?.idPhieuDichVu, TinhTrang)
+      .then((response) => {
+        setMsg(response?.message?.data?.message[0]);
+        setStatus(response?.message?.status);
+        handleCloseAlert();
+        handleOpenConfirm();
+        if (response?.message?.status === 200) {
+          if (page === 0) loadProductReceiptData();
+          else setPage(0);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -492,10 +545,24 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
-  const loadStaffIsNotAddChiTietNgayLam = () => {
-    getStaffIsNotAddChiTietNgayLam()
+  const loadStaffIsNotAddChiTietNgayLam = (idChiTietNgayLam) => {
+    getStaffIsNotAddChiTietNgayLam(idChiTietNgayLam)
       .then((response) => {
         setData_StaffWorking(
+          response?.message?.status === 200 ? response?.message?.data?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const loadProductReceiptStaffWorkDay = () => {
+    getProductReceiptStaffByIDChiTietNgayLam(
+      selectedWorkDayItem?.idChiTietNgayLam
+    )
+      .then((response) => {
+        setData_Staff(
           response?.message?.status === 200 ? response?.message?.data?.data : []
         );
       })
@@ -626,18 +693,8 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
 
   useEffect(() => {
     if (isFirstLoad) return;
-    getProductReceiptStaffByIDChiTietNgayLam(
-      selectedWorkDayItem?.idChiTietNgayLam
-    )
-      .then((response) => {
-        console.log("bbb", response);
-        setData_Staff(
-          response?.message?.status === 200 ? response?.message?.data?.data : []
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    loadProductReceiptStaffWorkDay();
+    loadStaffIsNotAddChiTietNgayLam(selectedWorkDayItem?.idChiTietNgayLam);
   }, [selectedWorkDayItem?.idChiTietNgayLam]);
 
   useEffect(() => {
@@ -704,6 +761,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
               setOpenDelete={handleOpenDelete}
               setOpenInsert={handleOpenInsert}
               setOpenEdit={handleOpenEdit}
+              setOpenConfirm={handleOpenConfirm}
             />
           </TabPanel>
           <TabPanel value="1">
@@ -717,6 +775,8 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
               selectedStaffItem={selectedStaffItem}
               setSelectedStaffItem={setSelectedStaffItem}
               data_Staff={data_Staff}
+              handleDeleteStaffWork={handleDeleteStaffWork}
+              handleReturn={handleOpenEdit}
             />
           </TabPanel>
         </TabContext>
@@ -781,6 +841,12 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
         dataProvince={dataProvince}
         dataDistrict={dataDistrict}
         dataWard={dataWard}
+      />
+      <ProductReceiptConfim
+        selectedRow={selectedRow}
+        open={openConfirm}
+        setOpen={handleOpenConfirm}
+        handleUpdateTinhTrang={handleUpdateTinhTrang}
       />
     </Grid>
   );

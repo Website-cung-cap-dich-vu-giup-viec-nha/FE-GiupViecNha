@@ -15,3 +15,11 @@ export async function deleteProductReceipt(id) {
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
+
+export async function updateProductReceiptTinhTrang(idPhieuDichVu, TinhTrang) {
+  const url = `/api/PhieuDichVu/updateTinhTrang/${idPhieuDichVu}/${TinhTrang}`;
+
+  return API.put(url)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}

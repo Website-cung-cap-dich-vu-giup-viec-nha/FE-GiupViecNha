@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ProductReceiptDetailDataWorkerList = ({ data, setSelectedItem }) => {
+const ProductReceiptDetailDataWorkerList = ({ data, setSelectedItem, handleDeleteStaffWork }) => {
   const classes = useStyles();
   const iconStyle = {
     fontSize: 20,
@@ -134,6 +134,7 @@ const ProductReceiptDetailDataWorkerList = ({ data, setSelectedItem }) => {
                         key={`${item.id}-iconbutton2-icon`}
                         onClick={() => {
                           handleIcon(item);
+                          handleDeleteStaffWork(item);
                         }}
                       >
                         <img
