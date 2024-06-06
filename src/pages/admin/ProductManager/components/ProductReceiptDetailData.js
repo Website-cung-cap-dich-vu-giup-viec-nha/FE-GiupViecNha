@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import ProductReceiptDetailDataWorkDayList from "./ProductReceiptDetailDataWorkDayList";
 import ProductReceiptDetailDataWorkerList from "./ProductReceiptDetailDataWorkerList";
+import Return from "../../../../assets/icon/return.svg";
 
 const ProductReceiptDetailData = ({
   data_WorkDay,
@@ -18,11 +19,37 @@ const ProductReceiptDetailData = ({
   setSelectedWorkDayItem,
   data_Staff,
   setSelectedStaffItem,
+  handleDeleteStaffWork,
+  handleReturn,
 }) => {
+  const iconStyle = {
+    fontSize: 20,
+    marginRight: 8,
+    color: "blue",
+    cursor: "pointer",
+  };
   return (
     <>
       <Box py={3} mb={3}>
         <Grid container spacing={3}>
+          <Grid item xs={12} sm={6} xl={1}>
+            <Button
+              variant="contained"
+              sx={{
+                height: "100%",
+                width: "100%",
+                fontWeight: "bold",
+                backgroundColor: "red",
+                color: "white",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+              onClick={() => handleReturn(false, null)}
+            >
+              <img src={Return} alt="" style={iconStyle} />
+            </Button>
+          </Grid>
           <Grid item xs={12} sm={6} xl={6}>
             <Autocomplete
               options={dataNhanVien}
@@ -85,7 +112,7 @@ const ProductReceiptDetailData = ({
               </Typography>
             </Button>
           </Grid>
-          <Grid item xs={12} sm={6} xl={4}>
+          <Grid item xs={12} sm={6} xl={2}>
             <Typography
               whiteSpace="nowrap"
               color="red"
@@ -109,6 +136,7 @@ const ProductReceiptDetailData = ({
             <ProductReceiptDetailDataWorkerList
               data={data_Staff}
               setSelectedItem={setSelectedStaffItem}
+              handleDeleteStaffWork={handleDeleteStaffWork}
             />
           </Grid>
         </Grid>

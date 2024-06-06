@@ -14,9 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 import View from "../../../../assets/icon/View.svg";
-import Edit from "../../../../assets/icon/Edit.svg";
+// import Edit from "../../../../assets/icon/Edit.svg";
 import Trash from "../../../../assets/icon/Trash.svg";
-import dayjs from "dayjs";
+// import Check from "../../../../assets/icon/check.svg";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { makeStyles } from "@mui/styles";
 import moment from "moment";
 
@@ -41,6 +43,7 @@ const ProductReceiptList = ({
   handleTinhTrangLabel,
   handleTinhTrangThanhToanLabel,
   setOpenCustomerDetail,
+  setOpenConfirm,
 }) => {
   const iconStyle = {
     fontSize: 20,
@@ -279,7 +282,8 @@ const ProductReceiptList = ({
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
-                      {item?.NgayBatDau && moment(item?.NgayBatDau).format('DD/MM/YYYY')}
+                      {item?.NgayBatDau &&
+                        moment(item?.NgayBatDau).format("DD/MM/YYYY")}
                     </TableCell>
                     {/* <TableCell
                       className={classes.tableCell}
@@ -370,11 +374,11 @@ const ProductReceiptList = ({
                           setOpenEdit(true, item);
                         }}
                       >
-                        <img
-                          src={Edit}
-                          alt=""
-                          key={`${item.id}-edit-icon`}
-                          style={iconStyle}
+                        <HowToRegIcon
+                          sx={{ color: "#0072B8" }}
+                          fontSize="small"
+                          title="PersonAdd"
+                          style={{ cursor: "pointer" }}
                         />
                       </IconButton>
 
@@ -390,6 +394,21 @@ const ProductReceiptList = ({
                           alt=""
                           key={`${item.id}-delete-icon`}
                           style={iconStyle}
+                        />
+                      </IconButton>
+
+                      <IconButton
+                        key={`${item.id}-iconbutton4-icon`}
+                        onClick={() => {
+                          setOpenConfirm();
+                          handleIcon(item);
+                        }}
+                      >
+                        <CheckCircleIcon
+                          sx={{ color: "#0072B8" }}
+                          fontSize="small"
+                          title="PersonAdd"
+                          style={{ cursor: "pointer" }}
                         />
                       </IconButton>
                     </TableCell>
