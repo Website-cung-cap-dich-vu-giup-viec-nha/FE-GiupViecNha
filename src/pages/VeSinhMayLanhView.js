@@ -126,35 +126,35 @@ const VeSinhMayLanhView = () => {
               <p className="fw-bold">Máy lạnh treo tường</p>
               <small>Vệ sinh từ</small>
               <h3>216.000đ</h3>
-              <small>Vệ sinh từ</small>
+              <small>bơm ga từ</small>
               <h3>216.000đ</h3>
             </div>
             <div className="text-center maylanh">
               <p className="fw-bold">Máy lạnh tủ đứng</p>
               <small>Vệ sinh từ</small>
               <h3>336.000đ</h3>
-              <small>Vệ sinh từ</small>
+              <small>bơm ga từ</small>
               <h3>220.000đ</h3>
             </div>
             <div className="text-center maylanh">
               <p className="fw-bold">Máy lạnh âm trần</p>
               <small>Vệ sinh từ</small>
               <h3>420.000đ</h3>
-              <small>Vệ sinh từ</small>
+              <small>bơm ga từ</small>
               <h3>200.000đ</h3>
             </div>
             <div className="text-center maylanh">
               <p className="fw-bold">Máy lạnh áp trần</p>
               <small>Vệ sinh từ</small>
               <h3>660.000đ</h3>
-              <small>Vệ sinh từ</small>
+              <small>bơm ga từ</small>
               <h3>220.000đ</h3>
             </div>
             <div className="text-center maylanh">
               <p className="fw-bold">Máy lạnh giấu trần</p>
               <small>Vệ sinh từ</small>
               <h3>204.000đ</h3>
-              <small>Vệ sinh từ</small>
+              <small>bơm ga từ</small>
               <h3>200.000đ</h3>
             </div>
           </Slider>

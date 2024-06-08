@@ -40,7 +40,7 @@ function a11yProps(index) {
   };
 }
 const ChamSocNgCaoTuoiView = () => {
-    const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -79,15 +79,19 @@ const ChamSocNgCaoTuoiView = () => {
               <div>
                 <button
                   style={{
-                    padding: "12px 24px",
+                    backgroundColor: "white",
                     borderRadius: "30px",
-                    backgroundColor: "#FF8228",
+                    padding: "14px 24px",
                     border: "none",
-                    color: "white",
                   }}
                 >
-                                  <Link className="text-decoration-none text-white" to="/thuedichvu/4">Trải nghiệm dịch vụ</Link>
-
+                  <Link
+                    style={{ color: "#FF8228" }}
+                    className="text-decoration-none"
+                    to={"/thuedichvu/4"}
+                  >
+                    Trải nghiệm dịch vụ
+                  </Link>
                 </button>
               </div>
             </div>
@@ -122,8 +126,12 @@ const ChamSocNgCaoTuoiView = () => {
                     color: "white",
                   }}
                 >
-                                  <Link className="text-decoration-none text-white" to="/thuedichvu/4">Trải nghiệm dịch vụ</Link>
-
+                  <Link
+                    className="text-decoration-none text-white"
+                    to="/thuedichvu/4"
+                  >
+                    Trải nghiệm dịch vụ
+                  </Link>
                 </button>
               </div>
             </div>
@@ -449,24 +457,15 @@ const ChamSocNgCaoTuoiView = () => {
 
           <div className="row justify-content-center">
             <div className="col-lg-3 bg-white p-2 px-4 rounded mx-3">
-              <h4>
-                Theo buổi
-              </h4>
+              <h4>Theo buổi</h4>
               <p>04 tiếng/ buổi</p>
-              <h4 className="border-top pt-2">
-                240.000 VND
-              </h4>
+              <h4 className="border-top pt-2">240.000 VND</h4>
             </div>
             <div className="col-lg-3 bg-white p-2 px-4 rounded mt-3 mt-lg-0">
-              <h4>
-                Theo ngày
-              </h4>
+              <h4>Theo ngày</h4>
               <p>8 tiếng/ ngày</p>
-              <h4 className="border-top pt-2">
-                440.000 VND
-              </h4>
+              <h4 className="border-top pt-2">440.000 VND</h4>
             </div>
-            
           </div>
         </div>
       </div>

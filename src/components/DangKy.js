@@ -68,6 +68,7 @@ const DangKy = () => {
                 placeholder=""
                 value={user.email}
                 onChange={(e) => setUser({...user, email: e.target.value})}
+                pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                 required
               />
               <label htmlFor="emailInput">Email</label>

@@ -119,21 +119,21 @@ const GiupViecTheoGioView = () => {
               giải pháp hợp lý cho mọi gia đình!
             </p>
             <button
-                style={{
-                  backgroundColor: "white",
-                  borderRadius: "30px",
-                  padding: "14px 24px",
-                  border: "none",
-                }}
-              >
-                <Link
-                  style={{ color: "#FF8228" }}
-                  className="text-decoration-none"
-                  to={"/thuedichvu/1"}
+                  style={{
+                    padding: "12px 24px",
+                    borderRadius: "30px",
+                    backgroundColor: "#FF8228",
+                    border: "none",
+                    color: "white",
+                  }}
                 >
-                  Trải nghiệm dịch vụ
-                </Link>
-              </button>
+                  <Link
+                    className="text-decoration-none text-white"
+                    to="/thuedichvu/1"
+                  >
+                    Trải nghiệm dịch vụ
+                  </Link>
+                </button>
           </div>
         </div>
       </div>
@@ -425,7 +425,7 @@ const GiupViecTheoGioView = () => {
           <div className="col-md-6 col-12">
             <table className="table table-bordered table-striped">
               <thead>
-                <tr>
+                <tr className="text-center">
                   <th>Thời gian</th>
                   <th>Giá/h</th>
                 </tr>
