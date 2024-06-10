@@ -77,8 +77,12 @@ const VeSinhMayLanhView = () => {
                     color: "white",
                   }}
                 >
-                                  <Link className="text-decoration-none text-white" to="/thuedichvu/5">Trải nghiệm dịch vụ</Link>
-
+                  <Link
+                    className="text-decoration-none text-white"
+                    to="/thuedichvu/5"
+                  >
+                    Trải nghiệm dịch vụ
+                  </Link>
                 </button>
               </div>
             </div>
@@ -89,7 +93,7 @@ const VeSinhMayLanhView = () => {
       <div className="container d-block d-lg-none">
         <img src={bannervesinhmaylanh} alt="" className="w-100 h-auto" />
         <div className="m-auto" style={{ maxWidth: "1140px" }}>
-        <div className="row p-3">
+          <div className="row p-3">
             <div className="col-12">
               <h1 className="fw-bold mb-3 ">
                 App Đặt Dịch Vụ Vệ Sinh Máy Lạnh Chỉ Với 30s, Bảo Hành 7 Ngày
@@ -109,8 +113,12 @@ const VeSinhMayLanhView = () => {
                     color: "white",
                   }}
                 >
-                                  <Link className="text-decoration-none text-white" to="/thuedichvu/5">Trải nghiệm dịch vụ</Link>
-
+                  <Link
+                    className="text-decoration-none text-white"
+                    to="/thuedichvu/5"
+                  >
+                    Trải nghiệm dịch vụ
+                  </Link>
                 </button>
               </div>
             </div>
@@ -119,48 +127,47 @@ const VeSinhMayLanhView = () => {
       </div>
 
       <div className="container my-5">
-      <h2 className="mb-4">Bảng giá dịch vụ vệ sinh máy lạnh mới nhất</h2>
+        <h2 className="mb-4">Bảng giá dịch vụ vệ sinh máy lạnh mới nhất</h2>
         <div className="slider-container">
           <Slider {...settings}>
             <div className="text-center maylanh">
               <p className="fw-bold">Máy lạnh treo tường</p>
-              <small>Vệ sinh từ</small>
-              <h3>216.000đ</h3>
-              <small>bơm ga từ</small>
-              <h3>216.000đ</h3>
+              <small>Vệ sinh / máy</small>
+              <h3>245.000đ</h3>
+              <small>Bơm ga / lần</small>
+              <h3>160.000đ</h3>
             </div>
             <div className="text-center maylanh">
               <p className="fw-bold">Máy lạnh tủ đứng</p>
-              <small>Vệ sinh từ</small>
+              <small>Vệ sinh / máy</small>
               <h3>336.000đ</h3>
-              <small>bơm ga từ</small>
+              <small>Bơm ga / lần</small>
               <h3>220.000đ</h3>
             </div>
             <div className="text-center maylanh">
               <p className="fw-bold">Máy lạnh âm trần</p>
-              <small>Vệ sinh từ</small>
+              <small>Vệ sinh / máy</small>
               <h3>420.000đ</h3>
-              <small>bơm ga từ</small>
+              <small>Bơm ga / lần</small>
               <h3>200.000đ</h3>
             </div>
             <div className="text-center maylanh">
               <p className="fw-bold">Máy lạnh áp trần</p>
-              <small>Vệ sinh từ</small>
+              <small>Vệ sinh / máy</small>
               <h3>660.000đ</h3>
-              <small>bơm ga từ</small>
+              <small>Bơm ga / lần</small>
               <h3>220.000đ</h3>
             </div>
             <div className="text-center maylanh">
               <p className="fw-bold">Máy lạnh giấu trần</p>
-              <small>Vệ sinh từ</small>
+              <small>Vệ sinh / máy</small>
               <h3>204.000đ</h3>
-              <small>bơm ga từ</small>
+              <small>Bơm ga / lần</small>
               <h3>200.000đ</h3>
             </div>
           </Slider>
         </div>
       </div>
-
 
       <div className="container pt-5">
         <div className="row">
@@ -189,7 +196,9 @@ const VeSinhMayLanhView = () => {
             <div className="mt-3">
               <h3>Sự chuyên nghiệp</h3>
               <p>
-              Với sự am hiểu sâu sắc về cách hoạt động của các loại máy lạnh, những chuyên gia nhà bTaskee tự tin trong khả năng vệ sinh máy lạnh và bơm gas một cách gọn gàng, nhanh chóng và hiệu quả.
+                Với sự am hiểu sâu sắc về cách hoạt động của các loại máy lạnh,
+                những chuyên gia nhà bTaskee tự tin trong khả năng vệ sinh máy
+                lạnh và bơm gas một cách gọn gàng, nhanh chóng và hiệu quả.
               </p>
             </div>
           </div>
@@ -204,7 +213,11 @@ const VeSinhMayLanhView = () => {
             <div className="mt-3">
               <h3>An toàn</h3>
               <p>
-              Với dịch vụ rửa máy lạnh bTaskee, mọi công việc đều luôn được tuân thủ các quy trình kỹ thuật và tiêu chuẩn chất lượng nhằm đảo bảo an toàn tuyệt đối cho khách hàng. Ngoài ra, mọi trang thiết bị, hóa chất tẩy rửa và dụng cụ vệ sinh đều có nhãn mác và nguồn gốc xuất xứ rõ ràng.
+                Với dịch vụ rửa máy lạnh bTaskee, mọi công việc đều luôn được
+                tuân thủ các quy trình kỹ thuật và tiêu chuẩn chất lượng nhằm
+                đảo bảo an toàn tuyệt đối cho khách hàng. Ngoài ra, mọi trang
+                thiết bị, hóa chất tẩy rửa và dụng cụ vệ sinh đều có nhãn mác và
+                nguồn gốc xuất xứ rõ ràng.
               </p>
             </div>
           </div>
@@ -221,13 +234,14 @@ const VeSinhMayLanhView = () => {
             <div className="mt-3">
               <h3>Giải quyết khối lượng công việc lớn</h3>
               <p>
-              bTaskee cam kết bảo hành 7 ngày sau khi hoàn thành chu trình vệ sinh điều hòa. Đối với mọi vấn đề kỹ thuật xảy ra, khách hàng hãy gọi ngay đến hotline tổng đài 1900 636736 để được hỗ trợ nhanh nhất!
+                bTaskee cam kết bảo hành 7 ngày sau khi hoàn thành chu trình vệ
+                sinh điều hòa. Đối với mọi vấn đề kỹ thuật xảy ra, khách hàng
+                hãy gọi ngay đến hotline tổng đài 1900 636736 để được hỗ trợ
+                nhanh nhất!
               </p>
             </div>
           </div>
-          <div className="col-md-6">
-            
-          </div>
+          <div className="col-md-6"></div>
         </div>
       </div>
     </>

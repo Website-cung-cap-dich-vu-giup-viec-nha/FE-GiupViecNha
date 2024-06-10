@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import Slider from "react-slick";
 import bannertongvesinh from "../assets/banner/deep-cleaning-banner-ver25.jpg";
 import { Link, useLocation } from "react-router-dom";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
@@ -52,6 +53,41 @@ const TongVeSinhView = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  var settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
@@ -428,7 +464,47 @@ const TongVeSinhView = () => {
       <div className="container-fluid bg-light pb-5">
         <div className="container">
           <h2 className="py-5">Giá dịch vụ</h2>
-          <div className="row justify-content-around">
+          <div className="slider-container">
+            <Slider {...settings}>
+            <div className="bg-white p-2 px-4 rounded">
+              <h4>
+                60m<sup>2</sup>
+              </h4>
+              <p>(2 người - 3 tiếng)</p>
+              <h4 className="border-top pt-2">
+                450.000<sup>đ</sup> - 570.000<sup>đ</sup>
+              </h4>
+            </div>
+            <div className="bg-white p-2 px-4 rounded">
+              <h4>
+                80m<sup>2</sup>
+              </h4>
+              <p>(2 người - 4 tiếng)</p>
+              <h4 className="border-top pt-2">
+                600.000<sup>đ</sup> - 760.000<sup>đ</sup>
+              </h4>
+            </div>
+            <div className="bg-white p-2 px-4 rounded">
+              <h4>
+                100m<sup>2</sup>
+              </h4>
+              <p>(3 người - 3 tiếng)</p>
+              <h4 className="border-top pt-2">
+                675.000<sup>đ</sup> - 855.000<sup>đ</sup>
+              </h4>
+            </div>
+            <div className="bg-white p-2 px-4 rounded">
+              <h4>
+                150m<sup>2</sup>
+              </h4>
+              <p>(3 người - 4 tiếng)</p>
+              <h4 className="border-top pt-2">
+                900.000<sup>đ</sup> - 1.140.000<sup>đ</sup>
+              </h4>
+            </div>
+            </Slider>
+          </div>
+          {/* <div className="row justify-content-around">
             <div className="col-lg-3 bg-white p-2 px-4 rounded">
               <h4>
                 80m<sup>2</sup>
@@ -455,6 +531,21 @@ const TongVeSinhView = () => {
               <h4 className="border-top pt-2">
                 900.000<sup>đ</sup> - 1.140.000<sup>đ</sup>
               </h4>
+            </div>
+          </div> */}
+          <div className="row mt-5 justify-content-center">
+            <div className="col-md-6">
+              <h3>
+                <i className="fa-solid fa-circle-exclamation"></i> Lưu ý
+              </h3>
+              <p>
+                * Bảng giá giúp việc theo giờ trên mang tính chất tham khảo ở
+                thời điểm hiện tại.
+              </p>
+              <p>
+                * Giá dịch vụ có thể tự động điều chỉnh tùy vào giờ cao điểm,
+                cuối tuần hay lễ tết.
+              </p>
             </div>
           </div>
         </div>
