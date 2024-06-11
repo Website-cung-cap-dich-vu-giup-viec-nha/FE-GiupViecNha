@@ -33,6 +33,7 @@ import ChamSocNgCaoTuoiView from "./pages/ChamSocNgCaoTuoiView";
 import VeSinhMayLanhView from "./pages/VeSinhMayLanhView";
 import VeSinhSoFa from "./pages/VeSinhSoFa";
 import ProductManager from "./pages/admin/ProductManager";
+import Calendar from "./pages/admin/Calendar";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -150,15 +151,21 @@ function App() {
           <Route path="/camon" element={<CamOn />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/sorry" element={<Sorry />} />
-          <Route path="/phuongthucthanhtoan" element={<PhuongThucThanhToan />} />
+          <Route
+            path="/phuongthucthanhtoan"
+            element={<PhuongThucThanhToan />}
+          />
           <Route path="/ketquathanhtoan" element={<KetQuaThanhToan />} />
-          <Route path="/thongke" element={<ThongKeView />} />
+          {/* <Route path="/thongke" element={<ThongKeView />} /> */}
           <Route path="/giupviectheogio" element={<GiupViecTheoGioView />} />
           <Route path="/tongvesinh" element={<TongVeSinhView />} />
           <Route path="/trongtre" element={<TrongTreView />} />
           <Route path="/vesinhmaylanh" element={<VeSinhMayLanhView />} />
           <Route path="/vesinhsofa" element={<VeSinhSoFa />} />
-          <Route path="/chamsocnguoicaotuoi" element={<ChamSocNgCaoTuoiView />} />
+          <Route
+            path="/chamsocnguoicaotuoi"
+            element={<ChamSocNgCaoTuoiView />}
+          />
           <Route
             path="/thuedichvu/:id"
             element={
@@ -210,6 +217,16 @@ function App() {
                 />
               }
             />
+            <Route
+              path="calendar"
+              element={
+                <Calendar
+                  setPageName={setAdminPageName}
+                  setBreadCrumb={setAdminBreadCrumb}
+                />
+              }
+            />
+            <Route path="" element={<ThongKeView />} />
           </Route>
         </Route>
       </Routes>

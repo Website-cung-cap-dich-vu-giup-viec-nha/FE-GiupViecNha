@@ -69,6 +69,11 @@ const AdminMenuItem = ({ pageName, breadCrumb }) => {
       icon: ReceiptIcon,
       text: "Quản lý phiếu dịch vụ",
     },
+    {
+      to: "/admin/calendar",
+      icon: ReceiptIcon,
+      text: "Lịch làm việc",
+    },
   ];
   const navigate = useNavigate();
   const theme = useTheme();

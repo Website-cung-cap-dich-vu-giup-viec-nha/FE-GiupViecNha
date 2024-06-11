@@ -204,7 +204,7 @@ const ProductReceiptInsert = ({
                     label="Ngày bắt đầu"
                     // defaultValue={dayjs(new Date())}
                     format="DD/MM/YYYY"
-                    value={dayjs(data?.NgayBatDau)}
+                    value={data?.NgayBatDau}
                     onChange={(event) => handleChange(event, "NgayBatDau")}
                     sx={{
                       width: "100%",
