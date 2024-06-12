@@ -34,7 +34,7 @@ import VeSinhMayLanhView from "./pages/VeSinhMayLanhView";
 import VeSinhSoFa from "./pages/VeSinhSoFa";
 import ProductManager from "./pages/admin/ProductManager";
 import Calendar from "./pages/admin/Calendar";
-import ScrollToTop from './components/ScrollToTop';
+import ScrollToTop from "./components/ScrollToTop";
 import TimKiemDVView from "./pages/TimKiemDVView";
 
 const axiosInstance = axios.create({
@@ -142,7 +142,7 @@ function App() {
 
   return (
     <>
-    <ScrollToTop />
+      <ScrollToTop />
       <Routes>
         {/* Routes with Default Layout */}
         <Route path="/" element={<DefaultLayout user={user} />}>
@@ -169,7 +169,10 @@ function App() {
             path="/chamsocnguoicaotuoi"
             element={<ChamSocNgCaoTuoiView />}
           />
-          <Route path="/chamsocnguoicaotuoi" element={<ChamSocNgCaoTuoiView />} />
+          <Route
+            path="/chamsocnguoicaotuoi"
+            element={<ChamSocNgCaoTuoiView />}
+          />
           <Route path="/search" element={<TimKiemDVView />} />
           <Route
             path="/thuedichvu/:id"
@@ -231,7 +234,15 @@ function App() {
                 />
               }
             />
-            <Route path="" element={<ThongKeView />} />
+            <Route
+              path=""
+              element={
+                <ThongKeView
+                  setPageName={setAdminPageName}
+                  setBreadCrumb={setAdminBreadCrumb}
+                />
+              }
+            />
           </Route>
         </Route>
       </Routes>
