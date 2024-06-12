@@ -20,7 +20,7 @@ const ThueDichVu = ({ user }) => {
   const [allowedDates, setAllowedDates] = useState([]);
   const [tongTien, setTongTien] = useState(0);
   const [soBuoi, setSoBuoi] = useState(1);
-  const [soGio, setSoGio] = useState(4);
+  const [soGio, setSoGio] = useState(3);
   const [gioBatDau, setGioBatDau] = useState("");
   const [ghiChu, setGhiChu] = useState("");
   const [minBuoi, setMinBuoi] = useState(1);
@@ -376,13 +376,13 @@ const ThueDichVu = ({ user }) => {
               <div className="col-md-6 mb-3">
                 <label htmlFor="SoGioLamViec" className="form-label">
                   Số giờ làm việc <br />
-                  <small className="text-danger">(Từ 4 - 8 giờ)</small>
+                  <small className="text-danger">(Từ 3 - 8 giờ)</small>
                 </label>
                 <input
                   type="number"
                   id="SoGioLamViec"
                   className="form-control"
-                  min={4}
+                  min={3}
                   max={8}
                   value={soGio}
                   onChange={handleSoGioChange}

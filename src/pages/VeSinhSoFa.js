@@ -295,6 +295,21 @@ const VeSinhSoFa = () => {
             </table>
           </div>
         </div>
+        <div className="row mt-5 justify-content-center">
+            <div className="col-md-6">
+              <h3>
+                <i className="fa-solid fa-circle-exclamation"></i> Lưu ý
+              </h3>
+              <p>
+                * Bảng giá giúp việc theo giờ trên mang tính chất tham khảo ở
+                thời điểm hiện tại.
+              </p>
+              <p>
+                * Giá dịch vụ có thể tự động điều chỉnh tùy vào giờ cao điểm,
+                cuối tuần hay lễ tết.
+              </p>
+            </div>
+          </div>
       </div>
     </>
   );

@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/Logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = ({ dangxuat, message }) => {
+  const [search, setSearch] = useState();
+  const navigate = useNavigate();
+  const handleSearch = async (e) =>{
+    navigate("/search", { state: { search } })
+  }
   return (
     <nav className="navbar navbar-expand-md navbar-light">
       <Link className="navbar-brand" to="/">
@@ -16,7 +21,10 @@ const Header = ({ dangxuat, message }) => {
       >
         <span className="navbar-toggler-icon"></span>
       </button>
-      <div className="collapse navbar-collapse" id="collapsibleNavbar">
+      <div
+        className="collapse navbar-collapse justify-content-between"
+        id="collapsibleNavbar"
+      >
         <ul className="navbar-nav bg-white">
           <li className="nav-item">
             <Link className="nav-link" to="/">
@@ -28,32 +36,44 @@ const Header = ({ dangxuat, message }) => {
               Dịch vụ
             </a>
           </li>
-          <li className="nav-item">
-            <a className="nav-link" href="sd">
-              Liên hệ
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="sd">
-              Tuyển dụng
-            </a>
-          </li>
-          <li className="nav-item">
-            {message ? (
-              <div
-                className="nav-link d-md-none"
-                role="button"
-                onClick={dangxuat}
-              >
-                Đăng xuất
-              </div>
-            ) : (
+
+          {message ? (
+            <>
+              <li className="nav-item">
+                <Link className="nav-link d-md-none" to="/hoso">
+                  Hồ sơ
+                </Link>
+              </li>
+              <li className="nav-item">
+                <div
+                  className="nav-link d-md-none"
+                  role="button"
+                  onClick={dangxuat}
+                >
+                  Đăng xuất
+                </div>
+              </li>
+            </>
+          ) : (
+            <li className="nav-item">
               <Link className="nav-link d-md-none" to="/dangnhap">
                 Đăng nhập
               </Link>
-            )}
-          </li>
+            </li>
+          )}
         </ul>
+        <div className="d-flex" role="search">
+          <input
+            className="form-control me-2"
+            type="search"
+            placeholder="Tìm ở đây"
+            aria-label="Search"
+            onChange={(e)=>setSearch(e.target.value)}
+          />
+          <button className="btn btn-outline-success" onClick={handleSearch}>
+            Tìm
+          </button>
+        </div>
       </div>
     </nav>
   );

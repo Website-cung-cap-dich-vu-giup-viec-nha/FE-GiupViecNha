@@ -3,6 +3,10 @@
     height: 100%;
 }
 
+h2{
+    font-weight: 700;
+}
+
 .maucam{
     color:#FF8228;
 }

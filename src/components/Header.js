@@ -41,7 +41,11 @@ const Header = ({ user }) => {
                     aria-expanded="false"
                   >
                     <img
-                      src={user.Anh?`${config.apiBaseUrl}/${user.Anh}`:require("../assets/icon/user.png")}
+                      src={
+                        user.Anh
+                          ? `${config.apiBaseUrl}/${user.Anh}`
+                          : require("../assets/icon/user.png")
+                      }
                       alt=""
                       width={40}
                       className="rounded-circle"
