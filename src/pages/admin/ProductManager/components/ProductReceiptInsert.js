@@ -50,6 +50,7 @@ const ProductReceiptInsert = ({
       },
     },
   };
+  const [day, setDay] = React.useState(null);
   return (
     <Dialog open={open} onClose={setOpen} maxWidth="xl" fullWidth>
       <DialogTitle
@@ -104,7 +105,9 @@ const ProductReceiptInsert = ({
                   sx={commonComboboxLabelStyle}
                   id="ward-label"
                 >
-                  {data?.idDichVu !== 6 ? "Ngày làm việc trong tuần" : "Loại sofa"}
+                  {data?.idDichVu !== 6
+                    ? "Ngày làm việc trong tuần"
+                    : "Loại sofa"}
                 </InputLabel>
                 <Select
                   value={data?.idChiTietDichVu}
@@ -126,7 +129,9 @@ const ProductReceiptInsert = ({
                   }
                 >
                   <MenuItem value="" disabled>
-                    {data?.idDichVu !== 6 ? "Chọn ngày làm việc trong tuần" : "Chọn loại sofa"}
+                    {data?.idDichVu !== 6
+                      ? "Chọn ngày làm việc trong tuần"
+                      : "Chọn loại sofa"}
                   </MenuItem>
                   {dataChiTietDichVu ? (
                     dataChiTietDichVu.map((item) => (
@@ -204,8 +209,11 @@ const ProductReceiptInsert = ({
                     label="Ngày bắt đầu"
                     // defaultValue={dayjs(new Date())}
                     format="DD/MM/YYYY"
-                    value={data?.NgayBatDau}
-                    onChange={(event) => handleChange(event, "NgayBatDau")}
+                    value={day}
+                    onChange={(event) => {
+                      handleChange(event, "NgayBatDau");
+                      setDay(event);
+                    }}
                     sx={{
                       width: "100%",
                       "& .MuiFormLabel-root": { zIndex: 1 },

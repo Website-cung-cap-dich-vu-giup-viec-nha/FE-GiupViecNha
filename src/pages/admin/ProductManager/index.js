@@ -266,7 +266,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
     if (propertyName === "NgayBatDau")
       setInsertData({
         ...insertData,
-        [propertyName]: event,
+        [propertyName]: dayjs(event).format("YYYY-MM-DD"),
       });
     else if (propertyName === "GioBatDau")
       setInsertData({

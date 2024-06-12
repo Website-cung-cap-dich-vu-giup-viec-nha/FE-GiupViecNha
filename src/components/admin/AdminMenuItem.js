@@ -20,6 +20,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import UserIcon from "@mui/icons-material/Person";
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import CalendarMonth from '@mui/icons-material/CalendarMonth';
 import { styled, useTheme } from "@mui/material/styles";
 import logo from "../../assets/Logo.png";
 import { Link, useNavigate, Outlet } from "react-router-dom";
@@ -71,7 +72,7 @@ const AdminMenuItem = ({ pageName, breadCrumb }) => {
     },
     {
       to: "/admin/calendar",
-      icon: ReceiptIcon,
+      icon: CalendarMonth,
       text: "Lịch làm việc",
     },
   ];
