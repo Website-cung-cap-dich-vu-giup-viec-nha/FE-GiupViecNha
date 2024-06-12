@@ -173,14 +173,14 @@ const ThueDichVu = ({ user }) => {
         (item) => item.BuoiDangKyDichVu === selectedDay
       );
       if (selectedService) {
-        const total = selectedService.GiaTien * soBuoi * soGio;
+        const total = selectedService.GiaTien * soBuoi;
         setTongTien(total);
       } else {
         setTongTien(0);
       }
     };
     tinhTongTien();
-  }, [selectedDay, soBuoi, soGio, dsChiTietDV]);
+  }, [selectedDay, soBuoi, dsChiTietDV]);
 
   const handleSoBuoiChange = (event) => {
     setSoBuoi(Number(event.target.value));

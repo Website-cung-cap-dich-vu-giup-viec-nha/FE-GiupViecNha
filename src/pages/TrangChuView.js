@@ -459,7 +459,7 @@ const TrangChuView = ({ dichvu }) => {
 
       {/* Câu hỏi thường gặp */}
       <div className="container mt-5">
-        <h2 className="text-center maucam">Các câu hỏi thường gặp</h2>
+        <h2 className="text-center maucam" style={{fontWeight:"700"}}>Các câu hỏi thường gặp</h2>
         <div className="row justify-content-center py-5">
           <div className="col-lg-6">
             <div className="accordion" id="accordionExample">
