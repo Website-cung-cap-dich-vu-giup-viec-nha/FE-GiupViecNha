@@ -116,7 +116,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
     Tongtien: 0,
     idDichVu: "",
     idChiTietDichVu: "",
-    NgayBatDau: moment(new Date()).format("YYYY-MM-DD"),
+    NgayBatDau: null,
     GioBatDau: null,
     SoBuoi: 1,
     SoGio: 1,
@@ -189,7 +189,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
       Tongtien: 0,
       idDichVu: "",
       idChiTietDichVu: "",
-      NgayBatDau: moment(new Date()).format("YYYY-MM-DD"),
+      NgayBatDau: null,
       GioBatDau: null,
       SoBuoi: 1,
       SoGio: 1,
@@ -263,11 +263,10 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   };
 
   const handleInsertData = (event, propertyName) => {
-    console.log(event);
     if (propertyName === "NgayBatDau")
       setInsertData({
         ...insertData,
-        [propertyName]: moment(event).format("YYYY-MM-DD"),
+        [propertyName]: dayjs(event).format("YYYY-MM-DD"),
       });
     else if (propertyName === "GioBatDau")
       setInsertData({
