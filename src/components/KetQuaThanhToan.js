@@ -48,7 +48,8 @@ const KetQuaThanhToan = () => {
       </h2> */}
 
       <div className="row justify-content-center">
-        <div className="col-lg-4 border rounded text-center">
+        {ketQua && 
+          <div className="col-lg-4 border rounded text-center">
           <div className="" style={{ marginTop: "-30px" }}>
             {ketQua.RspCode === "00" && (
               <img
@@ -84,6 +85,10 @@ const KetQuaThanhToan = () => {
           </p>
           <h3>{amount.toLocaleString("vi-VN")}đ</h3>
         </div>
+        }
+        {
+          !ketQua && "Không tìm thấy giao dịch"
+        }
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ const ProductReceiptSearching = ({
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer
               components={["DatePicker", "DatePicker"]}
-              sx={{ paddingTop: "0px" }}
+              sx={{ paddingTop: "10px" }}
             >
               <DatePicker
                 label="Ngày bắt đầu"
@@ -67,7 +67,7 @@ const ProductReceiptSearching = ({
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer
               components={["DatePicker", "DatePicker"]}
-              sx={{ paddingTop: "0px" }}
+              sx={{ paddingTop: "10px" }}
             >
               <DatePicker
                 label="Ngày kết thúc"
