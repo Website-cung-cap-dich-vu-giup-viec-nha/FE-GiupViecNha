@@ -208,13 +208,11 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
           </Box>
         </div>
       </Box>
-      <Box p={3}>
+      <Box p={2}>
         <TableContainer
           component={Paper}
           sx={{
             overflow: "auto",
-            height: "calc(100vh - 400px)",
-            width: "calc(167vh)",
           }}
           style={{
             padding: "15px",
@@ -300,8 +298,8 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(monday) &&
                     monday.length > 0 &&
                     monday.map((item, index) => (
-                      <Card sx={{ width: 300, margin: 1 }}>
-                        <Grid container spacing={3}>
+                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
+                        <Grid container >
                           <Grid
                             item
                             xs={12}
@@ -320,7 +318,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -329,7 +327,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               ID Phiếu dịch vụ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -339,7 +337,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -347,9 +345,10 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
+                            
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
-                            <Typography
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
+                          <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -358,16 +357,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Tên khách hàng:
+                              Khách hàng:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -377,16 +376,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Số điện thoại khách hàng:
+                              Số điện thoại:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -396,7 +395,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -405,7 +404,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               Địa chỉ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -429,8 +428,8 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(tuesday) &&
                     tuesday.length > 0 &&
                     tuesday.map((item, index) => (
-                      <Card sx={{ width: 300, margin: 1 }}>
-                        <Grid container spacing={3}>
+                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
+                        <Grid container >
                           <Grid
                             item
                             xs={12}
@@ -449,7 +448,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -458,7 +457,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               ID Phiếu dịch vụ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -468,7 +467,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -476,9 +475,10 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
+                            
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
-                            <Typography
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
+                          <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -487,16 +487,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Tên khách hàng:
+                              Khách hàng:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -506,16 +506,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Số điện thoại khách hàng:
+                              Số điện thoại:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -525,7 +525,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -534,7 +534,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               Địa chỉ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -559,8 +559,8 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(wednesday) &&
                     wednesday.length > 0 &&
                     wednesday.map((item, index) => (
-                      <Card sx={{ width: 300, margin: 1 }}>
-                        <Grid container spacing={3}>
+                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
+                        <Grid container >
                           <Grid
                             item
                             xs={12}
@@ -579,7 +579,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -588,7 +588,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               ID Phiếu dịch vụ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -598,7 +598,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -606,9 +606,10 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
+                            
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
-                            <Typography
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
+                          <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -617,16 +618,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Tên khách hàng:
+                              Khách hàng:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -636,16 +637,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Số điện thoại khách hàng:
+                              Số điện thoại:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -655,7 +656,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -664,7 +665,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               Địa chỉ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -688,8 +689,8 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(thursday) &&
                     thursday.length > 0 &&
                     thursday.map((item, index) => (
-                      <Card sx={{ width: 300, margin: 1 }}>
-                        <Grid container spacing={3}>
+                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
+                        <Grid container >
                           <Grid
                             item
                             xs={12}
@@ -708,7 +709,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -717,7 +718,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               ID Phiếu dịch vụ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -727,7 +728,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -735,9 +736,10 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
+                            
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
-                            <Typography
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
+                          <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -746,16 +748,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Tên khách hàng:
+                              Khách hàng:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -765,16 +767,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Số điện thoại khách hàng:
+                              Số điện thoại:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -784,7 +786,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -793,7 +795,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               Địa chỉ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -817,8 +819,8 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(friday) &&
                     friday.length > 0 &&
                     friday.map((item, index) => (
-                      <Card sx={{ width: 300, margin: 1 }}>
-                        <Grid container spacing={3}>
+                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
+                        <Grid container >
                           <Grid
                             item
                             xs={12}
@@ -837,7 +839,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -846,7 +848,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               ID Phiếu dịch vụ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -856,7 +858,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -864,9 +866,10 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
+                            
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
-                            <Typography
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
+                          <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -875,16 +878,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Tên khách hàng:
+                              Khách hàng:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -894,16 +897,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Số điện thoại khách hàng:
+                              Số điện thoại:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -913,7 +916,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -922,7 +925,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               Địa chỉ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -946,8 +949,8 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(saturday) &&
                     saturday.length > 0 &&
                     saturday.map((item, index) => (
-                      <Card sx={{ width: 300, margin: 1 }}>
-                        <Grid container spacing={3}>
+                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
+                        <Grid container >
                           <Grid
                             item
                             xs={12}
@@ -966,7 +969,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -975,7 +978,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               ID Phiếu dịch vụ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -985,7 +988,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -993,9 +996,10 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
+                            
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
-                            <Typography
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
+                          <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -1004,16 +1008,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Tên khách hàng:
+                              Khách hàng:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1023,16 +1027,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Số điện thoại khách hàng:
+                              Số điện thoại:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1042,7 +1046,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1051,7 +1055,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               Địa chỉ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1075,8 +1079,8 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(sunday) &&
                     sunday.length > 0 &&
                     sunday.map((item, index) => (
-                      <Card sx={{ width: 300, margin: 1 }}>
-                        <Grid container spacing={3}>
+                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
+                        <Grid container >
                           <Grid
                             item
                             xs={12}
@@ -1095,7 +1099,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1104,7 +1108,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               ID Phiếu dịch vụ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1114,7 +1118,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1122,9 +1126,10 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
+                            
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
-                            <Typography
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
+                          <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -1133,16 +1138,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Tên khách hàng:
+                              Khách hàng:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1152,16 +1157,16 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
                               fontWeight="regular"
                             >
-                              Số điện thoại khách hàng:
+                              Số điện thoại:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1171,7 +1176,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             </Typography>
                           </Grid>
 
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1180,7 +1185,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               Địa chỉ:
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6}>
+                          <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -1200,7 +1205,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Typography
+        {/* <Typography
           whiteSpace="nowrap"
           sx={{
             fontWeight: 600,
@@ -1212,9 +1217,10 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
             justifyContent: "center",
             textAlign: "center",
           }}
-        ></Typography>
+        >ssssssssss</Typography> */}
       </Box>
     </Card>
+    
   );
 };
 

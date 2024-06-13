@@ -39,7 +39,7 @@ const PhuongThucThanhToan = () => {
           <label className="form-check-label" htmlFor="momo">
             <img
               width={30}
-              src={require("../assets/icon/icons8-cash-48.png")}
+              src={require("../assets/icon/icon-momo.jpg")}
               alt=""
             />{" "}
             Thanh toán bằng MoMo
