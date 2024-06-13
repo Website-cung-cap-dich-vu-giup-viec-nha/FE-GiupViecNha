@@ -616,13 +616,24 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
     if (isFirstLoad) return;
     if (dataChiTietDichVu.length <= 0) return;
     const tinhTongTien = () => {
-      if (insertData?.idDichVu === 1 || insertData?.idDichVu === 2) {
+      if (insertData?.idDichVu === 1) {
         const selectedService = dataChiTietDichVu.find(
           (item) => item.idChiTietDichVu === insertData?.idChiTietDichVu
         );
         if (selectedService) {
           const total =
             selectedService.GiaTien * insertData?.SoBuoi * insertData?.SoGio;
+          setInsertData({ ...insertData, Tongtien: total });
+        } else {
+          setInsertData({ ...insertData, Tongtien: 0 });
+        }
+      } else if (insertData?.idDichVu === 2) {
+        const selectedService = dataChiTietDichVu.find(
+          (item) => item.idChiTietDichVu === insertData?.idChiTietDichVu
+        );
+        if (selectedService) {
+          const total =
+            selectedService.GiaTien * insertData?.SoBuoi;
           setInsertData({ ...insertData, Tongtien: total });
         } else {
           setInsertData({ ...insertData, Tongtien: 0 });
