@@ -129,7 +129,7 @@ const HoSo = ({ user, handleReloadHeader }) => {
               Số điện thoại
             </label>
             <p id="phoneInput">
-              {user.SDT} <Link to="/sorry">Thay đổi</Link>
+              {user.SDT}
             </p>
           </div>
           <div className="mb-3">
