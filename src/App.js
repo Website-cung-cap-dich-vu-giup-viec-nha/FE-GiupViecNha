@@ -36,6 +36,7 @@ import ProductManager from "./pages/admin/ProductManager";
 import Calendar from "./pages/admin/Calendar";
 import ScrollToTop from "./components/ScrollToTop";
 import TimKiemDVView from "./pages/TimKiemDVView";
+import ProtectedPermission from "./ProtectedPermission";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -207,24 +208,28 @@ function App() {
               />
             }
           >
-            <Route
-              path="users"
-              element={
-                <Users
-                  setPageName={setAdminPageName}
-                  setBreadCrumb={setAdminBreadCrumb}
-                />
-              }
-            />
-            <Route
-              path="productmanager"
-              element={
-                <ProductManager
-                  setPageName={setAdminPageName}
-                  setBreadCrumb={setAdminBreadCrumb}
-                />
-              }
-            />
+            <Route element={<ProtectedPermission idQuyen={1} />}>
+              <Route
+                path="users"
+                element={
+                  <Users
+                    setPageName={setAdminPageName}
+                    setBreadCrumb={setAdminBreadCrumb}
+                  />
+                }
+              />
+            </Route>
+            <Route element={<ProtectedPermission idQuyen={2} />}>
+              <Route
+                path="productmanager"
+                element={
+                  <ProductManager
+                    setPageName={setAdminPageName}
+                    setBreadCrumb={setAdminBreadCrumb}
+                  />
+                }
+              />
+            </Route>
             <Route
               path="calendar"
               element={
@@ -234,15 +239,17 @@ function App() {
                 />
               }
             />
-            <Route
-              path=""
-              element={
-                <ThongKeView
-                  setPageName={setAdminPageName}
-                  setBreadCrumb={setAdminBreadCrumb}
-                />
-              }
-            />
+            <Route element={<ProtectedPermission idQuyen={0} />}>
+              <Route
+                path=""
+                element={
+                  <ThongKeView
+                    setPageName={setAdminPageName}
+                    setBreadCrumb={setAdminBreadCrumb}
+                  />
+                }
+              />
+            </Route>
           </Route>
         </Route>
       </Routes>

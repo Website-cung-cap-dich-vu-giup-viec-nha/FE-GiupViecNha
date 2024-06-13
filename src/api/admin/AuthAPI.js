@@ -23,3 +23,11 @@ export async function doiMatKhau(doimatkhau) {
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
+
+export async function checkPermission(idQuyen) {
+  const url = `/api/PhanQuyen/${idQuyen}/checkQuyen`;
+
+  return API.get(url)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}

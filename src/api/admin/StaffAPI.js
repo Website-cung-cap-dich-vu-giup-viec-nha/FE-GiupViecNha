@@ -55,3 +55,11 @@ export async function getStaffIsNotAddChiTietNgayLam(idChiTietNgayLam) {
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
+
+export async function isStaff() {
+  const url = `/api/NhanVien/isStaff`;
+
+  return API.get(url)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}
