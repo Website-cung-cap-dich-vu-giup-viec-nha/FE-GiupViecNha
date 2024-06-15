@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HoSo from "../components/HoSo";
 import pattern from "../assets/background/pattern.jpg";
 import DoiMatKhau from "../components/DoiMatKhau";
 import DiaChi from "../components/DiaChi";
 import HoaDonKH from "../components/HoaDonKH";
+import { isStaff } from "../api/admin/StaffAPI";
 const HoSoView = ({ user, handleReloadHeader }) => {
   const [activeComponent, setActiveComponent] = useState("HoSo");
+  const [staff, setStaff] = useState(false);
+  const checking = async () => {
+    try {
+      const response = await isStaff();
+      if (response?.message?.data?.data === true) {
+        setStaff(true);
+      } else {
+        setStaff(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setStaff(false);
+    }
+  };
+  useEffect(() => {
+    checking();
+  }, []);
   return (
     <div
       className="container-fluid"
@@ -39,22 +57,24 @@ const HoSoView = ({ user, handleReloadHeader }) => {
                       <i className="fa-solid fa-key me-2"></i> Đổi mật khẩu
                     </span>
                   </li>
-                  <li className="nav-item border-bottom border-secondary">
+                  <li className="nav-item border-bottom border-secondary" hidden={staff}>
                     <span
                       className="nav-link"
                       onClick={() => setActiveComponent("DiaChi")}
                     >
                       {" "}
-                      <i className="fa-solid fa-map-location-dot me-2"></i> Địa chỉ
+                      <i className="fa-solid fa-map-location-dot me-2"></i> Địa
+                      chỉ
                     </span>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item" hidden={staff}>
                     <span
                       className="nav-link"
                       onClick={() => setActiveComponent("PhieuDichVu")}
                     >
                       {" "}
-                      <i className="fa-solid fa-file-invoice me-2"></i> Phiếu dịch vụ
+                      <i className="fa-solid fa-file-invoice me-2"></i> Phiếu
+                      dịch vụ
                     </span>
                   </li>
                 </ul>

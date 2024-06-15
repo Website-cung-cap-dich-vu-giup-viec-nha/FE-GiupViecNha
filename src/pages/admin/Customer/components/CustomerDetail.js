@@ -59,7 +59,7 @@ import {
                   </Typography>
                 </Grid>
   
-                <Grid item xs={12} sm={6} xl={2}>
+                {/* <Grid item xs={12} sm={6} xl={2}>
                   <Typography variant="caption" color="text" fontWeight="regular">
                     Email:
                   </Typography>
@@ -68,7 +68,7 @@ import {
                   <Typography variant="caption" color="text" fontWeight="bold">
                     {selectedRow?.email}
                   </Typography>
-                </Grid>
+                </Grid> */}
   
                 <Grid item xs={12} sm={6} xl={2}>
                   <Typography variant="caption" color="text" fontWeight="regular">

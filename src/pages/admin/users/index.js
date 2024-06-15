@@ -62,10 +62,10 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [insertData, setInsertData] = useState({
     name: "",
-    email: "",
+    // email: "",
     SDT: "",
-    password: "",
-    password_confirmation: "",
+    // password: "",
+    // password_confirmation: "",
     GioiTinh: "Nữ",
     idPhongBan: "",
     idChucVu: "",
@@ -151,13 +151,24 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   const handleInsert = () => {
     insertStaff(insertData)
       .then((response) => {
-        setMsg(response?.message?.data?.message);
-        setStatus(response?.message?.status);
-        handleCloseAlert();
-        if (response?.message?.status === 200) handleOpenInsert();
         if (response?.message?.status === 200) {
-          if (page === 0) loadStaffTable();
-          else setPage(0);
+          setMsg(response?.message?.data?.message);
+          setStatus(response?.message?.status);
+          handleCloseAlert();
+          if (response?.message?.status === 200) handleOpenInsert();
+          if (response?.message?.status === 200) {
+            if (page === 0) loadStaffTable();
+            else setPage(0);
+          }
+        } else if(response?.message?.status === 201) {
+          setMsg(response?.message?.data?.message[0]);
+          setStatus(response?.message?.status);
+          handleCloseAlert();
+        } else {
+          const str = response?.message?.data?.message ? response?.message?.data?.message.split(' (') : '';
+          setMsg(str[0]);
+          setStatus(response?.message?.status);
+          handleCloseAlert();
         }
       })
       .catch((error) => {
@@ -247,10 +258,10 @@ const Users = ({ setPageName, setBreadCrumb }) => {
         excelData?.map((item) => ({
           idNhanVien: item[0] || null,
           name: item[1] || null,
-          email: item[2] || null,
-          SDT: item[3] || null,
-          GioiTinh: item[4] || null,
-          tenChucVu: item[5] || null,
+          // email: item[2] || null,
+          SDT: item[2] || null,
+          GioiTinh: item[3] || null,
+          tenChucVu: item[4] || null,
         }))
       );
     };
@@ -353,10 +364,10 @@ const Users = ({ setPageName, setBreadCrumb }) => {
     if (isFirstLoad) return;
     if (openInsert) {
       handleDataChucVu(insertData?.idPhongBan);
-      setInsertData({ ...insertData, "idChucVu": null });
+      setInsertData({ ...insertData, idChucVu: null });
     } else if (openEdit) {
       handleDataChucVu(selectedRow?.idPhongBan);
-      setSelectedRow({ ...selectedRow, "idChucVu": null });
+      setSelectedRow({ ...selectedRow, idChucVu: null });
     }
   }, [insertData?.idPhongBan, selectedRow?.idPhongBan]);
 
@@ -371,10 +382,10 @@ const Users = ({ setPageName, setBreadCrumb }) => {
     if (openInsert) {
       setInsertData({
         name: "",
-        email: "",
+        // email: "",
         SDT: "",
-        password: "",
-        password_confirmation: "",
+        // password: "",
+        // password_confirmation: "",
         GioiTinh: "Nữ",
         idPhongBan: "",
         idChucVu: "",

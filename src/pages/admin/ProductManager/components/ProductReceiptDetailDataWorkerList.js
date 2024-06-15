@@ -54,13 +54,13 @@ const ProductReceiptDetailDataWorkerList = ({ data, setSelectedItem, handleDelet
                 >
                   HỌ VÀ TÊN
                 </TableCell>
-                <TableCell
+                {/* <TableCell
                   className={classes.tableCell}
                   align="center"
                   sx={{ fontWeight: "bold", color: "#606F89" }}
                 >
                   EMAIL
-                </TableCell>
+                </TableCell> */}
                 <TableCell
                   className={classes.tableCell}
                   align="center"
@@ -104,13 +104,13 @@ const ProductReceiptDetailDataWorkerList = ({ data, setSelectedItem, handleDelet
                       {item?.name}
                     </TableCell>
 
-                    <TableCell
+                    {/* <TableCell
                       className={classes.tableCell}
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
                       {item?.email}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell
                       className={classes.tableCell}
                       align="center"
