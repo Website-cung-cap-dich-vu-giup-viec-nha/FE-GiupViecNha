@@ -38,6 +38,8 @@ import ScrollToTop from "./components/ScrollToTop";
 import TimKiemDVView from "./pages/TimKiemDVView";
 import ProtectedPermission from "./ProtectedPermission";
 import ProtectedCustomerLogin from "./ProtectedCustomerLogin";
+import CalendarManager from "./pages/admin/CalendarManager";
+import PermissionManager from "./pages/admin/PermissionManager";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -247,6 +249,28 @@ function App() {
                 path=""
                 element={
                   <ThongKeView
+                    setPageName={setAdminPageName}
+                    setBreadCrumb={setAdminBreadCrumb}
+                  />
+                }
+              />
+            </Route>
+            <Route element={<ProtectedPermission idQuyen={4} />}>
+              <Route
+                path="calendarmanager"
+                element={
+                  <CalendarManager
+                    setPageName={setAdminPageName}
+                    setBreadCrumb={setAdminBreadCrumb}
+                  />
+                }
+              />
+            </Route>
+            <Route element={<ProtectedPermission idQuyen={3} />}>
+              <Route
+                path="permissionmanager"
+                element={
+                  <PermissionManager
                     setPageName={setAdminPageName}
                     setBreadCrumb={setAdminBreadCrumb}
                   />

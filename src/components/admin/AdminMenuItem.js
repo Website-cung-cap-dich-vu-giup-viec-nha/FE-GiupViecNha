@@ -19,14 +19,18 @@ import {
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import UserIcon from "@mui/icons-material/Person";
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import CalendarMonth from '@mui/icons-material/CalendarMonth';
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import CalendarMonth from "@mui/icons-material/CalendarMonth";
 import { styled, useTheme } from "@mui/material/styles";
 import logo from "../../assets/Logo.png";
 import { Link, useNavigate, Outlet } from "react-router-dom";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Cookies from "js-cookie";
-import { getProfile, logout } from "../../api/admin/AuthAPI";
+import {
+  getPermissionByIdNhanVien,
+  getProfile,
+  logout,
+} from "../../api/admin/AuthAPI";
 import { config } from "../../config";
 
 const drawerWidth = 240;
@@ -59,28 +63,25 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 // );
 
 const AdminMenuItem = ({ pageName, breadCrumb }) => {
-  const menuItems = [
-    {
-      to: "/admin/users",
-      icon: UserIcon,
-      text: "Quản lý nhân viên",
-    },
-    {
-      to: "/admin/productmanager",
-      icon: ReceiptIcon,
-      text: "Quản lý phiếu dịch vụ",
-    },
-    {
-      to: "/admin/calendar",
-      icon: CalendarMonth,
-      text: "Lịch làm việc",
-    },
-  ];
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const [userProfile, setUserProfile] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
+  const [permmission, setPermission] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
+
+  const loadPermission = () => {
+    getPermissionByIdNhanVien()
+      .then((response) => {
+        setPermission(
+          response?.message?.status === 200 ? response?.message?.data?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -117,8 +118,37 @@ const AdminMenuItem = ({ pageName, breadCrumb }) => {
       .catch((error) => {
         console.log(error);
       });
+    loadPermission();
   }, []);
-
+  useEffect(() => {
+    setMenuItems([
+      {
+        to: "/admin/users",
+        icon: UserIcon,
+        text: "Quản lý nhân viên",
+        visible: permmission && permmission.some((item) => item?.idQuyen === 1),
+      },
+      {
+        to: "/admin/productmanager",
+        icon: ReceiptIcon,
+        text: "Quản lý phiếu dịch vụ",
+        visible: permmission && permmission.some((item) => item?.idQuyen === 2),
+      },
+      {
+        to: "/admin/calendarmanager",
+        icon: CalendarMonth,
+        text: "Theo dõi lịch làm việc",
+        visible: permmission && permmission.some((item) => item?.idQuyen === 4),
+      },
+      {
+        to: "/admin/calendar",
+        icon: CalendarMonth,
+        text: "Lịch làm việc",
+        visible:
+          permmission && !permmission.some((item) => item?.idQuyen === 4),
+      },
+    ]);
+  }, [permmission]);
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -173,14 +203,16 @@ const AdminMenuItem = ({ pageName, breadCrumb }) => {
           </DrawerHeader>
           <List>
             {menuItems &&
-              menuItems.map((item, index) => (
-                <ListItem button component={Link} to={item.to} key={index}>
-                  <ListItemIcon>
-                    <item.icon style={{ color: "white" }} />{" "}
-                  </ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItem>
-              ))}
+              menuItems.map((item, index) =>
+                item?.visible ? (
+                  <ListItem button component={Link} to={item.to} key={index}>
+                    <ListItemIcon>
+                      <item.icon style={{ color: "white" }} />{" "}
+                    </ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItem>
+                ) : null
+              )}
           </List>
         </Drawer>
 
