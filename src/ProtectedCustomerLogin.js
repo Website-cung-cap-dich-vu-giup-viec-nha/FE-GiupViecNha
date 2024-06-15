@@ -37,9 +37,9 @@ const ProtectedCustomerLogin = () => {
     );
   }
   if (staff === false) {
-    return staff ? <Outlet /> : <Navigate to="/admin" />;
+    return !staff ? <Outlet /> : <Navigate to="/admin" />;
   } else {
-    return <Navigate to="/admin" />;
+    return <Navigate to="/admin" />;  
   }
 };
 

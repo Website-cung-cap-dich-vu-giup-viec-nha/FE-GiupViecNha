@@ -31,3 +31,11 @@ export async function checkPermission(idQuyen) {
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
+
+export async function getPermissionByIdNhanVien() {
+  const url = `/api/Quyen/getQuyenByIdNhanVien`;
+
+  return API.get(url)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}
