@@ -11,7 +11,7 @@ const ProtectedPermission = ({ idQuyen }) => {
     try {
       if (idQuyen === 0) {
         const response = await isStaff();
-        if (response?.message?.status === 200) {
+        if (response?.message?.data?.data === true) {
           seStaff(true);
           setIsPermission(true);
         } else {
@@ -20,7 +20,7 @@ const ProtectedPermission = ({ idQuyen }) => {
         }
       } else {
         const response = await checkPermission(idQuyen);
-        if (response?.message?.status === 200) {
+        if (response?.message?.data?.message === true) {
           setIsPermission(true);
         } else {
           setIsPermission(false);

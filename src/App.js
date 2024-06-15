@@ -37,6 +37,7 @@ import Calendar from "./pages/admin/Calendar";
 import ScrollToTop from "./components/ScrollToTop";
 import TimKiemDVView from "./pages/TimKiemDVView";
 import ProtectedPermission from "./ProtectedPermission";
+import ProtectedCustomerLogin from "./ProtectedCustomerLogin";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -175,16 +176,18 @@ function App() {
             element={<ChamSocNgCaoTuoiView />}
           />
           <Route path="/search" element={<TimKiemDVView />} />
-          <Route
-            path="/thuedichvu/:id"
-            element={
-              user ? (
-                <ThueDichVuView user={user} />
-              ) : (
-                <Navigate to="/dangnhap" />
-              )
-            }
-          />
+          <Route element={<ProtectedCustomerLogin />}>
+            <Route
+              path="/thuedichvu/:id"
+              element={
+                user ? (
+                  <ThueDichVuView user={user} />
+                ) : (
+                  <Navigate to="/dangnhap" />
+                )
+              }
+            />
+          </Route>
           <Route
             path="/hoso"
             element={

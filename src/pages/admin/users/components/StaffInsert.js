@@ -65,7 +65,7 @@ const StaffInsert = ({
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            {/* <Grid item xs={12} sm={6} xl={4}>
               <TextField
                 label="Email"
                 placeholder="Nhập email"
@@ -78,7 +78,7 @@ const StaffInsert = ({
                 }}
                 textAlign="center"
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6} xl={4}>
               <TextField
                 label="Số Điện Thoại"
@@ -93,7 +93,7 @@ const StaffInsert = ({
                 textAlign="center"
               />
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            {/* <Grid item xs={12} sm={6} xl={4}>
               <TextField
                 label="Mật khẩu"
                 placeholder="Nhập mật khẩu"
@@ -124,7 +124,7 @@ const StaffInsert = ({
                 }}
                 textAlign="center"
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6} xl={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer

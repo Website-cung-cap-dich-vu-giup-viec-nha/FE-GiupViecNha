@@ -103,6 +103,7 @@ const ProductReceiptSearching = ({
             InputLabelProps={{
               shrink: true,
             }}
+            sx={{ marginTop: "10px" }}
           />
         </Grid>
         <Grid item xs={12} sm={6} xl={4}>

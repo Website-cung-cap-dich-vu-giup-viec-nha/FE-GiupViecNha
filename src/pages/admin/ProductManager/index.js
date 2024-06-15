@@ -163,6 +163,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   const handleOpenEdit = (isFirstTabOpen, item) => {
     setIsFirstTabDisabled(isFirstTabOpen);
     if (isFirstTabOpen) {
+      setSelectedWorkDayItem({});
       setCurrentTab("1");
       loadProductReceiptDataWorkDay(item?.idPhieuDichVu);
     } else {
@@ -353,14 +354,28 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   const handleSearching_Staff = () => {
     insertProductReceiptStaff(selectedWorkDayItem)
       .then((response) => {
-        setMsg(response?.message?.data?.message[0]);
-        setStatus(response?.message?.status);
-        handleCloseAlert();
-        setSelectedWorkDayItem({
-          ...selectedWorkDayItem,
-          idNhanVien: null,
-        });
-        loadStaffIsNotAddChiTietNgayLam(selectedWorkDayItem?.idChiTietNgayLam);
+        if (response?.message?.status === 200) {
+          setMsg(response?.message?.data?.message[0]);
+          setStatus(response?.message?.status);
+          handleCloseAlert();
+          setSelectedWorkDayItem({
+            ...selectedWorkDayItem,
+            idNhanVien: null,
+          });
+          loadStaffIsNotAddChiTietNgayLam(
+            selectedWorkDayItem?.idChiTietNgayLam
+          );
+        } else if (response?.message?.status === 201) {
+          setMsg(response?.message?.data?.message[0]);
+          setStatus(response?.message?.status);
+          handleCloseAlert();
+        } else {
+          const str = response?.message?.data?.message ? response?.message?.data?.message.split(' (') : '';
+          setMsg(str[0]);
+          setStatus(response?.message?.status);
+          handleCloseAlert();
+        }
+        console.log(response);
       })
       .catch((error) => {
         console.log(error);
@@ -602,14 +617,25 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   useEffect(() => {
     loadProductDetailData(insertData?.idDichVu);
     loadProductTypeData(insertData?.idDichVu);
-    setInsertData({
-      ...insertData,
-      idChiTietDichVu: "",
-      idKieuDichVu: "",
-      SoBuoi: 1,
-      SoGio: 1,
-      SoNguoiDuocChamSoc: 1,
-    });
+    if (insertData?.idDichVu === 3 || insertData?.idDichVu === 4) {
+      setInsertData({
+        ...insertData,
+        idChiTietDichVu: "",
+        idKieuDichVu: "",
+        SoBuoi: 1,
+        SoGio: 1,
+        SoNguoiDuocChamSoc: 1,
+      });
+    } else {
+      setInsertData({
+        ...insertData,
+        idChiTietDichVu: "",
+        idKieuDichVu: "",
+        SoBuoi: 1,
+        SoGio: 1,
+        SoNguoiDuocChamSoc: null,
+      });
+    }
   }, [insertData?.idDichVu]);
 
   useEffect(() => {
@@ -632,8 +658,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
           (item) => item.idChiTietDichVu === insertData?.idChiTietDichVu
         );
         if (selectedService) {
-          const total =
-            selectedService.GiaTien * insertData?.SoBuoi;
+          const total = selectedService.GiaTien * insertData?.SoBuoi;
           setInsertData({ ...insertData, Tongtien: total });
         } else {
           setInsertData({ ...insertData, Tongtien: 0 });

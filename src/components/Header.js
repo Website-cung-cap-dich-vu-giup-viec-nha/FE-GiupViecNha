@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import NavMain from "./NavMain";
 import { config } from "../config";
+import { isStaff } from "../api/admin/StaffAPI";
 
 const Header = ({ user }) => {
   const navigate = useNavigate();
@@ -23,6 +24,24 @@ const Header = ({ user }) => {
       }
     }
   };
+
+  const [staff, setStaff] = useState(false);
+  const checking = async () => {
+    try {
+      const response = await isStaff();
+      if (response?.message?.data?.data === true) {
+        setStaff(true);
+      } else {
+        setStaff(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setStaff(false);
+    }
+  };
+  useEffect(() => {
+    checking();
+  }, []);
 
   return (
     <div className="container-fluid border-bottom">
@@ -56,6 +75,11 @@ const Header = ({ user }) => {
                     className="dropdown-menu"
                     aria-labelledby="dropdownMenuUser"
                   >
+                    <li hidden={!staff}>
+                      <Link className="dropdown-item" to="/admin">
+                        Trang quản lý
+                      </Link>
+                    </li>
                     <li>
                       <Link className="dropdown-item" to="/hoso">
                         Hồ sơ

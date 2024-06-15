@@ -7,7 +7,7 @@ const StaffSearching = ({ searchData, handleChange, handleSearching }) => {
         <Grid item xs={12} sm={9} xl={11}>
           <TextField
             label="Tìm kiếm"
-            placeholder="Nhập họ tên, email, SDT"
+            placeholder="Nhập họ tên, SDT"
             value={searchData}
             onChange={handleChange}
             variant="outlined"
