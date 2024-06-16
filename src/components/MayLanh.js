@@ -137,6 +137,18 @@ const ThueDichVu = ({ user }) => {
     let currentHour = now.getHours();
     const currentMinute = now.getMinutes();
 
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+
     const selectedDate = new Date(ngayBD);
 
     if (currentMinute > 0) {
@@ -147,6 +159,10 @@ const ThueDichVu = ({ user }) => {
       gioBatDauHour <= currentHour
     ) {
       setGioBatDau("");
+      Toast.fire({
+        icon: "warning",
+        title: "Giờ bắt đầu phải lớn hơn giờ hiện tại khoảng 2 tiếng!",
+      });
       return;
     }
 
@@ -158,6 +174,10 @@ const ThueDichVu = ({ user }) => {
       setGioBatDau(formattedTime);
     } else {
       setGioBatDau("");
+      Toast.fire({
+        icon: "warning",
+        title: "Giờ bắt đầu từ 7 giờ sáng đến bé hơn 10 giờ tối!",
+      });
     }
   };
 
@@ -258,8 +278,8 @@ const ThueDichVu = ({ user }) => {
     const currentDate = new Date();
 
     const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
   };
