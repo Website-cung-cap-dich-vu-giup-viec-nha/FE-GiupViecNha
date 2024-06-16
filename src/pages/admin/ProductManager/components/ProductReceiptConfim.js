@@ -41,7 +41,7 @@ const ProductReceiptConfim = ({
         <Box py={3}>
           <Box mb={3}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6} xl={12}>
+              <Grid item xs={12} sm={12} xl={12}>
                 <img
                   src={questionsIcon}
                   alt="Questions Icon"
@@ -56,7 +56,7 @@ const ProductReceiptConfim = ({
                   }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} xl={12}>
+              <Grid item xs={12} sm={12} xl={12}>
                 <Typography
                   variant="caption"
                   color="text"
@@ -72,7 +72,7 @@ const ProductReceiptConfim = ({
                   Xác nhận
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={6} xl={12}>
+              <Grid item xs={12} sm={12} xl={12}>
                 <Typography
                   variant="caption"
                   color="text"
