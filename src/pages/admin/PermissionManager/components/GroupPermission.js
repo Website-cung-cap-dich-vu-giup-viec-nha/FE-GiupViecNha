@@ -59,7 +59,7 @@ import {
         <DialogContent>
           <Box py={3} mb={3}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6} xl={10}>
+              <Grid item xs={12} sm={10} xl={10}>
                 <Autocomplete
                   options={dataQuyen}
                   getOptionLabel={(option) =>
@@ -93,7 +93,7 @@ import {
                   }
                 />
               </Grid>
-              <Grid item xs={12} sm={6} xl={2}>
+              <Grid item xs={12} sm={2} xl={2}>
                 <Button
                   variant="contained"
                   sx={{
@@ -123,7 +123,7 @@ import {
                   </Typography>
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={6} xl={12}>
+              <Grid item xs={12} sm={12} xl={12}>
                 <Card>
                   <Box p={3}>
                     <TableContainer
