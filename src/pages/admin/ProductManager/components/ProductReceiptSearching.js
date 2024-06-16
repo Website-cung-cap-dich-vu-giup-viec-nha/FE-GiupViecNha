@@ -34,7 +34,7 @@ const ProductReceiptSearching = ({
   return (
     <Box py={3} mb={3}>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} xl={4}>
+        <Grid item xs={12} sm={4} xl={4}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer
               components={["DatePicker", "DatePicker"]}
@@ -63,7 +63,7 @@ const ProductReceiptSearching = ({
             </DemoContainer>
           </LocalizationProvider>
         </Grid>
-        <Grid item xs={12} sm={6} xl={4}>
+        <Grid item xs={12} sm={4} xl={4}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer
               components={["DatePicker", "DatePicker"]}
@@ -92,7 +92,7 @@ const ProductReceiptSearching = ({
             </DemoContainer>
           </LocalizationProvider>
         </Grid>
-        <Grid item xs={12} sm={6} xl={4}>
+        <Grid item xs={12} sm={4} xl={4}>
           <TextField
             label="ID Phiếu dịch vụ"
             placeholder="Nhập ID Phiếu dịch vụ"
@@ -106,7 +106,7 @@ const ProductReceiptSearching = ({
             sx={{ marginTop: "10px" }}
           />
         </Grid>
-        <Grid item xs={12} sm={6} xl={4}>
+        <Grid item xs={12} sm={4} xl={4}>
           <FormControl fullWidth className="formControl">
             <InputLabel
               shrink={true}
@@ -138,7 +138,7 @@ const ProductReceiptSearching = ({
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} xl={4}>
+        <Grid item xs={12} sm={4} xl={4}>
           <FormControl fullWidth className="formControl">
             <InputLabel
               shrink={true}
@@ -170,7 +170,7 @@ const ProductReceiptSearching = ({
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} xl={4}>
+        <Grid item xs={12} sm={4} xl={4}>
           <FormControl fullWidth className="formControl">
             <InputLabel
               shrink={true}
@@ -210,8 +210,8 @@ const ProductReceiptSearching = ({
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={12} xl={5}></Grid>
-        <Grid item xs={12} sm={12} xl={2}>
+        <Grid item xs={12} sm={5} xl={5}></Grid>
+        <Grid item xs={12} sm={2} xl={2}>
           <Button
             variant="contained"
             sx={{
@@ -239,7 +239,7 @@ const ProductReceiptSearching = ({
             </Typography>
           </Button>
         </Grid>
-        <Grid item xs={12} sm={12} xl={5}></Grid>
+        <Grid item xs={12} sm={5} xl={5}></Grid>
       </Grid>
     </Box>
   );

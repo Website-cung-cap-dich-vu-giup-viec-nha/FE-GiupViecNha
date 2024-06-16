@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../assets/Logo.png";
 import bocongthuong from "../assets/icon/bocongthuong.png";
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <div className="container-fluid bg-light" style={{ padding: "50px 0px" }}>
@@ -73,49 +74,34 @@ const Footer = () => {
             <h5>Dịch vụ</h5>
             <ul className="nav flex-column mt-3">
               <li className="nav-item">
-                <a className="text-dark nav-link p-0 pb-2" href="ds">
+                <Link className="text-dark nav-link p-0 pb-2" to="/giupviectheogio">
                   Giúp việc nhà theo giờ
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="text-dark nav-link p-0 pb-2" href="ds">
-                  Đi chợ
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="text-dark nav-link p-0 pb-2" href="ds">
-                  Chăm sóc người bệnh
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="text-dark nav-link p-0 pb-2" href="ds">
+                <Link className="text-dark nav-link p-0 pb-2" to="/chamsocnguoicaotuoi">
                   Chăm sóc ngưới cao tuổi
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="text-dark nav-link p-0 pb-2" href="ds">
+                <Link className="text-dark nav-link p-0 pb-2" to="/tongvesinh">
                   Tổng vệ sinh
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="text-dark nav-link p-0 pb-2" href="ds">
+                <Link className="text-dark nav-link p-0 pb-2" to="/vesinhmaylanh">
                   Vệ sinh máy lạnh
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="text-dark nav-link p-0 pb-2" href="ds">
-                  Nấu ăn gia đình
-                </a>
+                <Link className="text-dark nav-link p-0 pb-2" to="/trongtre">
+                  Trông trẻ
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="text-dark nav-link p-0 pb-2" href="ds">
-                  Giặt ủi
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="text-dark nav-link p-0 pb-2" href="ds">
-                  Dọn dẹp buồng phòng
-                </a>
+                <Link className="text-dark nav-link p-0 pb-2" to="/vesinhsofa">
+                  Vệ sinh SoFa
+                </Link>
               </li>
             </ul>
           </div>

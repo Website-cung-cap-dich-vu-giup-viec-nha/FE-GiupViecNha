@@ -227,13 +227,13 @@ const StaffInsert = ({
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} sm={6} xl={1}>
+            <Grid item xs={12} sm={1} xl={1}>
               <Typography variant="caption" color="text" fontWeight="regular">
                 Giới tính nam:
               </Typography>
             </Grid>
 
-            <Grid item xs={12} sm={6} xl={3}>
+            <Grid item xs={12} sm={3} xl={3}>
               <Typography variant="caption" color="text" fontWeight="bold">
                 <Switch
                   color="primary"

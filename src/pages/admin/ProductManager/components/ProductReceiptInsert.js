@@ -61,7 +61,7 @@ const ProductReceiptInsert = ({
       <DialogContent>
         <Box py={3} mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <FormControl fullWidth className="formControl">
                 <InputLabel
                   shrink={true}
@@ -98,7 +98,7 @@ const ProductReceiptInsert = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <FormControl fullWidth className="formControl">
                 <InputLabel
                   shrink={true}
@@ -152,7 +152,7 @@ const ProductReceiptInsert = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <FormControl fullWidth className="formControl">
                 <InputLabel
                   shrink={true}
@@ -199,7 +199,7 @@ const ProductReceiptInsert = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer
                   components={["DatePicker", "DatePicker"]}
@@ -231,7 +231,7 @@ const ProductReceiptInsert = ({
                 </DemoContainer>
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer
                   components={["DatePicker", "DatePicker"]}
@@ -262,7 +262,7 @@ const ProductReceiptInsert = ({
                 </DemoContainer>
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <TextField
                 label="Số buổi"
                 placeholder="Chọn số buổi"
@@ -282,7 +282,7 @@ const ProductReceiptInsert = ({
                 }
               />
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <TextField
                 label="Số giờ làm việc"
                 placeholder="Chọn số giờ làm việc"
@@ -303,7 +303,7 @@ const ProductReceiptInsert = ({
                 }
               />
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <TextField
                 label="Số người được chăm sóc"
                 placeholder="Chọn số người được chăm sóc"
@@ -325,7 +325,7 @@ const ProductReceiptInsert = ({
                 }
               />
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <Autocomplete
                 options={dataKhachHang}
                 getOptionLabel={(option) =>
@@ -358,7 +358,7 @@ const ProductReceiptInsert = ({
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <TextField
                 label="Ghi chú"
                 placeholder="Nhập ghi chú"
@@ -372,7 +372,7 @@ const ProductReceiptInsert = ({
                 textAlign="center"
               />
             </Grid>
-            <Grid item xs={12} sm={6} xl={7}>
+            <Grid item xs={12} sm={7} xl={7}>
               <FormControl fullWidth className="formControl">
                 <InputLabel
                   shrink={true}
@@ -411,7 +411,7 @@ const ProductReceiptInsert = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6} xl={1}>
+            <Grid item xs={12} sm={1} xl={1}>
               <Button
                 sx={{
                   border: "1px solid gray",
@@ -444,8 +444,8 @@ const ProductReceiptInsert = ({
                 </Typography>
               </Button>
             </Grid>
-            <Grid item xs={12} sm={6} xl={5}></Grid>
-            <Grid item xs={12} sm={6} xl={1}>
+            <Grid item xs={12} sm={5} xl={5}></Grid>
+            <Grid item xs={12} sm={1} xl={1}>
               <Typography
                 variant="caption"
                 color="text"
@@ -455,7 +455,7 @@ const ProductReceiptInsert = ({
                 Tổng tiền:
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={6} xl={1}>
+            <Grid item xs={12} sm={1} xl={1}>
               <Typography
                 variant="caption"
                 color="red"
@@ -465,7 +465,7 @@ const ProductReceiptInsert = ({
                 {data?.Tongtien && data?.Tongtien.toLocaleString("vi-VN")} đ
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={6} xl={5}></Grid>
+            <Grid item xs={12} sm={5} xl={5}></Grid>
           </Grid>
         </Box>
       </DialogContent>

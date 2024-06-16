@@ -5,6 +5,7 @@ import DoiMatKhau from "../components/DoiMatKhau";
 import DiaChi from "../components/DiaChi";
 import HoaDonKH from "../components/HoaDonKH";
 import { isStaff } from "../api/admin/StaffAPI";
+import LichKH from "../components/LichKH";
 const HoSoView = ({ user, handleReloadHeader }) => {
   const [activeComponent, setActiveComponent] = useState("HoSo");
   const [staff, setStaff] = useState(false);
@@ -67,7 +68,7 @@ const HoSoView = ({ user, handleReloadHeader }) => {
                       chỉ
                     </span>
                   </li>
-                  <li className="nav-item" hidden={staff}>
+                  <li className="nav-item border-bottom border-secondary" hidden={staff}>
                     <span
                       className="nav-link"
                       onClick={() => setActiveComponent("PhieuDichVu")}
@@ -75,6 +76,15 @@ const HoSoView = ({ user, handleReloadHeader }) => {
                       {" "}
                       <i className="fa-solid fa-file-invoice me-2"></i> Phiếu
                       dịch vụ
+                    </span>
+                  </li>
+                  <li className="nav-item" hidden={staff}>
+                    <span
+                      className="nav-link"
+                      onClick={() => setActiveComponent("LichKH")}
+                    >
+                      {" "}
+                      <i class="fa-solid fa-calendar-days me-2"></i> Xem lịch
                     </span>
                   </li>
                 </ul>
@@ -88,6 +98,7 @@ const HoSoView = ({ user, handleReloadHeader }) => {
             {activeComponent === "DoiMatKhau" && <DoiMatKhau user={user} />}
             {activeComponent === "DiaChi" && <DiaChi user={user} />}
             {activeComponent === "PhieuDichVu" && <HoaDonKH user={user} />}
+            {activeComponent === "LichKH" && <LichKH user={user} />}
           </div>
         </div>
       </div>
