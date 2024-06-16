@@ -63,3 +63,19 @@ export async function isStaff() {
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
+
+export async function getStaffIsNotAddNhom(idNhom) {
+  const url = `/api/NhanVien/getStaffIsNotAddNhom?idNhom=${idNhom}`;
+
+  return API.get(url)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}
+
+export async function getPermissionIsNotAddNhom(idNhom) {
+  const url = `/api/Quyen/getPermissionIsNotAddNhom?idNhom=${idNhom}`;
+
+  return API.get(url)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}

@@ -21,6 +21,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import UserIcon from "@mui/icons-material/Person";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import CalendarMonth from "@mui/icons-material/CalendarMonth";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { styled, useTheme } from "@mui/material/styles";
 import logo from "../../assets/Logo.png";
 import { Link, useNavigate, Outlet } from "react-router-dom";
@@ -133,6 +134,12 @@ const AdminMenuItem = ({ pageName, breadCrumb }) => {
         icon: ReceiptIcon,
         text: "Quản lý phiếu dịch vụ",
         visible: permmission && permmission.some((item) => item?.idQuyen === 2),
+      },
+      {
+        to: "/admin/permissionmanager",
+        icon: HowToRegIcon,
+        text: "Quản lý phân quyền",
+        visible: permmission && permmission.some((item) => item?.idQuyen === 3),
       },
       {
         to: "/admin/calendarmanager",
