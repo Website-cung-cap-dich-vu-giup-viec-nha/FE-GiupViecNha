@@ -4,7 +4,7 @@ const StaffSearching = ({ searchData, handleChange, handleSearching }) => {
   return (
     <Box py={3} mb={3}>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={9} xl={11}>
+        <Grid item xs={12} sm={11} xl={11}>
           <TextField
             label="Tìm kiếm"
             placeholder="Nhập họ tên, SDT"

@@ -37,23 +37,23 @@ import {
                   />
                 </Grid>
   
-                <Grid item xs={12} sm={6} xl={2}>
+                <Grid item xs={12} sm={2} xl={2}>
                   <Typography variant="caption" color="text" fontWeight="regular">
                     Mã khách hàng:
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} xl={4}>
+                <Grid item xs={12} sm={4} xl={4}>
                   <Typography variant="caption" color="text" fontWeight="bold">
                     {selectedRow?.idKhachHang}
                   </Typography>
                 </Grid>
   
-                <Grid item xs={12} sm={6} xl={2}>
+                <Grid item xs={12} sm={2} xl={2}>
                   <Typography variant="caption" color="text" fontWeight="regular">
                     Họ và tên:
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} xl={4}>
+                <Grid item xs={12} sm={4} xl={4}>
                   <Typography variant="caption" color="text" fontWeight="bold">
                     {selectedRow?.name}
                   </Typography>
@@ -70,45 +70,45 @@ import {
                   </Typography>
                 </Grid> */}
   
-                <Grid item xs={12} sm={6} xl={2}>
+                <Grid item xs={12} sm={2} xl={2}>
                   <Typography variant="caption" color="text" fontWeight="regular">
                     Số điện thoại:
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} xl={4}>
+                <Grid item xs={12} sm={4} xl={4}>
                   <Typography variant="caption" color="text" fontWeight="bold">
                     {selectedRow?.SDT}
                   </Typography>
                 </Grid>
   
-                <Grid item xs={12} sm={6} xl={2}>
+                <Grid item xs={12} sm={2} xl={2}>
                   <Typography variant="caption" color="text" fontWeight="regular">
                     Ngày sinh:
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} xl={4}>
+                <Grid item xs={12} sm={4} xl={4}>
                   <Typography variant="caption" color="text" fontWeight="bold">
                     {selectedRow?.NgaySinh}
                   </Typography>
                 </Grid>
   
-                <Grid item xs={12} sm={6} xl={2}>
+                <Grid item xs={12} sm={2} xl={2}>
                   <Typography variant="caption" color="text" fontWeight="regular">
                     Giới tính:
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} xl={4}>
+                <Grid item xs={12} sm={4} xl={4}>
                   <Typography variant="caption" color="text" fontWeight="bold">
                     {selectedRow?.GioiTinh}
                   </Typography>
                 </Grid>
   
-                <Grid item xs={12} sm={6} xl={2}>
+                <Grid item xs={12} sm={2} xl={2}>
                   <Typography variant="caption" color="text" fontWeight="regular">
                     Trạng Thái:
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} xl={4}>
+                <Grid item xs={12} sm={4} xl={4}>
                   <Box>
                     <span
                       style={{
