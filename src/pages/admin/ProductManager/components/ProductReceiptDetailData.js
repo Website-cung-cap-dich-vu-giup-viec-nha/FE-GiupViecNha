@@ -61,7 +61,7 @@ const ProductReceiptDetailData = ({
     <>
       <Box py={3} mb={3}>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} xl={1}>
+          <Grid item xs={12} sm={1} xl={1}>
             <Button
               variant="contained"
               sx={{
@@ -79,7 +79,7 @@ const ProductReceiptDetailData = ({
               <img src={Return} alt="" style={iconStyle} />
             </Button>
           </Grid>
-          <Grid item xs={12} sm={6} xl={4}>
+          <Grid item xs={12} sm={4} xl={4}>
             <Autocomplete
               options={dataNhanVien}
               getOptionLabel={(option) =>
@@ -113,7 +113,7 @@ const ProductReceiptDetailData = ({
               }
             />
           </Grid>
-          <Grid item xs={12} sm={6} xl={2}>
+          <Grid item xs={12} sm={2} xl={2}>
             <Button
               variant="contained"
               sx={{
@@ -141,7 +141,7 @@ const ProductReceiptDetailData = ({
               </Typography>
             </Button>
           </Grid>
-          <Grid item xs={12} sm={6} xl={2}>
+          <Grid item xs={12} sm={2} xl={2}>
             <Button
               variant="contained"
               sx={{
@@ -170,7 +170,7 @@ const ProductReceiptDetailData = ({
               </Typography>
             </Button>
           </Grid>
-          <Grid item xs={12} sm={6} xl={2}>
+          <Grid item xs={12} sm={2} xl={2}>
             <Typography
               whiteSpace="nowrap"
               color="red"
