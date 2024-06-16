@@ -273,7 +273,7 @@ const DiaChi = ({ user }) => {
                     <input
                       type="text"
                       className="d-block w-100 ps-3 p-2 form-control"
-                      placeholder="Số nhà"
+                      placeholder="Đường"
                       value={duong}
                       onChange={(e) => setDuong(e.target.value)}
                       required

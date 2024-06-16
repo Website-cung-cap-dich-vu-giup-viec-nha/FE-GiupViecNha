@@ -125,7 +125,7 @@ const TrangChuView = ({ dichvu }) => {
     ],
   };
   return (
-    <div style={{backgroundImage:`url(${pattern})`}}>
+    <div style={{ backgroundImage: `url(${pattern})` }}>
       {/* banner */}
 
       <div
@@ -139,84 +139,43 @@ const TrangChuView = ({ dichvu }) => {
       >
         <div className="m-auto" style={{ maxWidth: "1140px" }}>
           <div className="text-white text-center">
-            <p className="m-0" style={{textShadow: ".13em .02em .1em rgba(0, 0, 0, .4)", letterSpacing:"2px"}}>DỊCH VỤ VIỆC NHÀ VÀ VỆ SINH ĐƯỢC ĐÁNH GIÁ CAO NHẤT</p>
+            <p
+              className="m-0"
+              style={{
+                textShadow: ".13em .02em .1em rgba(0, 0, 0, .4)",
+                letterSpacing: "2px",
+              }}
+            >
+              DỊCH VỤ VIỆC NHÀ VÀ VỆ SINH ĐƯỢC ĐÁNH GIÁ CAO NHẤT
+            </p>
             <h1
               className="lh-lg"
               style={{
                 textShadow: ".03em .02em .1em rgba(0, 0, 0, .4)",
                 fontWeight: "700",
-                fontSize: "3rem"
+                fontSize: "3rem",
               }}
             >
               HÃY ĐỂ VIỆC NHÀ CHO CHÚNG TÔI
             </h1>
-            <p style={{
-              textShadow:"-.06em .07em .1em rgba(0, 0, 0, .4)",
-              lineHeight:"1.4em",
-              fontWeight: "500",}}>
+            <p
+              style={{
+                textShadow: "-.06em .07em .1em rgba(0, 0, 0, .4)",
+                lineHeight: "1.4em",
+                fontWeight: "500",
+              }}
+            >
               Bạn có thể tập trung vào những việc quan trọng hơn.
             </p>
           </div>
         </div>
       </div>
 
-      {/* <div
-        id="carouselBanner"
-        className="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img
-              src={require("../assets/banner/banner1.jpg")}
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src={require("../assets/banner/banner2.jpg")}
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src={require("../assets/banner/banner3.jpg")}
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-        </div>
-        <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselBanner"
-          data-bs-slide="prev"
-        >
-          <span
-            className="carousel-control-prev-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselBanner"
-          data-bs-slide="next"
-        >
-          <span
-            className="carousel-control-next-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Next</span>
-        </button>
-      </div> */}
-
       {/* Lý do vì sao nên chọn chúng tôi */}
       <div className="container-md py-5">
-        <h2 className="text-center maucam">Những lý do bạn nên chọn chúng tôi</h2>
+        <h2 className="text-center maucam">
+          Những lý do bạn nên chọn chúng tôi
+        </h2>
         <div className="row justify-content-center">
           <div className="col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center px-3 mt-5">
             <img src={supplies} height={40} alt="" />
@@ -457,9 +416,107 @@ const TrangChuView = ({ dichvu }) => {
         </div>
       </div>
 
+      <div className="container my-5">
+        <h2 className="text-center maucam mb-4" style={{ fontWeight: "700" }}>
+          Nhân viên tiêu biểu của tháng
+        </h2>
+        <div className="row mb-5">
+          <div className="col-sm-6 m-auto text-start">
+            <h4 className="text-center">Nguyễn Thị Mai</h4>
+            <p>
+              <strong>Chức vụ:</strong> Nhân viên dịch vụ
+            </p>
+            <p>
+              <strong>Mô tả:</strong> Chị Nguyễn Thị Mai là một trong những nhân
+              viên giúp việc nhà giàu kinh nghiệm nhất của chúng tôi. Với tinh
+              thần trách nhiệm cao và sự cẩn thận, chị Mai luôn hoàn thành công
+              việc một cách xuất sắc. Chị có khả năng làm sạch và tổ chức ngăn
+              nắp các khu vực trong nhà, từ phòng khách, nhà bếp cho đến phòng
+              ngủ và nhà tắm. Chị Mai luôn nhận được những lời khen ngợi từ
+              khách hàng về sự tận tâm và chu đáo trong công việc.
+            </p>
+            <p>
+              <strong>Đặc điểm nổi bật:</strong> Chị Mai đặc biệt giỏi trong
+              việc làm sạch các bề mặt kính và sắp xếp đồ đạc hợp lý. Chị còn có
+              khả năng chăm sóc cây cảnh và thú cưng, mang lại sự hài lòng tối
+              đa cho gia chủ.
+            </p>
+          </div>
+          <div className="col-sm-6 text-center">
+            <img
+              src={require("../assets/images/tb1.jpg")}
+              className="rounded"
+              width={450}
+              alt=""
+            />
+          </div>
+        </div>
+        <div className="row mb-4">
+          <div className="col-sm-6 text-center">
+            <img
+              src={require("../assets/images/tb2.jpg")}
+              className="rounded"
+              width={450}
+              alt=""
+            />
+          </div>
+          <div className="col-sm-6 m-auto text-start">
+            <h4 className="text-center">Nguyễn Thị Thu Lan</h4>
+            <p>
+              <strong>Chức vụ:</strong> Nhân viên dịch vụ
+            </p>
+            <p>
+              <strong>Mô tả:</strong> Chị Phạm Thị Thu Lan là một nhân viên tận
+              tâm và có tâm hồn yêu thích công việc giúp việc nhà. Với sự nhiệt
+              tình và chu đáo, chị Lan luôn mang lại không gian sống sạch sẽ và
+              thoải mái cho khách hàng. Chị có khả năng làm sạch sâu và đặc biệt
+              chú trọng đến việc khử mùi và làm sạch không khí trong nhà, giúp
+              không gian sống luôn thoáng mát và dễ chịu.
+            </p>
+            <p>
+              <strong>Đặc điểm nổi bật:</strong> Chị Lan có kỹ năng đặc biệt
+              trong việc làm sạch các vật dụng bằng vải và da, từ ghế sofa, rèm
+              cửa cho đến thảm trải sàn. Chị luôn sử dụng các sản phẩm làm sạch
+              an toàn và thân thiện với môi trường.
+            </p>
+          </div>
+        </div>
+        <div className="row mb-5">
+          <div className="col-sm-6 m-auto text-start">
+            <h4 className="text-center">Trần Văn Hùng</h4>
+            <p>
+              <strong>Chức vụ:</strong> Nhân viên dịch vụ
+            </p>
+            <p>
+              <strong>Mô tả:</strong> Anh Trần Văn Hùng là một nhân viên năng
+              động và tận tụy. Với khả năng làm việc nhanh nhẹn và hiệu quả, anh
+              Hùng luôn đảm bảo mọi công việc trong nhà được hoàn thành đúng
+              thời gian và đạt chất lượng cao. Anh có kỹ năng sử dụng các thiết
+              bị làm sạch hiện đại và luôn cập nhật những phương pháp làm sạch
+              mới để mang lại kết quả tốt nhất cho khách hàng.
+            </p>
+            <p>
+              <strong>Đặc điểm nổi bật:</strong> Anh Hùng có kinh nghiệm trong
+              việc vệ sinh các thiết bị điện tử và nội thất cao cấp. Anh luôn
+              cẩn thận trong từng chi tiết nhỏ và đảm bảo không làm hỏng hay
+              trầy xước các vật dụng trong nhà.
+            </p>
+          </div>
+          <div className="col-sm-6 text-center">
+            <img
+              src={require("../assets/images/tb3.png")}
+              className="rounded"
+              width={450}
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
       {/* Câu hỏi thường gặp */}
       <div className="container mt-5">
-        <h2 className="text-center maucam" style={{fontWeight:"700"}}>Các câu hỏi thường gặp</h2>
+        <h2 className="text-center maucam" style={{ fontWeight: "700" }}>
+          Các câu hỏi thường gặp
+        </h2>
         <div className="row justify-content-center py-5">
           <div className="col-lg-6">
             <div className="accordion" id="accordionExample">
@@ -509,15 +566,11 @@ const TrangChuView = ({ dichvu }) => {
                   data-bs-parent="#accordionExample"
                 >
                   <div className="accordion-body">
-                    <strong>This is the second item's accordion body.</strong>{" "}
-                    It is hidden by default, until the collapse plugin adds the
-                    appropriate classes that we use to style each element. These
-                    classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any
-                    of this with custom CSS or overriding our default variables.
-                    It's also worth noting that just about any HTML can go
-                    within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
+                    bTaskee hoạt động xuyên suốt tất cả các ngày trong tuần và
+                    lễ Tết nên bạn hoàn toàn có thể đặt dịch vụ vào những ngày
+                    này. Để đảm bảo luôn có người nhận công việc của bạn vào
+                    cuối tuần, lễ Tết, bTaskee khuyến khích bạn nên đặt lịch sớm
+                    từ 1 – 2 ngày.
                   </div>
                 </div>
               </div>
@@ -531,7 +584,7 @@ const TrangChuView = ({ dichvu }) => {
                     aria-expanded="false"
                     aria-controls="collapseThree"
                   >
-                    Làm sao để sử dụng dịch vụ một cách hoàn hảo?
+                    Ứng dụng được triển khai ở đâu?
                   </button>
                 </h2>
                 <div
@@ -540,15 +593,11 @@ const TrangChuView = ({ dichvu }) => {
                   data-bs-parent="#accordionExample"
                 >
                   <div className="accordion-body">
-                    <strong>This is the third item's accordion body.</strong> It
-                    is hidden by default, until the collapse plugin adds the
-                    appropriate classes that we use to style each element. These
-                    classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any
-                    of this with custom CSS or overriding our default variables.
-                    It's also worth noting that just about any HTML can go
-                    within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
+                    Ứng dụng hiện đang được triển khai tại: TP Hồ Chí Minh
+                    <br />
+                    Trong tương lai, bTaskee sẽ mở rộng
+                    và phát triển đến những thành phố khác trong thời gian sớm
+                    nhất.
                   </div>
                 </div>
               </div>
