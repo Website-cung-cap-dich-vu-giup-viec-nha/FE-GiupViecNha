@@ -121,7 +121,10 @@ const ThueDichVu = ({ user }) => {
       tempDate.setDate(tempDate.getDate() + i);
 
       if (daysOfWeekNumbers.includes(tempDate.getDay())) {
-        nextDates.push(tempDate.toISOString().split("T")[0]);
+        let year = tempDate.getFullYear();
+        let month = (tempDate.getMonth() + 1).toString().padStart(2, '0');
+        let day = tempDate.getDate().toString().padStart(2, '0');
+        nextDates.push(`${year}-${month}-${day}`);
       }
     }
 
@@ -555,7 +558,7 @@ const ThueDichVu = ({ user }) => {
                     <input
                       type="text"
                       className="d-block w-100 ps-3 p-2 form-control"
-                      placeholder="Số nhà"
+                      placeholder="Đường"
                       value={duong}
                       onChange={(e) => setDuong(e.target.value)}
                       required
