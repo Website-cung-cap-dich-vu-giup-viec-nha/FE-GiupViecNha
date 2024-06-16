@@ -238,6 +238,16 @@ const ThueDichVu = ({ user }) => {
     setSelectedWard("");
   };
 
+  const getMinDay = () => {
+    const currentDate = new Date();
+
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <div className="container py-5">
       <div className="row justify-content-center">
@@ -279,7 +289,7 @@ const ThueDichVu = ({ user }) => {
                   className="form-control"
                   value={ngayBD}
                   onChange={handleNgayBDChange}
-                  min={new Date().toISOString().split("T")[0]} // Disallow past dates
+                  min={getMinDay()} // Disallow past dates
                   required
                 />
               </div>
@@ -433,7 +443,7 @@ const ThueDichVu = ({ user }) => {
                     <input
                       type="text"
                       className="d-block w-100 ps-3 p-2 form-control"
-                      placeholder="Số nhà"
+                      placeholder="Đường"
                       value={duong}
                       onChange={(e) => setDuong(e.target.value)}
                       required
