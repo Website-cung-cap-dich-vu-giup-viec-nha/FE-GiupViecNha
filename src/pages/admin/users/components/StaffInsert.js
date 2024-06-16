@@ -129,7 +129,7 @@ const StaffInsert = ({
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer
                   components={["DatePicker", "DatePicker"]}
-                  sx={{ paddingTop: "0px" }}
+                  sx={{ paddingTop: "10px" }}
                 >
                   <DatePicker
                     label="Ngày sinh"
@@ -155,7 +155,7 @@ const StaffInsert = ({
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={6} xl={4}>
-              <FormControl fullWidth className="formControl">
+              <FormControl fullWidth className="formControl" sx={{ marginTop: "10px" }}>
                 <InputLabel
                   shrink={true}
                   sx={commonComboboxLabelStyle}
@@ -191,7 +191,7 @@ const StaffInsert = ({
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6} xl={4}>
-              <FormControl fullWidth className="formControl">
+              <FormControl fullWidth className="formControl" sx={{ marginTop: "10px" }}>
                 <InputLabel
                   shrink={true}
                   sx={commonComboboxLabelStyle}

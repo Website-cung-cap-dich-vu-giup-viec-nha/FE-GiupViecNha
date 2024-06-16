@@ -23,6 +23,7 @@ import Trash from "../../../../assets/icon/Trash.svg";
 import { config } from "../../../../config";
 import { makeStyles } from "@mui/styles";
 import dayjs from "dayjs";
+import moment from "moment";
 // import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const useStyles = makeStyles({
@@ -366,7 +367,7 @@ const StaffList = ({
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
-                      {item.NgaySinh}
+                      {moment(item.NgaySinh).format("DD/MM/YYYY")}
                     </TableCell>
                     <TableCell
                       className={classes.tableCell}

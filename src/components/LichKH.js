@@ -218,7 +218,11 @@ const LichKH = ({ user }) => {
                 <div className="col-sm-4 text-center">
                   <img
                     className="rounded m-auto"
-                    src={`${config.apiBaseUrl}/${nv.Anh}`}
+                    src={
+                      nv.Anh
+                        ? `${config.apiBaseUrl}/${nv.Anh}`
+                        : require("../assets/icon/user.png")
+                    }
                     alt=""
                     width={150}
                   />

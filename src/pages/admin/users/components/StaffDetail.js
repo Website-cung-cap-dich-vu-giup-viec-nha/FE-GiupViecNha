@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { config } from "../../../../config";
+import moment from "moment";
 
 const StaffDetail = ({ selectedRow, open, setOpen }) => {
   return (
@@ -99,7 +100,7 @@ const StaffDetail = ({ selectedRow, open, setOpen }) => {
               </Grid>
               <Grid item xs={12} sm={4} xl={4}>
                 <Typography variant="caption" color="text" fontWeight="bold">
-                  {selectedRow?.NgaySinh}
+                  {moment(selectedRow?.NgaySinh).format("DD/MM/YYYY")}
                 </Typography>
               </Grid>
 
