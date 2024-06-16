@@ -152,7 +152,20 @@ const HoaDonKH = ({ user }) => {
                     <p>Giờ bắt đầu: {phieuDV.GioBatDau}</p>
                   </div>
                 </div>
-
+                {phieuDV.SoNguoiDuocChamSoc && (
+                  <p>Số người được chăm sóc: {phieuDV.SoNguoiDuocChamSoc}</p>
+                )}
+                {phieuDV.tenChiTietDichVu && (
+                  <p>
+                    Loại máy: {phieuDV.tenKieuDichVu} -{" "}
+                    {phieuDV.tenChiTietDichVu}
+                  </p>
+                )}
+                {phieuDV.tenKieuDichVu?.includes("Sofa") && (
+                  <p>
+                    Loại SoFa: {phieuDV.tenKieuDichVu}
+                  </p>
+                )}
                 <p>
                   Địa chỉ:{" "}
                   {`${dchi.Duong}, ${dchi.ward_name}, ${dchi.district_name}, ${dchi.province_name}`}
@@ -167,8 +180,8 @@ const HoaDonKH = ({ user }) => {
                   </strong>
                 </p>
               </div>
-              
-              {phieuDV.TinhTrang === 2 ?  (
+
+              {phieuDV.TinhTrang === 2 ? (
                 <div className="modal-footer d-flex justify-content-end">
                   {phieuDV.TinhTrangThanhToan === 1 ? (
                     <button
@@ -184,7 +197,7 @@ const HoaDonKH = ({ user }) => {
                     </button>
                   )}
                 </div>
-              ): (
+              ) : (
                 ""
               )}
             </div>
