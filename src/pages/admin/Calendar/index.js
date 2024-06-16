@@ -1,9 +1,11 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
   Grid,
   Paper,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -19,7 +21,10 @@ import { useCallback, useEffect, useState } from "react";
 import { getCalendar } from "../../../api/admin/Calendar";
 import moment from "moment";
 import dayjs from "dayjs";
-import isoWeek from 'dayjs/plugin/isoWeek';
+import isoWeek from "dayjs/plugin/isoWeek";
+import { updateTinhTrangDichVu } from "../../../api/admin/ProductReceiptWorkDayAPI";
+import ErrorIcon from "@mui/icons-material/Error";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 // import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const useStyles = makeStyles({
@@ -31,6 +36,28 @@ const useStyles = makeStyles({
 dayjs.extend(isoWeek);
 
 const Calendar = ({ setPageName, setBreadCrumb }) => {
+  // -- Start Alerts Setting -- //
+  const [msg, setMsg] = useState("");
+  const [status, setStatus] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const handleCloseAlert = () => {
+    setOpenAlert((prev) => !prev);
+  };
+
+  const getIconAndColor = (message) => {
+    if (message === 200) {
+      return {
+        icon: <CheckCircleOutlineIcon style={{ color: "white" }} />,
+        color: "#39ac39",
+      };
+    }
+    return {
+      icon: <ErrorIcon style={{ color: "white" }} />,
+      color: "#f44336",
+    };
+  };
+  // --- End Alerts Setting --- //
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const setPageNameCallback = useCallback(
     () => setPageName("Lịch làm việc"),
@@ -55,24 +82,28 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
   const [saturday, setSatuday] = useState([]);
   const [sunday, setSunday] = useState([]);
   const [today, setToday] = useState(dayjs());
-  const [startOfWeek, setStartOfWeek] = useState(dayjs().startOf('isoWeek').format('YYYY-MM-DD'));
-  const [endOfWeek, setEndOfWeek] = useState(dayjs().endOf('isoWeek').format('YYYY-MM-DD'));
+  const [startOfWeek, setStartOfWeek] = useState(
+    dayjs().startOf("isoWeek").format("YYYY-MM-DD")
+  );
+  const [endOfWeek, setEndOfWeek] = useState(
+    dayjs().endOf("isoWeek").format("YYYY-MM-DD")
+  );
 
   const handleNext = () => {
-    const newToday = today.add(7, 'day');
+    const newToday = today.add(7, "day");
     setToday(newToday);
-    const newStartOfWeek = newToday.startOf('isoWeek').format('YYYY-MM-DD');
-    const newEndOfWeek = newToday.endOf('isoWeek').format('YYYY-MM-DD');
+    const newStartOfWeek = newToday.startOf("isoWeek").format("YYYY-MM-DD");
+    const newEndOfWeek = newToday.endOf("isoWeek").format("YYYY-MM-DD");
     setStartOfWeek(newStartOfWeek);
     setEndOfWeek(newEndOfWeek);
     loadCalendar(newStartOfWeek, newEndOfWeek);
   };
 
   const handleBack = () => {
-    const newToday = today.subtract(7, 'day');
+    const newToday = today.subtract(7, "day");
     setToday(newToday);
-    const newStartOfWeek = newToday.startOf('isoWeek').format('YYYY-MM-DD');
-    const newEndOfWeek = newToday.endOf('isoWeek').format('YYYY-MM-DD');
+    const newStartOfWeek = newToday.startOf("isoWeek").format("YYYY-MM-DD");
+    const newEndOfWeek = newToday.endOf("isoWeek").format("YYYY-MM-DD");
     setStartOfWeek(newStartOfWeek);
     setEndOfWeek(newEndOfWeek);
     loadCalendar(newStartOfWeek, newEndOfWeek);
@@ -117,6 +148,21 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
             ? response?.message?.data?.data?.[7]
             : []
         );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleUpdateTinhTrangDichVu = (item) => {
+    updateTinhTrangDichVu(item?.idChiTietNgayLam, item?.TinhTrangDichVu + 1)
+      .then((response) => {
+        setMsg(response?.message?.data?.message);
+        setStatus(response?.message?.status);
+        handleCloseAlert();
+        if (response?.message?.status === 200) {
+          loadCalendar(startOfWeek, endOfWeek);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -298,8 +344,14 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(monday) &&
                     monday.length > 0 &&
                     monday.map((item, index) => (
-                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
-                        <Grid container >
+                      <Card
+                        sx={{
+                          minWidth: 300,
+                          padding: "10px",
+                          backgroundColor: "#E7ECF0",
+                        }}
+                      >
+                        <Grid container>
                           <Grid
                             item
                             xs={12}
@@ -345,10 +397,9 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
-                            
                           </Grid>
                           <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                          <Typography
+                            <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -416,6 +467,82 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               {item?.province_name ?? ""}
                             </Typography>
                           </Grid>
+                          <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
+                            <Typography
+                              variant="caption"
+                              color="text"
+                              fontWeight="bold"
+                            >
+                              {item?.Duong ?? ""}, {item?.ward_name ?? ""}
+                              {", "}
+                              {item?.district_name ?? ""},{" "}
+                              {item?.province_name ?? ""}
+                            </Typography>
+                          </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
+                          <Grid item xs={12} sm={4} xl={4} paddingTop={1}>
+                            {item?.TinhTrangDichVu === 1 ||
+                            item?.TinhTrangDichVu === 2 ? (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  height: "100%",
+                                  width: "100%",
+                                  fontWeight: "bold",
+                                  backgroundColor:
+                                    item?.TinhTrangDichVu === 1
+                                      ? "primary"
+                                      : "orange",
+                                  color: "white",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => {
+                                  handleUpdateTinhTrangDichVu(item);
+                                }}
+                              >
+                                <Typography
+                                  whiteSpace="nowrap"
+                                  color="white"
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "16px",
+                                    textTransform: "none",
+                                  }}
+                                >
+                                  {item?.TinhTrangDichVu === 1
+                                    ? "Check In"
+                                    : "Check Out"}
+                                </Typography>
+                              </Button>
+                            ) : (
+                              <Typography
+                                whiteSpace="nowrap"
+                                color="text"
+                                sx={{
+                                  fontWeight: 600,
+                                  fontSize: "16px",
+                                  textTransform: "none",
+                                }}
+                              >
+                                Dịch vụ đã hoàn tất
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
                         </Grid>
                       </Card>
                     ))}
@@ -428,8 +555,14 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(tuesday) &&
                     tuesday.length > 0 &&
                     tuesday.map((item, index) => (
-                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
-                        <Grid container >
+                      <Card
+                        sx={{
+                          minWidth: 300,
+                          padding: "10px",
+                          backgroundColor: "#E7ECF0",
+                        }}
+                      >
+                        <Grid container>
                           <Grid
                             item
                             xs={12}
@@ -475,10 +608,9 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
-                            
                           </Grid>
                           <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                          <Typography
+                            <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -546,6 +678,70 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               {item?.province_name ?? ""}
                             </Typography>
                           </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
+                          <Grid item xs={12} sm={4} xl={4} paddingTop={1}>
+                            {item?.TinhTrangDichVu === 1 ||
+                            item?.TinhTrangDichVu === 2 ? (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  height: "100%",
+                                  width: "100%",
+                                  fontWeight: "bold",
+                                  backgroundColor:
+                                    item?.TinhTrangDichVu === 1
+                                      ? "primary"
+                                      : "orange",
+                                  color: "white",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => {
+                                  handleUpdateTinhTrangDichVu(item);
+                                }}
+                              >
+                                <Typography
+                                  whiteSpace="nowrap"
+                                  color="white"
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "16px",
+                                    textTransform: "none",
+                                  }}
+                                >
+                                  {item?.TinhTrangDichVu === 1
+                                    ? "Check In"
+                                    : "Check Out"}
+                                </Typography>
+                              </Button>
+                            ) : (
+                              <Typography
+                                whiteSpace="nowrap"
+                                color="text"
+                                sx={{
+                                  fontWeight: 600,
+                                  fontSize: "16px",
+                                  textTransform: "none",
+                                }}
+                              >
+                                Dịch vụ đã hoàn tất
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
                         </Grid>
                       </Card>
                     ))}
@@ -559,8 +755,14 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(wednesday) &&
                     wednesday.length > 0 &&
                     wednesday.map((item, index) => (
-                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
-                        <Grid container >
+                      <Card
+                        sx={{
+                          minWidth: 300,
+                          padding: "10px",
+                          backgroundColor: "#E7ECF0",
+                        }}
+                      >
+                        <Grid container>
                           <Grid
                             item
                             xs={12}
@@ -606,10 +808,9 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
-                            
                           </Grid>
                           <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                          <Typography
+                            <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -677,6 +878,70 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               {item?.province_name ?? ""}
                             </Typography>
                           </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
+                          <Grid item xs={12} sm={4} xl={4} paddingTop={1}>
+                            {item?.TinhTrangDichVu === 1 ||
+                            item?.TinhTrangDichVu === 2 ? (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  height: "100%",
+                                  width: "100%",
+                                  fontWeight: "bold",
+                                  backgroundColor:
+                                    item?.TinhTrangDichVu === 1
+                                      ? "primary"
+                                      : "orange",
+                                  color: "white",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => {
+                                  handleUpdateTinhTrangDichVu(item);
+                                }}
+                              >
+                                <Typography
+                                  whiteSpace="nowrap"
+                                  color="white"
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "16px",
+                                    textTransform: "none",
+                                  }}
+                                >
+                                  {item?.TinhTrangDichVu === 1
+                                    ? "Check In"
+                                    : "Check Out"}
+                                </Typography>
+                              </Button>
+                            ) : (
+                              <Typography
+                                whiteSpace="nowrap"
+                                color="text"
+                                sx={{
+                                  fontWeight: 600,
+                                  fontSize: "16px",
+                                  textTransform: "none",
+                                }}
+                              >
+                                Dịch vụ đã hoàn tất
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
                         </Grid>
                       </Card>
                     ))}
@@ -689,8 +954,14 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(thursday) &&
                     thursday.length > 0 &&
                     thursday.map((item, index) => (
-                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
-                        <Grid container >
+                      <Card
+                        sx={{
+                          minWidth: 300,
+                          padding: "10px",
+                          backgroundColor: "#E7ECF0",
+                        }}
+                      >
+                        <Grid container>
                           <Grid
                             item
                             xs={12}
@@ -736,10 +1007,9 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
-                            
                           </Grid>
                           <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                          <Typography
+                            <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -807,6 +1077,70 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               {item?.province_name ?? ""}
                             </Typography>
                           </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
+                          <Grid item xs={12} sm={4} xl={4} paddingTop={1}>
+                            {item?.TinhTrangDichVu === 1 ||
+                            item?.TinhTrangDichVu === 2 ? (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  height: "100%",
+                                  width: "100%",
+                                  fontWeight: "bold",
+                                  backgroundColor:
+                                    item?.TinhTrangDichVu === 1
+                                      ? "primary"
+                                      : "orange",
+                                  color: "white",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => {
+                                  handleUpdateTinhTrangDichVu(item);
+                                }}
+                              >
+                                <Typography
+                                  whiteSpace="nowrap"
+                                  color="white"
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "16px",
+                                    textTransform: "none",
+                                  }}
+                                >
+                                  {item?.TinhTrangDichVu === 1
+                                    ? "Check In"
+                                    : "Check Out"}
+                                </Typography>
+                              </Button>
+                            ) : (
+                              <Typography
+                                whiteSpace="nowrap"
+                                color="text"
+                                sx={{
+                                  fontWeight: 600,
+                                  fontSize: "16px",
+                                  textTransform: "none",
+                                }}
+                              >
+                                Dịch vụ đã hoàn tất
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
                         </Grid>
                       </Card>
                     ))}
@@ -819,8 +1153,14 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(friday) &&
                     friday.length > 0 &&
                     friday.map((item, index) => (
-                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
-                        <Grid container >
+                      <Card
+                        sx={{
+                          minWidth: 300,
+                          padding: "10px",
+                          backgroundColor: "#E7ECF0",
+                        }}
+                      >
+                        <Grid container>
                           <Grid
                             item
                             xs={12}
@@ -866,10 +1206,9 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
-                            
                           </Grid>
                           <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                          <Typography
+                            <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -937,6 +1276,70 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               {item?.province_name ?? ""}
                             </Typography>
                           </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
+                          <Grid item xs={12} sm={4} xl={4} paddingTop={1}>
+                            {item?.TinhTrangDichVu === 1 ||
+                            item?.TinhTrangDichVu === 2 ? (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  height: "100%",
+                                  width: "100%",
+                                  fontWeight: "bold",
+                                  backgroundColor:
+                                    item?.TinhTrangDichVu === 1
+                                      ? "primary"
+                                      : "orange",
+                                  color: "white",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => {
+                                  handleUpdateTinhTrangDichVu(item);
+                                }}
+                              >
+                                <Typography
+                                  whiteSpace="nowrap"
+                                  color="white"
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "16px",
+                                    textTransform: "none",
+                                  }}
+                                >
+                                  {item?.TinhTrangDichVu === 1
+                                    ? "Check In"
+                                    : "Check Out"}
+                                </Typography>
+                              </Button>
+                            ) : (
+                              <Typography
+                                whiteSpace="nowrap"
+                                color="text"
+                                sx={{
+                                  fontWeight: 600,
+                                  fontSize: "16px",
+                                  textTransform: "none",
+                                }}
+                              >
+                                Dịch vụ đã hoàn tất
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
                         </Grid>
                       </Card>
                     ))}
@@ -949,8 +1352,14 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(saturday) &&
                     saturday.length > 0 &&
                     saturday.map((item, index) => (
-                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
-                        <Grid container >
+                      <Card
+                        sx={{
+                          minWidth: 300,
+                          padding: "10px",
+                          backgroundColor: "#E7ECF0",
+                        }}
+                      >
+                        <Grid container>
                           <Grid
                             item
                             xs={12}
@@ -996,10 +1405,9 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
-                            
                           </Grid>
                           <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                          <Typography
+                            <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -1067,6 +1475,70 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               {item?.province_name ?? ""}
                             </Typography>
                           </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
+                          <Grid item xs={12} sm={4} xl={4} paddingTop={1}>
+                            {item?.TinhTrangDichVu === 1 ||
+                            item?.TinhTrangDichVu === 2 ? (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  height: "100%",
+                                  width: "100%",
+                                  fontWeight: "bold",
+                                  backgroundColor:
+                                    item?.TinhTrangDichVu === 1
+                                      ? "primary"
+                                      : "orange",
+                                  color: "white",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => {
+                                  handleUpdateTinhTrangDichVu(item);
+                                }}
+                              >
+                                <Typography
+                                  whiteSpace="nowrap"
+                                  color="white"
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "16px",
+                                    textTransform: "none",
+                                  }}
+                                >
+                                  {item?.TinhTrangDichVu === 1
+                                    ? "Check In"
+                                    : "Check Out"}
+                                </Typography>
+                              </Button>
+                            ) : (
+                              <Typography
+                                whiteSpace="nowrap"
+                                color="text"
+                                sx={{
+                                  fontWeight: 600,
+                                  fontSize: "16px",
+                                  textTransform: "none",
+                                }}
+                              >
+                                Dịch vụ đã hoàn tất
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
                         </Grid>
                       </Card>
                     ))}
@@ -1079,8 +1551,14 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                     Array.isArray(sunday) &&
                     sunday.length > 0 &&
                     sunday.map((item, index) => (
-                      <Card sx={{ minWidth: 300, padding:"10px", backgroundColor:"#E7ECF0"}}>
-                        <Grid container >
+                      <Card
+                        sx={{
+                          minWidth: 300,
+                          padding: "10px",
+                          backgroundColor: "#E7ECF0",
+                        }}
+                      >
+                        <Grid container>
                           <Grid
                             item
                             xs={12}
@@ -1126,10 +1604,9 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                             >
                               Giờ bắt đầu:
                             </Typography>
-                            
                           </Grid>
                           <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                          <Typography
+                            <Typography
                               variant="caption"
                               color="text"
                               fontWeight="bold"
@@ -1197,6 +1674,70 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               {item?.province_name ?? ""}
                             </Typography>
                           </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
+                          <Grid item xs={12} sm={4} xl={4} paddingTop={1}>
+                            {item?.TinhTrangDichVu === 1 ||
+                            item?.TinhTrangDichVu === 2 ? (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  height: "100%",
+                                  width: "100%",
+                                  fontWeight: "bold",
+                                  backgroundColor:
+                                    item?.TinhTrangDichVu === 1
+                                      ? "primary"
+                                      : "orange",
+                                  color: "white",
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                }}
+                                onClick={() => {
+                                  handleUpdateTinhTrangDichVu(item);
+                                }}
+                              >
+                                <Typography
+                                  whiteSpace="nowrap"
+                                  color="white"
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontSize: "16px",
+                                    textTransform: "none",
+                                  }}
+                                >
+                                  {item?.TinhTrangDichVu === 1
+                                    ? "Check In"
+                                    : "Check Out"}
+                                </Typography>
+                              </Button>
+                            ) : (
+                              <Typography
+                                whiteSpace="nowrap"
+                                color="text"
+                                sx={{
+                                  fontWeight: 600,
+                                  fontSize: "16px",
+                                  textTransform: "none",
+                                }}
+                              >
+                                Dịch vụ đã hoàn tất
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={4}
+                            xl={4}
+                            paddingTop={1}
+                          ></Grid>
                         </Grid>
                       </Card>
                     ))}
@@ -1219,8 +1760,25 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
           }}
         >ssssssssss</Typography> */}
       </Box>
+      <Snackbar
+        open={openAlert}
+        // autoHideDuration={3600}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          variant="filled"
+          sx={{
+            width: "100%",
+            backgroundColor: getIconAndColor(status).color,
+          }}
+          icon={getIconAndColor(status).icon}
+        >
+          {msg}
+        </Alert>
+      </Snackbar>
     </Card>
-    
   );
 };
 
