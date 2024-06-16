@@ -4,7 +4,7 @@ import { Box, CircularProgress } from "@mui/material";
 import { isStaff } from "./api/admin/StaffAPI";
 
 const ProtectedCustomerLogin = () => {
-  const [staff, setStaff] = useState(true);
+  const [staff, setStaff] = useState(null);
   const checking = async () => {
     try {
         const response = await isStaff();
@@ -37,7 +37,7 @@ const ProtectedCustomerLogin = () => {
     );
   }
   if (staff === false) {
-    return !staff ? <Outlet /> : <Navigate to="/admin" />;
+    return <Outlet />;
   } else {
     return <Navigate to="/admin" />;  
   }
