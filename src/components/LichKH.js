@@ -4,6 +4,7 @@ import { layIdKhachHang } from "../api/GiupViecAPI";
 import moment from "moment";
 import { layThongTinNV } from "../api/NhanVienAPI";
 import { config } from "../config";
+import { layChiTietNgayLamKH } from "../api/ChiTietNgayLamAPI";
 
 const LichKH = ({ user }) => {
   const [currentWeek, setCurrentWeek] = useState(0);
@@ -47,19 +48,13 @@ const LichKH = ({ user }) => {
   const fetchWeekData = async (start, end) => {
     try {
       const idKH = await layIdKhachHang(user.id);
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/layChiTietNgayLamKH",
-        {
-          params: {
-            idKH: idKH.message.data[0],
-            startDate: moment(start).format("YYYY/MM/DD"),
-            endDate: moment(end).format("YYYY/MM/DD"),
-          },
-        }
-      );
-      console.log(response.data);
-      response.data.sort((a, b) => new Date(a.NgayLam) - new Date(b.NgayLam));
-      setWeekData(response.data);
+      const response = await layChiTietNgayLamKH({
+        idKH: idKH.message.data[0],
+        startDate: moment(start).format("YYYY/MM/DD"),
+        endDate: moment(end).format("YYYY/MM/DD"),
+      })
+      response.message.data.sort((a, b) => new Date(a.NgayLam) - new Date(b.NgayLam));
+      setWeekData(response.message.data);
     } catch (error) {
       console.error("Error fetching week data", error);
     }
@@ -93,7 +88,7 @@ const LichKH = ({ user }) => {
       setNV(response.message.data);
     } catch (error) {
       console.log(error.message);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -116,25 +111,40 @@ const LichKH = ({ user }) => {
       <div className="row">
         <div className="col">
           <div className="d-flex justify-content-between">
-          <div className="d-flex">
-            <p className="px-2 me-2 rounded" style={{backgroundColor:"#e7ecf0"}}>Chưa thực hiện</p>
-            <p className="px-2 me-2 rounded" style={{backgroundColor:"#fdff9a"}}>Đang thực hiện</p>
-            <p className="px-2 me-2 rounded" style={{backgroundColor:"#92d6ff"}}>Đã hoàn tất</p>
-          </div>
-          <div className="d-flex justify-content-end mb-3">
-            <button
-              className="btn btn-outline-primary me-2"
-              onClick={handlePreviousWeek}
-            >
-              <i className="fa-solid fa-angle-left"></i> Trở về
-            </button>
-            <button
-              className="btn btn-outline-primary"
-              onClick={handleNextWeek}
-            >
-              Tiếp <i className="fa-solid fa-angle-right"></i>
-            </button>
-          </div>
+            <div className="d-flex">
+              <p
+                className="px-2 me-2 rounded"
+                style={{ backgroundColor: "#e7ecf0" }}
+              >
+                Chưa thực hiện
+              </p>
+              <p
+                className="px-2 me-2 rounded"
+                style={{ backgroundColor: "#fdff9a" }}
+              >
+                Đang thực hiện
+              </p>
+              <p
+                className="px-2 me-2 rounded"
+                style={{ backgroundColor: "#92d6ff" }}
+              >
+                Đã hoàn tất
+              </p>
+            </div>
+            <div className="d-flex justify-content-end mb-3">
+              <button
+                className="btn btn-outline-primary me-2"
+                onClick={handlePreviousWeek}
+              >
+                <i className="fa-solid fa-angle-left"></i> Trở về
+              </button>
+              <button
+                className="btn btn-outline-primary"
+                onClick={handleNextWeek}
+              >
+                Tiếp <i className="fa-solid fa-angle-right"></i>
+              </button>
+            </div>
           </div>
           <div className="table-responsive">
             <table className="table table-bordered text-center">
@@ -157,13 +167,20 @@ const LichKH = ({ user }) => {
                       {weekData
                         .filter((item) => {
                           const itemDate = new Date(item.NgayLam);
+                          if (itemDate.getDay() === 0) {
+                            return itemDate.getDay() === dayIndex - 6;
+                          }
                           return itemDate.getDay() === dayIndex + 1; // Ngày trong tuần (0: Chủ nhật, 1: Thứ 2, ..., 6: Thứ 7)
                         })
                         .map((item, index) => (
                           <div
                             key={index}
                             className="p-2 rounded text-start my-1"
-                            style={{backgroundColor:getBackgroundColor(item.TinhTrangDichVu)}}
+                            style={{
+                              backgroundColor: getBackgroundColor(
+                                item.TinhTrangDichVu
+                              ),
+                            }}
                           >
                             <p className="m-0 fw-bold">{item.tenDichVu}</p>
                             <p className="m-0">Mã HD: {item.idPhieuDichVu}</p>
@@ -214,42 +231,40 @@ const LichKH = ({ user }) => {
               ></button>
             </div>
             <div className="modal-body">
-              {!loading && <div className="row">
-                <div className="col-sm-4 text-center">
-                  <img
-                    className="rounded m-auto"
-                    src={
-                      nv.Anh
-                        ? `${config.apiBaseUrl}/${nv.Anh}`
-                        : require("../assets/icon/user.png")
-                    }
-                    alt=""
-                    width={150}
-                  />
-                </div>
-                <div className="col-sm-8 mt-3 mt-sm-0">
-                  <p>
-                    Họ và tên: <strong>{nv.name}</strong>
-                  </p>
-                  <div className="d-flex justify-content-between">
+              {!loading && (
+                <div className="row">
+                  <div className="col-sm-4 text-center">
+                    <img
+                      className="rounded m-auto"
+                      src={`${config.apiBaseUrl}/${nv.Anh}`}
+                      alt=""
+                      width={150}
+                    />
+                  </div>
+                  <div className="col-sm-8 mt-3 mt-sm-0">
                     <p>
-                      Ngày sinh:{" "}
-                      <strong>
-                        {moment(nv.NgaySinh).format("DD/MM/YYYY")}
-                      </strong>
+                      Họ và tên: <strong>{nv.name}</strong>
+                    </p>
+                    <div className="d-flex justify-content-between">
+                      <p>
+                        Ngày sinh:{" "}
+                        <strong>
+                          {moment(nv.NgaySinh).format("DD/MM/YYYY")}
+                        </strong>
+                      </p>
+                      <p>
+                        Giới tính: <strong>{nv.GioiTinh}</strong>
+                      </p>
+                    </div>
+                    <p>
+                      Số sao: <strong>{nv.SoSao}</strong>
                     </p>
                     <p>
-                      Giới tính: <strong>{nv.GioiTinh}</strong>
+                      Chức vụ: <strong>{nv.tenChucVu}</strong>
                     </p>
                   </div>
-                  <p>
-                    Số sao: <strong>{nv.SoSao}</strong>
-                  </p>
-                  <p>
-                    Chức vụ: <strong>{nv.tenChucVu}</strong>
-                  </p>
                 </div>
-              </div>}
+              )}
             </div>
           </div>
         </div>

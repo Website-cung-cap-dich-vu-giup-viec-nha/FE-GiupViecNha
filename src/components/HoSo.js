@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { capNhatUser } from "../api/UserAPI";
 const HoSo = ({ user, handleReloadHeader }) => {
   const [userData, setUserData] = useState(user);
   const avatarFile = useRef(null);
@@ -33,11 +34,9 @@ const HoSo = ({ user, handleReloadHeader }) => {
       formData.append("Anh", userData.Anh);
     }
     try {
-      const response = await axios.post(
-        `http://127.0.0.1:8000/api/user/${user.id}`,
-        formData
-      );
-      handleReloadHeader(response.data.user);
+      const response = await capNhatUser(user.id, formData);
+      console.log(response);
+      handleReloadHeader(response.message.data.user);
       Swal.fire({
         title: "Đã cập nhật!",
         icon: "success",

@@ -14,6 +14,7 @@ import bannernew from "../assets/banner/banner-new.jpg";
 
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { getProduct } from "../api/admin/ProductAPI";
 const TrangChuView = ({ dichvu }) => {
   const [dichvus, setDichvus] = useState([]);
   const dichvuRef = useRef(null);
@@ -35,8 +36,8 @@ const TrangChuView = ({ dichvu }) => {
   useEffect(() => {
     const layDanhSachDV = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/dichvu");
-        setDichvus(response.data);
+        const response = await getProduct();
+        setDichvus(response.message.data);
       } catch (err) {
         console.error("Lỗi lấy danh sách dịch vụ");
         return null;

@@ -16,6 +16,21 @@ export async function logout() {
     .catch((error) => standardResponse(false, error.response?.data));
 }
 
+export async function login(user) {
+  const url = `/api/auth/login`;
+
+  return API.post(url, user)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}
+
+export async function register(user) {
+  const url = `/api/auth/register`;
+  return API.post(url, user)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}
+
 export async function doiMatKhau(doimatkhau) {
   const url = `/api/auth/doimatkhau`;
 
