@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate, Link } from "react-router-dom";
+import { login } from "../api/admin/AuthAPI";
 
 const DangNhap = () => {
   const [user, setUser] = useState({ SDT: "", password: "" });
@@ -11,23 +11,25 @@ const DangNhap = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/auth/login",
-        user
-      );
-      if (!response.data.status) {
-        setError("Đăng nhập thất bại!");
+      const response = await login(user);
+      if (response.message.data.message.includes("SDT")) {
+        console.log(response.message.data.message)
+        setError("Số điện thoại không hợp lệ!");
         return;
       }
-      Cookies.set("token", response.data.token, {
-        expires: response.data.expires_in,
+      if (response.message.data.message.includes("details")) {
+        console.log(response.message.data.message)
+        setError("Số điện thoại hoặc mật khẩu không đúng!");
+        return;
+      }
+      Cookies.set("token", response.message.data.token, {
+        expires: response.message.data.expires_in,
         secure: true,
         sameSite: "Strict",
       });
       navigate("/");
     } catch (error) {
-      const errorMessage = "Số điện thoại không hợp lệ!";
-      setError(errorMessage);
+      setError("Đăng nhập thất bại!");
     }
   };
 
@@ -119,7 +121,7 @@ const DangNhap = () => {
 
         <div className="row">
           <div className="col">
-          <div className="rounded border border-secondary w-100 d-flex justify-content-center btn btn-light">
+            <div className="rounded border border-secondary w-100 d-flex justify-content-center btn btn-light">
               <Link to="/sorry" className="text-decoration-none text-dark">
                 <img
                   width={"30px"}

@@ -2,6 +2,7 @@ import { CircularProgress } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { searchDichVu } from "../api/admin/ProductAPI";
 
 const TimKiemDVView = () => {
   const [loading, setLoading] = useState(true);
@@ -11,11 +12,8 @@ const TimKiemDVView = () => {
   useEffect(() => {
     const rsSearch = async () => {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/dichvu/search/" + search
-        );
-        setKetQuaSearch(response.data);
-        console.log(search);
+        const response = await searchDichVu(search)
+        setKetQuaSearch(response.message.data);
       } catch (error) {
         console.log(error);
       } finally {

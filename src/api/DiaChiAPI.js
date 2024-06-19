@@ -32,6 +32,14 @@ export async function layXaByDistrictId(id) {
     .catch((error) => standardResponse(false, error.response?.data));
 }
 
+export async function layDiaChi(id) {
+  const url = `/api/diachi/` + id;
+
+  return API.get(url)
+    .then((response) => standardResponse(true, response))
+    .catch((error) => standardResponse(false, error.response?.data));
+}
+
 export async function xoaDiaChi(id) {
   const url = `/api/diachi/` + id;
 

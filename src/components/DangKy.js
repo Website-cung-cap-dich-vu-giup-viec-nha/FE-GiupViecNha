@@ -2,33 +2,37 @@ import React from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { register } from "../api/admin/AuthAPI";
 
 const DangKy = () => {
-  const [user, setUser] = useState({name:"", email:"", SDT:"", password:"", password_confirmation:""})
+  const [user, setUser] = useState({name:"", SDT:"", password:"", password_confirmation:""})
  const [error, setError] = useState("")
  const navigate = useNavigate()
 
- const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
   if(user.password !== user.password_confirmation)
     {
       setError("Mật khẩu không trùng khớp")
       return;
     }
-  axios
-      .post("http://127.0.0.1:8000/api/auth/register", user)
-      .then((response) => {
 
-        navigate("/dangnhap");
-      })
-      .catch((error) => {
-        if(error.response.data.message.includes("valid")){
-          setError("Số điện thoại không hợp lệ!")
-        }else{
-          setError("Số điện thoại này đã được đăng ký!")
-        }
-        
-      });
+    try{
+      const response = await register(user);
+      console.log(response.message.data.message);
+      if(response.message.data.message.includes("SDT")){
+        setError("Số điện thoại không hợp lệ!");
+        return;
+      }
+      if(response.message.data.message.includes("already")){
+        setError("Số điện thoại này đã được đăng ký!");
+        return;
+      }
+      navigate("/dangnhap");
+    }
+    catch(error){
+      console.log(error);
+    }
 }
 
   return (

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { layIdKhachHang } from "../api/GiupViecAPI";
 import { config } from "../config";
 import moment from "moment";
+import { layPhieuDichVuTheoIdKhachHang, phieudichvu } from "../api/PhieuDichVuAPI";
+import { layDiaChi } from "../api/DiaChiAPI";
 
 const HoaDonKH = ({ user }) => {
   const [phieuDVs, setPhieuDVs] = useState([]);
@@ -14,37 +16,28 @@ const HoaDonKH = ({ user }) => {
 
   useEffect(() => {
     const layDSPhieuDV = async () => {
-      const idKH = await layIdKhachHang(user.id);
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/layPhieuDichVuTheoIdKhachHang/" +
-          idKH.message.data[0]
-      );
-      setPhieuDVs(response.data);
+      try {
+        const idKH = await layIdKhachHang(user.id);
+        const response = await layPhieuDichVuTheoIdKhachHang(idKH.message.data[0]);
+        setPhieuDVs(response.message.data);
+      } catch (error) {
+        console.log(error)
+      }
+
     };
     layDSPhieuDV();
   }, []);
 
   const handleClick = async (e) => {
     const value = e.currentTarget.getAttribute("value");
-    const response = await axios.get(
-      "http://127.0.0.1:8000/api/phieudichvu/" + value
-    );
-    setPhieuDV(response.data[0]);
-    const dc = await axios.get(
-      "http://127.0.0.1:8000/api/diachi/" + response.data[0].idDiaChi
-    );
-    setDChi(dc.data);
-  };
-
-  const handleChiTiet = async (e) => {
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/layChiTietNLTheoIdPDV/" +
-          phieuDV.idPhieuDichVu
-      );
-      setChiTietNL(response.data);
+      const response = await phieudichvu(value);
+      setPhieuDV(response.message.data[0]);
+
+      const dc = await layDiaChi(response.message.data[0].idDiaChi);
+      setDChi(dc.message.data);
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   };
 

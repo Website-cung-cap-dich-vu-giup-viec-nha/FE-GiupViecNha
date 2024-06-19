@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import NavMain from "./NavMain";
 import { config } from "../config";
 import { isStaff } from "../api/admin/StaffAPI";
+import { logout } from "../api/admin/AuthAPI";
 
 const Header = ({ user }) => {
   const navigate = useNavigate();
@@ -12,13 +13,11 @@ const Header = ({ user }) => {
     const token = Cookies.get("token");
     if (token) {
       try {
-        await axios.get("http://127.0.0.1:8000/api/auth/logout", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        Cookies.remove("token");
-        navigate("/dangnhap");
+        const response = await logout();
+        if(response){
+          Cookies.remove("token");
+          navigate("/dangnhap");
+        }
       } catch (error) {
         console.log(error);
       }
