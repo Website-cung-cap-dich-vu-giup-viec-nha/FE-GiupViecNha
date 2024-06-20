@@ -1,7 +1,7 @@
 // src/config.js
 import Cookies from "js-cookie";
 const config = {
-  apiBaseUrl: "http://localhost:8000",
+  apiBaseUrl: "http://be-giup-viec-nha.infinityfreeapp.com",
 };
 
 const removeToken = () => {
