@@ -1,7 +1,7 @@
 import { API, standardResponse } from "../middleware";
 
 export async function getProduct() {
-  const url = `/api/DichVu`;
+  const url = `/api/dichvu`;
 
   return API.get(url)
     .then((response) => standardResponse(true, response))
