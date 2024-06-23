@@ -124,7 +124,8 @@ const ProductReceiptInsert = ({
                   disabled={
                     // data?.idDichVu === 2 ||
                     // data?.idDichVu === 5 ||
-                    // data?.idDichVu === 6 ||
+                    data?.idDichVu === 6 ||
+                    (data?.idDichVu === 5 && data?.idKieuDichVu === "") ||
                     data?.idDichVu === ""
                   }
                 >
@@ -177,7 +178,7 @@ const ProductReceiptInsert = ({
                     data?.idDichVu === 1 ||
                     data?.idDichVu === 3 ||
                     data?.idDichVu === 4 ||
-                    data?.idDichVu === 5 ||
+                    // data?.idDichVu === 5 ||
                     data?.idDichVu === ""
                   }
                 >
