@@ -52,8 +52,9 @@ const StaffInsert = ({
       <DialogContent>
         <Box py={3} mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <TextField
+              sx={{ marginTop: "10px" }}
                 label="Họ và tên"
                 placeholder="Nhập họ và tên"
                 value={data?.name}
@@ -79,8 +80,9 @@ const StaffInsert = ({
                 textAlign="center"
               />
             </Grid> */}
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <TextField
+              sx={{ marginTop: "10px" }}
                 label="Số Điện Thoại"
                 placeholder="Nhập số điện thoại"
                 value={data?.SDT}
@@ -125,7 +127,7 @@ const StaffInsert = ({
                 textAlign="center"
               />
             </Grid> */}
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer
                   components={["DatePicker", "DatePicker"]}
@@ -154,7 +156,7 @@ const StaffInsert = ({
                 </DemoContainer>
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <FormControl fullWidth className="formControl" sx={{ marginTop: "10px" }}>
                 <InputLabel
                   shrink={true}
@@ -190,7 +192,7 @@ const StaffInsert = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6} xl={4}>
+            <Grid item xs={12} sm={4} xl={4}>
               <FormControl fullWidth className="formControl" sx={{ marginTop: "10px" }}>
                 <InputLabel
                   shrink={true}
