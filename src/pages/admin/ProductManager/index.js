@@ -26,6 +26,7 @@ import {
   themDiaChi,
 } from "../../../api/DiaChiAPI";
 import {
+  layChiTietDVTheoIdKieuDV,
   layDanhSachChiTietDVTheoId,
   layKieuDVByIdDV,
   taoPhieuDichVu,
@@ -485,6 +486,18 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
+  const loadProductDetailDataByIdKieuDichVu = (id) => {
+    layChiTietDVTheoIdKieuDV(id)
+      .then((response) => {
+        setDataChiTietDichVu(
+          response?.message?.status === 200 ? response?.message?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const loadProductTypeData = (id) => {
     layKieuDVByIdDV(id)
       .then((response) => {
@@ -662,6 +675,12 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
 
   useEffect(() => {
     if (isFirstLoad) return;
+    if (insertData?.idDichVu === 5)
+      loadProductDetailDataByIdKieuDichVu(insertData?.idKieuDichVu);
+  }, [insertData?.idKieuDichVu]);
+
+  useEffect(() => {
+    if (isFirstLoad) return;
     if (dataChiTietDichVu.length <= 0) return;
     const tinhTongTien = () => {
       if (insertData?.idDichVu === 1) {
@@ -699,9 +718,25 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
         } else {
           setInsertData({ ...insertData, Tongtien: 0 });
         }
-      } else if (insertData?.idDichVu === 5 || insertData?.idDichVu === 6) {
+      } else if (insertData?.idDichVu === 5) {
         const selectedService = dataChiTietDichVu.find(
           (item) => item.idChiTietDichVu === insertData?.idChiTietDichVu
+        );
+        if (selectedService) {
+          let total = selectedService.GiaTien;
+          if (insertData?.NgayBatDau) {
+            const ngay = new Date(insertData?.NgayBatDau).getDay(); // 0 là chủ nhật, 6 là thứ bảy
+            if (ngay === 0 || ngay === 6) {
+              total *= 1.2; // Tăng 20%
+            }
+          }
+          setInsertData({ ...insertData, Tongtien: total });
+        } else {
+          setInsertData({ ...insertData, Tongtien: 0 });
+        }
+      } else if (insertData?.idDichVu === 6) {
+        const selectedService = dataChiTietDichVu.find(
+          (item) => item.idKieuDichVu === insertData?.idKieuDichVu
         );
         if (selectedService) {
           let total = selectedService.GiaTien;
