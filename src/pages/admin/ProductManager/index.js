@@ -231,6 +231,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
   };
 
   const handleInsert = () => {
+    console.log(insertData);
     taoPhieuDichVu(insertData)
       .then((response) => {
         setMsg(response?.message?.data?.message);
@@ -276,7 +277,6 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
       });
     else if (
       propertyName === "idDichVu" ||
-      propertyName === "idChiTietDichVu" ||
       propertyName === "idDiaChi" ||
       propertyName === "idKieuDichVu"
     )
@@ -293,6 +293,26 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
         idNguoiDung: event?.idNguoiDung,
       });
       setAddressData({ ...addressData, idNguoiDung: event?.idNguoiDung });
+    } else if (propertyName === "idChiTietDichVu") {
+      if (
+        insertData?.idDichVu === 1 ||
+        insertData?.idDichVu === 2 ||
+        insertData?.idDichVu === 3 ||
+        insertData?.idDichVu === 4
+      ) {
+        setInsertData({
+          ...insertData,
+          [propertyName]: event.target.value,
+          Thu: dataChiTietDichVu.find(
+            (t) => t?.idChiTietDichVu === event.target.value
+          )?.BuoiDangKyDichVu,
+        });
+      } else {
+        setInsertData({
+          ...insertData,
+          [propertyName]: event.target.value,
+        });
+      }
     } else setInsertData({ ...insertData, [propertyName]: event.target.value });
   };
 
@@ -370,7 +390,9 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
           setStatus(response?.message?.status);
           handleCloseAlert();
         } else {
-          const str = response?.message?.data?.message ? response?.message?.data?.message.split(' (') : '';
+          const str = response?.message?.data?.message
+            ? response?.message?.data?.message.split(" (")
+            : "";
           setMsg(str[0]);
           setStatus(response?.message?.status);
           handleCloseAlert();
