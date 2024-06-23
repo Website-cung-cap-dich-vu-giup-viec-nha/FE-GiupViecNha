@@ -774,6 +774,7 @@ const ProductManager = ({ setPageName, setBreadCrumb }) => {
     const selectedOption = dataKieuDichVu.find(
       (item) => item.idKieuDichVu === insertData?.idKieuDichVu
     );
+    if (selectedOption === null || selectedOption == undefined) return;
     const selectedKey = selectedOption?.tenKieuDichVu;
     const gioPattern = /(\d+)\sgiờ/;
     const ketQua = selectedKey.match(gioPattern);
