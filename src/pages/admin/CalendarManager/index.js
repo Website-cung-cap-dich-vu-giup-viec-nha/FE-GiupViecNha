@@ -138,7 +138,7 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
         );
         setSunday(
           response?.message?.status === 200
-            ? response?.message?.data?.data?.[7]
+            ? response?.message?.data?.data?.[0]
             : []
         );
       })
