@@ -19,7 +19,6 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useCallback, useEffect, useState } from "react";
 import { getCalendar } from "../../../api/admin/Calendar";
-import moment from "moment";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { updateTinhTrangDichVu } from "../../../api/admin/ProductReceiptWorkDayAPI";
@@ -112,7 +111,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
   const loadCalendar = (startDate, endDate) => {
     getCalendar(startDate, endDate)
       .then((response) => {
-        console.log(response, startDate, endDate);
+        console.log("bbbbb",response, startDate, endDate);
         setMonday(
           response?.message?.status === 200
             ? response?.message?.data?.data?.[1]

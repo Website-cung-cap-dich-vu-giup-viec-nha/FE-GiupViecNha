@@ -53,8 +53,9 @@ import dayjs from "dayjs";
         <DialogContent>
           <Box py={3} mb={3}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6} xl={4}>
+              <Grid item xs={12} sm={4} xl={4}>
                 <TextField
+                sx={{ marginTop: "10px" }}
                   label="Họ và tên"
                   placeholder="Nhập họ và tên"
                   value={data?.name}
@@ -80,8 +81,9 @@ import dayjs from "dayjs";
                   textAlign="center"
                 />
               </Grid> */}
-              <Grid item xs={12} sm={6} xl={4}>
+              <Grid item xs={12} sm={4} xl={4}>
                 <TextField
+                sx={{ marginTop: "10px" }}
                   label="Số Điện Thoại"
                   placeholder="Nhập số điện thoại"
                   value={data?.SDT}
@@ -126,7 +128,7 @@ import dayjs from "dayjs";
                   textAlign="center"
                 />
               </Grid> */}
-              <Grid item xs={12} sm={6} xl={4}>
+              <Grid item xs={12} sm={4} xl={4}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer
                     components={["DatePicker", "DatePicker"]}
@@ -155,7 +157,7 @@ import dayjs from "dayjs";
                   </DemoContainer>
                 </LocalizationProvider>
               </Grid>
-              <Grid item xs={12} sm={6} xl={4}>
+              <Grid item xs={12} sm={4} xl={4}>
                 <FormControl fullWidth className="formControl" sx={{ marginTop: "10px" }}>
                   <InputLabel
                     shrink={true}
@@ -191,7 +193,7 @@ import dayjs from "dayjs";
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6} xl={4}>
+              <Grid item xs={12} sm={4} xl={4}>
                 <FormControl fullWidth className="formControl" sx={{ marginTop: "10px" }}>
                   <InputLabel
                     shrink={true}
