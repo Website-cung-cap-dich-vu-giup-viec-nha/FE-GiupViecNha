@@ -1,32 +1,39 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { layIdKhachHang } from "../api/GiupViecAPI";
 import { config } from "../config";
 import moment from "moment";
-import { layPhieuDichVuTheoIdKhachHang, phieudichvu } from "../api/PhieuDichVuAPI";
+import {
+  layPhieuDichVuTheoIdKhachHang,
+  phieudichvu,
+} from "../api/PhieuDichVuAPI";
 import { layDiaChi } from "../api/DiaChiAPI";
+import Swal from "sweetalert2";
+import { deleteProductReceipt } from "../api/admin/ProductReceiptAPI";
 
 const HoaDonKH = ({ user }) => {
   const [phieuDVs, setPhieuDVs] = useState([]);
   const [phieuDV, setPhieuDV] = useState({});
   const [dchi, setDChi] = useState({});
-  const [chiTietNL, setChiTietNL] = useState([]);
+  const [load, setLoad] = useState(false);
+  const modalRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const layDSPhieuDV = async () => {
       try {
         const idKH = await layIdKhachHang(user.id);
-        const response = await layPhieuDichVuTheoIdKhachHang(idKH.message.data[0]);
+        const response = await layPhieuDichVuTheoIdKhachHang(
+          idKH.message.data[0]
+        );
         setPhieuDVs(response.message.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-
     };
     layDSPhieuDV();
-  }, []);
+  }, [load]);
 
   const handleClick = async (e) => {
     const value = e.currentTarget.getAttribute("value");
@@ -37,12 +44,50 @@ const HoaDonKH = ({ user }) => {
       const dc = await layDiaChi(response.message.data[0].idDiaChi);
       setDChi(dc.message.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   const handleThanhToan = () => {
     navigate("/phuongthucthanhtoan", { state: { phieuDV } });
+  };
+
+  const handleHuyPhieu = async () => {
+    try {
+      Swal.fire({
+        icon: "warning",
+        cancelButtonText: "Trở lại",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Xác nhận",
+        title: "Bạn có chắc là muốn hủy phiếu dịch vụ này?",
+        text: "Bạn sẽ không thể hoàn tác sau khi hủy!",
+        input: "select",
+        inputOptions: {
+          reason1: "Tôi đã đặt nhầm ngày",
+          reason2: "Tôi phát hiện trùng lịch, sẽ đặt vào hôm khác",
+          reason3: "Khác",
+        },
+        inputPlaceholder: "Vì sao bạn lại hủy ?",
+        showCancelButton: true,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await deleteProductReceipt(phieuDV.idPhieuDichVu);
+          setLoad(!load);
+          if (modalRef.current) {
+            const modalInstance = window.bootstrap.Modal.getInstance(
+              modalRef.current
+            );
+            modalInstance.hide();
+          }
+          Swal.fire({
+            title: "Đã hủy!",
+            text: "Phiếu dịch vụ của bạn đã được hủy.",
+            icon: "success",
+          });
+        }
+      });
+    } catch (error) {}
   };
 
   return (
@@ -109,6 +154,7 @@ const HoaDonKH = ({ user }) => {
           tabIndex="-1"
           aria-labelledby="xemThongTin"
           aria-hidden="true"
+          ref={modalRef}
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -155,9 +201,7 @@ const HoaDonKH = ({ user }) => {
                   </p>
                 )}
                 {phieuDV.tenKieuDichVu?.includes("Sofa") && (
-                  <p>
-                    Loại SoFa: {phieuDV.tenKieuDichVu}
-                  </p>
+                  <p>Loại SoFa: {phieuDV.tenKieuDichVu}</p>
                 )}
                 <p>
                   Địa chỉ:{" "}
@@ -174,9 +218,15 @@ const HoaDonKH = ({ user }) => {
                 </p>
               </div>
 
-              {phieuDV.TinhTrang === 2 ? (
-                <div className="modal-footer d-flex justify-content-end">
-                  {phieuDV.TinhTrangThanhToan === 1 ? (
+              <div className="modal-footer d-flex justify-content-between">
+                {phieuDV.TinhTrang !== 3 && (
+                  <button className="btn btn-danger" onClick={handleHuyPhieu}>
+                    Hủy phiếu
+                  </button>
+                )}
+
+                {phieuDV.TinhTrang === 2 ? (
+                  phieuDV.TinhTrangThanhToan === 1 ? (
                     <button
                       className="btn btn-primary"
                       data-bs-dismiss="modal"
@@ -188,11 +238,11 @@ const HoaDonKH = ({ user }) => {
                     <button className="btn btn-secondary" disabled>
                       Thanh toán
                     </button>
-                  )}
-                </div>
-              ) : (
-                ""
-              )}
+                  )
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
           </div>
         </div>
