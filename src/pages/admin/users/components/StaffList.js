@@ -24,6 +24,7 @@ import { config } from "../../../../config";
 import { makeStyles } from "@mui/styles";
 import dayjs from "dayjs";
 import moment from "moment";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 // import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const useStyles = makeStyles({
@@ -47,6 +48,7 @@ const StaffList = ({
   setOpenDelete,
   setOpenInsert,
   setOpenEdit,
+  setOpenStaffCapacity,
 }) => {
   const iconStyle = {
     fontSize: 20,
@@ -57,8 +59,8 @@ const StaffList = ({
   const classes = useStyles();
   const handleIcon = (item) => {
     setSelectedRow(item);
-    setSelectedRow({ ...item, "NgaySinh": dayjs(item?.NgaySinh) });
-    setSelectedRow({ ...item, "password": "" });
+    setSelectedRow({ ...item, NgaySinh: dayjs(item?.NgaySinh) });
+    setSelectedRow({ ...item, password: "" });
   };
   return (
     <Card>
@@ -453,6 +455,20 @@ const StaffList = ({
                           alt=""
                           key={`${item.id}-delete-icon`}
                           style={iconStyle}
+                        />
+                      </IconButton>
+                      <IconButton
+                        key={`${item.id}-iconbutton4-icon`}
+                        onClick={() => {
+                          setOpenStaffCapacity(item);
+                          handleIcon(item);
+                        }}
+                      >
+                        <HowToRegIcon
+                          sx={{ color: "#0072B8" }}
+                          fontSize="small"
+                          title="PersonAdd"
+                          style={{ cursor: "pointer" }}
                         />
                       </IconButton>
                     </TableCell>

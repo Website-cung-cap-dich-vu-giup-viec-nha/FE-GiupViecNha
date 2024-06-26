@@ -83,7 +83,7 @@ const ProductReceiptDetailData = ({
             <Autocomplete
               options={dataNhanVien}
               getOptionLabel={(option) =>
-                `${option.name || ""} - ${option.SDT || ""}`
+                `${option.name || ""} - ${option.SDT || ""} - ${option.soSao || "0"} sao`
               }
               autoSelect
               fullWidth
