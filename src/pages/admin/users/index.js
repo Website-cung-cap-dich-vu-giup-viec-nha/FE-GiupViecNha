@@ -19,6 +19,9 @@ import StaffInsert from "./components/StaffInsert";
 import { getDepartment } from "../../../api/admin/DepartmentAPI";
 import { getPositionByDepartment } from "../../../api/admin/PositionAPI";
 import StaffEdit from "./components/StaffEdit";
+import StaffCapacity from "./components/StaffCapacity";
+import { getProduct, getProductIsNotAddStaffCapacityByStaffId } from "../../../api/admin/ProductAPI";
+import { deleteStaffCapacity, getStaffCapacity, insertStaffCapacity } from "../../../api/admin/StaffCapacity";
 
 const Users = ({ setPageName, setBreadCrumb }) => {
   // -- Start Alerts Setting -- //
@@ -53,6 +56,8 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   const [downloadData, setDownloadData] = useState([]);
   const [importData, setImportData] = useState([]);
   const [exampleExportData, setExampleExportData] = useState([]);
+  const [dataNangLuc, setDataNangLuc] = useState([]);
+  const [staffCapacityData, setStaffCapacityData] = useState([]);
   const [oldSearching, setOldSearching] = useState("");
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [selectedRow, setSelectedRow] = useState({});
@@ -60,6 +65,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openStaffCapacity, setOpenStaffCapacity] = useState(false);
   const [insertData, setInsertData] = useState({
     name: "",
     // email: "",
@@ -73,6 +79,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   });
   const [dataPhongBan, setDataPhongBan] = useState([]);
   const [dataChucVu, setDataChucVu] = useState([]);
+  const [staffCapacity, setStaffCapacity] = useState({});
   const setPageNameCallback = useCallback(
     () => setPageName("Quản lý nhân viên"),
     [setPageName]
@@ -132,6 +139,21 @@ const Users = ({ setPageName, setBreadCrumb }) => {
     else setSelectedRow({ ...selectedRow, [propertyName]: event.target.value });
   };
 
+  const handleChange_StaffCapacity = (event, propertyName) => {
+    if (propertyName === "idDichVu") {
+      setStaffCapacity({
+        ...staffCapacity,
+        [propertyName]: event?.idDichVu,
+      });
+    }
+    else if (propertyName === "idNhanVien") {
+      setStaffCapacity({
+        ...staffCapacity,
+        [propertyName]: event,
+      });
+    }
+  };
+
   const handleOpenInsert = () => {
     setOpenInsert((prev) => !prev);
   };
@@ -148,6 +170,13 @@ const Users = ({ setPageName, setBreadCrumb }) => {
     setOpenDelete((prev) => !prev);
   };
 
+  const handleOpenStaffCapacity = (item) => {
+    loadStaffCapacity(item?.idNhanVien);
+    handleChange_StaffCapacity(item?.idNhanVien, "idNhanVien");
+    loadStaffCapacityTable(item?.idNhanVien);
+    setOpenStaffCapacity((prev) => !prev);
+  };
+
   const handleInsert = () => {
     insertStaff(insertData)
       .then((response) => {
@@ -160,12 +189,14 @@ const Users = ({ setPageName, setBreadCrumb }) => {
             if (page === 0) loadStaffTable();
             else setPage(0);
           }
-        } else if(response?.message?.status === 201) {
+        } else if (response?.message?.status === 201) {
           setMsg(response?.message?.data?.message[0]);
           setStatus(response?.message?.status);
           handleCloseAlert();
         } else {
-          const str = response?.message?.data?.message ? response?.message?.data?.message.split(' (') : '';
+          const str = response?.message?.data?.message
+            ? response?.message?.data?.message.split(" (")
+            : "";
           setMsg(str[0]);
           setStatus(response?.message?.status);
           handleCloseAlert();
@@ -210,6 +241,22 @@ const Users = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
+  const handleDeleteStaffCapacity = (item) => {
+    deleteStaffCapacity(item?.idNangLucNhanVien).then((response) => {
+      if (response?.message?.status === 200) {
+        loadStaffCapacity(item?.idNhanVien);
+        loadStaffCapacityTable(item?.idNhanVien);
+      } else {
+        const str = response?.message?.data?.message
+          ? response?.message?.data?.message.split(" (")
+          : "";
+        setMsg(str[0]);
+        setStatus(response?.message?.status);
+        handleCloseAlert();
+      }
+    });
+  };
+
   const handleChange = (event) => {
     setSearchData(event.target.value);
   };
@@ -229,7 +276,6 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   const handleDownload = () => {
     getStaff(oldSearching, "", "")
       .then((response) => {
-        console.log(response);
         setDownloadData(
           response?.message?.status === 200 ? response?.message?.data?.data : []
         );
@@ -281,6 +327,23 @@ const Users = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
+  const handleInsertStaffCapacity = (item) => {
+    insertStaffCapacity(staffCapacity).then((response) => {
+      if (response?.message?.status === 200) {
+        loadStaffCapacityTable(item?.idNhanVien);
+        loadStaffCapacity(item?.idNhanVien);
+        handleChange_StaffCapacity(null, "idDichVu");
+      } else {
+        const str = response?.message?.data?.message
+          ? response?.message?.data?.message.split(" (")
+          : "";
+        setMsg(str[0]);
+        setStatus(response?.message?.status);
+        handleCloseAlert();
+      }
+    });
+  };
+
   const loadStaffTable = () => {
     getStaff(oldSearching, page * rowsPerPage, rowsPerPage)
       .then((response) => {
@@ -289,6 +352,30 @@ const Users = ({ setPageName, setBreadCrumb }) => {
         );
         setTotalElements(
           response?.message?.status === 200 ? response?.message?.data?.total : 0
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const loadStaffCapacity = (idnhanvien) => {
+    getProductIsNotAddStaffCapacityByStaffId(idnhanvien)
+      .then((response) => {
+        setDataNangLuc(
+          response?.message?.status === 200 ? response?.message?.data?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const loadStaffCapacityTable = (idNhanVien) => {
+    getStaffCapacity(idNhanVien)
+      .then((response) => {
+        setStaffCapacityData(
+          response?.message?.status === 200 ? response?.message?.data?.data : []
         );
       })
       .catch((error) => {
@@ -434,6 +521,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
           setOpenDelete={handleOpenDelete}
           setOpenInsert={handleOpenInsert}
           setOpenEdit={handleOpenEdit}
+          setOpenStaffCapacity={handleOpenStaffCapacity}
         />
       </Grid>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
@@ -484,6 +572,16 @@ const Users = ({ setPageName, setBreadCrumb }) => {
         open={openDelete}
         setOpen={handleOpenDelete}
         handleDelete={handleDelete}
+      />
+      <StaffCapacity
+        open={openStaffCapacity}
+        setOpen={handleOpenStaffCapacity}
+        handleChange={handleChange_StaffCapacity}
+        dataNangLuc={dataNangLuc}
+        handleInsert={handleInsertStaffCapacity}
+        data={staffCapacity}
+        staffCapacityData={staffCapacityData}
+        handleDelete={handleDeleteStaffCapacity}
       />
     </Grid>
   );

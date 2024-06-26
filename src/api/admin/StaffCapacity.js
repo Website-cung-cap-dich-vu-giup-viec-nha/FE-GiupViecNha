@@ -1,25 +1,25 @@
 import { API, standardResponse } from "../middleware";
 
-export async function getProduct() {
-  const url = `/api/dichvu`;
+export async function getStaffCapacity(idnhanvien) {
+  const url = `/api/nanglucnhanvien?idnhanvien=${idnhanvien}`;
 
   return API.get(url)
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
 
-export async function searchDichVu(search) {
-  const url = `/api/dichvu/search/` + search;
+export async function insertStaffCapacity(data) {
+  const url = `/api/nanglucnhanvien`;
 
-  return API.get(url)
+  return API.post(url, data)
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
 
-export async function getProductIsNotAddStaffCapacityByStaffId(idnhanvien) {
-  const url = `/api/dichvu/getProductIsNotAddStaffCapacityByStaffId?idNhanVien=${idnhanvien}`;
+export async function deleteStaffCapacity(idNangLucNhanVien) {
+  const url = `/api/nanglucnhanvien/${idNangLucNhanVien}`;
 
-  return API.get(url)
+  return API.delete(url)
     .then((response) => standardResponse(true, response))
     .catch((error) => standardResponse(false, error.response?.data));
 }
