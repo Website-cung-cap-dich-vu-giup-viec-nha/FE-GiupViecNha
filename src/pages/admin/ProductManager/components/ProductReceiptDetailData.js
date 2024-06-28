@@ -16,6 +16,7 @@ import Return from "../../../../assets/icon/return.svg";
 import { useState, useEffect } from "react";
 import CalendarManager from "../../CalendarManager";
 import { checkPermission } from "../../../../api/admin/AuthAPI";
+import moment from "moment";
 
 const ProductReceiptDetailData = ({
   data_WorkDay,
@@ -181,7 +182,7 @@ const ProductReceiptDetailData = ({
                 textTransform: "none",
               }}
             >
-              Ngày làm: {selectedWorkDayItem?.NgayLam}
+              Ngày làm: {moment(selectedWorkDayItem?.NgayLam).format("DD/MM/yyyy")}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} xl={6}>

@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Edit from "../../../../assets/icon/Edit.svg";
+import moment from "moment";
 
 const useStyles = makeStyles({
   tableCell: {
@@ -120,7 +121,7 @@ const ProductReceiptDetailDataWorkDayList = ({
                       align="center"
                       sx={{ color: "#606F89" }}
                     >
-                      {item?.NgayLam}
+                      {moment(item?.NgayLam).format("DD/MM/yyyy") }
                     </TableCell>
 
                     <TableCell
