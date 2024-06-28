@@ -41,6 +41,7 @@ import ProtectedCustomerLogin from "./ProtectedCustomerLogin";
 import CalendarManager from "./pages/admin/CalendarManager";
 import PermissionManager from "./pages/admin/PermissionManager";
 import TienMat from "./components/TienMat";
+import FeedbackManager from "./components/FeedbackManager";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -158,6 +159,7 @@ function App() {
           <Route path="/" element={<TrangChuView />} />
           <Route path="/camon" element={<CamOn />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/feedbackmanager" element={<FeedbackManager />} />
           <Route path="/sorry" element={<Sorry />} />
           <Route
             path="/phuongthucthanhtoan"
