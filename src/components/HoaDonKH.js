@@ -1,8 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { layIdKhachHang } from "../api/GiupViecAPI";
-import { config } from "../config";
 import moment from "moment";
 import {
   layPhieuDichVuTheoIdKhachHang,

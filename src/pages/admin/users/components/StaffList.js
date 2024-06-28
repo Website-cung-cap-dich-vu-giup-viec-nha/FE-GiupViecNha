@@ -336,12 +336,11 @@ const StaffList = ({
                     <TableCell
                       className={classes.tableCell}
                       align="center"
-                      sx={{ display: "flex", justifyContent: "center" }}
                     >
                       <Avatar
                         alt={item.Anh}
                         src={`${config.apiBaseUrl}/${item.Anh}`}
-                        sx={{ width: 40, height: 40 }}
+                        sx={{ width: 40, height: 40 , margin: "auto"}}
                       />
                     </TableCell>
 
