@@ -84,11 +84,7 @@ const Header = ({ user }) => {
                         Hồ sơ
                       </Link>
                     </li>
-                    <li>
-                      <Link className="dropdown-item" to="/giohang">
-                        Thông báo
-                      </Link>
-                    </li>
+                    
                     <li>
                       <span className="dropdown-item" onClick={handleDangXuat}>
                         Đăng xuất

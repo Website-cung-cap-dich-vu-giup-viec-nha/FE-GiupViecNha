@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { thanhToanVnPay } from "../api/ThanhToanAPI";
 
 const PhuongThucThanhToan = () => {
@@ -9,9 +9,11 @@ const PhuongThucThanhToan = () => {
   const handlePaymentChange = (event) => {
     setPaymentMethod(event.target.id);
   };
+  const navigate = useNavigate();
 
   const handleThanhToan = async () =>{
     try {
+      if(paymentMethod === "vnpay"){
         const response = await thanhToanVnPay({hd: phieuDV.idPhieuDichVu, tt: phieuDV.Tongtien});
         
         if (response.message.data && response.message.data.data) {
@@ -19,6 +21,14 @@ const PhuongThucThanhToan = () => {
         } else {
           console.error("Invalid response data:", response.message.data);
         }
+      }
+      if(paymentMethod === "momo"){
+
+      }
+      if(paymentMethod === "tienmat"){
+
+        navigate("/tienmat");
+      }
     } catch (error) {
         console.log(error)
     }
@@ -61,6 +71,24 @@ const PhuongThucThanhToan = () => {
               alt=""
             />{" "}
             Thanh toán bằng VNPAY
+          </label>
+        </div>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="flexRadioDefault"
+            id="tienmat"
+            checked={paymentMethod === "tienmat"}
+            onChange={handlePaymentChange}
+          />
+          <label className="form-check-label" htmlFor="tienmat">
+            <img
+              width={30}
+              src={require("../assets/icon/icons8-cash-48.png")}
+              alt=""
+            />{" "}
+            Thanh toán bằng tiền mặt
           </label>
         </div>
       </div>

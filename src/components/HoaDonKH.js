@@ -219,7 +219,7 @@ const HoaDonKH = ({ user }) => {
               </div>
 
               <div className="modal-footer d-flex justify-content-between">
-                {phieuDV.TinhTrang !== 3 && (
+                {phieuDV.TinhTrang !== 3 &&  phieuDV.TinhTrangThanhToan !== 2 && (
                   <button className="btn btn-danger" onClick={handleHuyPhieu}>
                     Hủy phiếu
                   </button>
