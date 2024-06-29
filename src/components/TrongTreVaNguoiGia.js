@@ -36,6 +36,7 @@ const ThueDichVu = ({ user }) => {
   const [duong, setDuong] = useState("");
   const [dsChiTietDV, setDSChiTietDV] = useState([]);
   const [soLg, setSoLg] = useState(1);
+  const [soBuoiCuaThang, setSoBuoiCuaThang] = useState(4);
   const { id } = useParams();
   const modalRef = useRef(null);
 
@@ -51,8 +52,8 @@ const ThueDichVu = ({ user }) => {
       );
       setIdChiTietDV(chiTietDichVu.idChiTietDichVu);
       const daysOfWeek = selectedDayOfWeek.split(" - ");
-      setSoBuoi(daysOfWeek.length);
       setMinBuoi(daysOfWeek.length);
+      setSoBuoi(daysOfWeek.length * soBuoiCuaThang);
       const nextAvailableDates = getNextAvailableDates(daysOfWeek);
       setAllowedDates(nextAvailableDates);
     } else {
@@ -96,8 +97,8 @@ const ThueDichVu = ({ user }) => {
 
       if (daysOfWeekNumbers.includes(tempDate.getDay())) {
         let year = tempDate.getFullYear();
-        let month = (tempDate.getMonth() + 1).toString().padStart(2, '0');
-        let day = tempDate.getDate().toString().padStart(2, '0');
+        let month = (tempDate.getMonth() + 1).toString().padStart(2, "0");
+        let day = tempDate.getDate().toString().padStart(2, "0");
         nextDates.push(`${year}-${month}-${day}`);
       }
     }
@@ -163,7 +164,8 @@ const ThueDichVu = ({ user }) => {
   }, [selectedDay, soBuoi, soGio, soLg, dsChiTietDV]);
 
   const handleSoBuoiChange = (event) => {
-    setSoBuoi(Number(event.target.value));
+    setSoBuoiCuaThang(Number(event.target.value));
+    setSoBuoi(Number(event.target.value) * minBuoi);
   };
 
   const handleSoLgChange = (event) => {
@@ -193,7 +195,7 @@ const ThueDichVu = ({ user }) => {
         toast.onmouseleave = Swal.resumeTimer;
       },
     });
-    
+
     const selectedDate = new Date(ngayBD);
 
     if (currentMinute > 0) {
@@ -387,18 +389,18 @@ const ThueDichVu = ({ user }) => {
               </div>
               <div className="col-md-6 mb-3">
                 <label htmlFor="SoBuoi" className="form-label">
-                  Số buổi
+                  Số tháng
                 </label>
-                <input
-                  type="number"
-                  id="SoBuoi"
-                  className="form-control"
-                  min={minBuoi}
-                  max={182}
-                  value={soBuoi}
+                <select
+                  value={soBuoiCuaThang}
+                  class="form-select"
+                  aria-label="chon so thang"
                   onChange={handleSoBuoiChange}
-                  required
-                />
+                >
+                  <option value="4">1 tháng</option>
+                  <option value="8">2 tháng</option>
+                  <option value="12">3 tháng</option>
+                </select>
               </div>
               <div className="col-md-6 mb-3">
                 <label htmlFor="SoGioLamViec" className="form-label">
@@ -434,7 +436,8 @@ const ThueDichVu = ({ user }) => {
             </div>
             <div className="mb-3">
               <label htmlFor="SoLg" className="form-label">
-                {id === "3" ? "Số Trẻ" : "Số người"} <small className="text-danger">(Tối đa 2)</small>
+                {id === "3" ? "Số Trẻ" : "Số người"}{" "}
+                <small className="text-danger">(Tối đa 2)</small>
               </label>
               <input
                 type="number"
