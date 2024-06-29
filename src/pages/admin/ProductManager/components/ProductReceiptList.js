@@ -82,6 +82,7 @@ const ProductReceiptList = ({
                 alignItems: "center",
                 backgroundColor: "#80d4ff",
                 color: "white",
+                visibility: "hidden",
               }}
             >
               <Typography
