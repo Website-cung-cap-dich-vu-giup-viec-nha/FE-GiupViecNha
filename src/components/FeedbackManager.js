@@ -54,18 +54,18 @@ const FeedbackManager = () => {
 
   const handleChangeSort = (e) => {
     setSortBy(e.target.value);
-    console.log(e.target.value)
   };
 
   useEffect(() => {
     const loadFeedbackTable = async () => {
-      
       try {
         let response;
-        if(sortBy==="new"){
+        if (sortBy === "new") {
           response = await axios.get("http://localhost:8000/api/danhgia");
-        }else{
-          response = await axios.get("http://localhost:8000/api/layDanhGiaTheoSapXep/"+sortBy);
+        } else {
+          response = await axios.get(
+            "http://localhost:8000/api/layDanhGiaTheoSapXep/" + sortBy
+          );
         }
         setData(response.data);
         setTotalElements(response.data.length);
@@ -78,16 +78,21 @@ const FeedbackManager = () => {
   return (
     <div className="container py-5">
       <div className="row">
-      <div className="col">
-      <div className="d-flex align-items-center">
-        <label>Sắp xếp theo: </label>
-        <select className="form-select ms-2" style={{maxWidth:200}} aria-label="Sort by" onChange={handleChangeSort}>
-            <option value="new">Mới nhất</option>
-            <option value="desc">Tốt</option>
-            <option value="asc">Tệ</option>
-          </select>
-      </div>
-      </div>
+        <div className="col">
+          <div className="d-flex align-items-center">
+            <label>Sắp xếp theo: </label>
+            <select
+              className="form-select ms-2"
+              style={{ maxWidth: 200 }}
+              aria-label="Sort by"
+              onChange={handleChangeSort}
+            >
+              <option value="new">Mới nhất</option>
+              <option value="desc">Tốt</option>
+              <option value="asc">Tệ</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div className="row">
         <div className="col">
@@ -227,7 +232,12 @@ const FeedbackManager = () => {
                           value={item.idChiTietNhanVienLamDichVu}
                           onClick={handleChiTiet}
                         >
-                          <DescriptionIcon />
+                          <DescriptionIcon
+                            className="text-primary"
+                            sx={{
+                              pointerEvents: "none",
+                            }}
+                          />
                         </IconButton>
                       </TableCell>
                     </TableRow>
