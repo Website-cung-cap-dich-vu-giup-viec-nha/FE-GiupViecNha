@@ -20,8 +20,15 @@ import { getDepartment } from "../../../api/admin/DepartmentAPI";
 import { getPositionByDepartment } from "../../../api/admin/PositionAPI";
 import StaffEdit from "./components/StaffEdit";
 import StaffCapacity from "./components/StaffCapacity";
-import { getProduct, getProductIsNotAddStaffCapacityByStaffId } from "../../../api/admin/ProductAPI";
-import { deleteStaffCapacity, getStaffCapacity, insertStaffCapacity } from "../../../api/admin/StaffCapacity";
+import {
+  getProduct,
+  getProductIsNotAddStaffCapacityByStaffId,
+} from "../../../api/admin/ProductAPI";
+import {
+  deleteStaffCapacity,
+  getStaffCapacity,
+  insertStaffCapacity,
+} from "../../../api/admin/StaffCapacity";
 
 const Users = ({ setPageName, setBreadCrumb }) => {
   // -- Start Alerts Setting -- //
@@ -145,8 +152,7 @@ const Users = ({ setPageName, setBreadCrumb }) => {
         ...staffCapacity,
         [propertyName]: event?.idDichVu,
       });
-    }
-    else if (propertyName === "idNhanVien") {
+    } else if (propertyName === "idNhanVien") {
       setStaffCapacity({
         ...staffCapacity,
         [propertyName]: event,
@@ -171,6 +177,12 @@ const Users = ({ setPageName, setBreadCrumb }) => {
   };
 
   const handleOpenStaffCapacity = (item) => {
+    if (item?.idChucVu !== undefined && item?.idChucVu !== 3) {
+      setMsg("Vui lòng chỉ thêm năng lực cho nhân viên dịch vụ.");
+      setStatus(201);
+      handleCloseAlert();
+      return;
+    }
     loadStaffCapacity(item?.idNhanVien);
     handleChange_StaffCapacity(item?.idNhanVien, "idNhanVien");
     loadStaffCapacityTable(item?.idNhanVien);
