@@ -18,10 +18,15 @@ import { makeStyles } from "@mui/styles";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useCallback, useEffect, useState } from "react";
-import { getCalendarByManager } from "../../../api/admin/Calendar";
+import {
+  getCalendarByManager,
+  getCalendarByManager_v2,
+} from "../../../api/admin/Calendar";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { getStaffIsNotAddChiTietNgayLam } from "../../../api/admin/StaffAPI";
+import { getProduct } from "../../../api/admin/ProductAPI";
+import CalendarDetail from "./CalendarDetail";
 // import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 const useStyles = makeStyles({
@@ -31,6 +36,30 @@ const useStyles = makeStyles({
 });
 
 dayjs.extend(isoWeek);
+
+const LegendItem = ({ color, name }) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        marginRight: 2,
+        marginBottom: 1,
+      }}
+    >
+      <Box
+        sx={{
+          width: 20,
+          height: 20,
+          backgroundColor: color,
+          marginRight: 1,
+          borderRadius: "50%",
+        }}
+      />
+      <Typography variant="body1">{name}</Typography>
+    </Box>
+  );
+};
 
 const CalendarManager = ({ setPageName, setBreadCrumb }) => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -64,8 +93,40 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
     dayjs().endOf("isoWeek").format("YYYY-MM-DD")
   );
   const [oldSearchData, setOldSearchData] = useState();
-  const [searchData, setSearchData] = useState();
+  const [searchData, setSearchData] = useState({
+    idNhanVien: "",
+    idDichVu: "",
+  });
   const [dataNhanVien, setDataNhanVien] = useState([]);
+  const [dataDichVu, setDataDichVu] = useState([]);
+  const [dayOfWeek, setDayOfWeek] = useState([
+    "Thứ 2",
+    "Thứ 3",
+    "Thứ 4",
+    "Thứ 5",
+    "Thứ 6",
+    "Thứ 7",
+    "Chủ nhật",
+  ]);
+  const [selectedData, setSelectedData] = useState({});
+  const [openDetail, setOpenDetail] = useState(false);
+  const colors = [
+    "#E7ECF0",
+    "#00ffff",
+    "#ffc966",
+    "#66ff66",
+    "#ff9999",
+    "#ffb3ff",
+  ];
+
+  const handleOpenDetail = () => {
+    setOpenDetail((prev) => !prev);
+  };
+
+  const handleSelectedData = (item) => {
+    setSelectedData(item);
+    handleOpenDetail();
+  };
 
   const handleSearching = () => {
     setOldSearchData(searchData);
@@ -91,6 +152,20 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
     loadCalendar(newStartOfWeek, newEndOfWeek);
   };
 
+  const handleChange = (event, propertyName) => {
+    if (propertyName === "idDichVu") {
+      setSearchData({
+        ...searchData,
+        [propertyName]: event,
+      });
+    } else if (propertyName === "idNhanVien") {
+      setSearchData({
+        ...searchData,
+        [propertyName]: event,
+      });
+    }
+  };
+
   const loadStaff = () => {
     getStaffIsNotAddChiTietNgayLam(null)
       .then((response) => {
@@ -103,8 +178,20 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
+  const loadProduct = () => {
+    getProduct()
+      .then((response) => {
+        setDataDichVu(
+          response?.message?.status === 200 ? response?.message?.data : []
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const loadCalendar = (startDate, endDate) => {
-    getCalendarByManager(searchData, startDate, endDate)
+    getCalendarByManager_v2(searchData, startDate, endDate)
       .then((response) => {
         setMonday(
           response?.message?.status === 200
@@ -147,25 +234,41 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
       });
   };
 
+  const getBackgroundColor = (idDichVu) => {
+    // if (idDichVu === 1) return "#E7ECF0";
+    // else if (idDichVu === 2) return "#1f77b4";
+    // else if (idDichVu === 3) return "#ff7f0e";
+    // else if (idDichVu === 4) return "#2ca02c";
+    // else if (idDichVu === 5) return "#d62728";
+    // else return "#9467bd";
+    return colors[idDichVu - 1];
+  };
+
   useEffect(() => {
     setPageNameCallback();
     setBreadCrumbCallback();
   }, [setPageNameCallback, setBreadCrumbCallback]);
 
   useEffect(() => {
-    if(isFirstLoad) return;
+    if (isFirstLoad) return;
     setToday(dayjs());
     const newStartOfWeek = dayjs().startOf("isoWeek").format("YYYY-MM-DD");
     const newEndOfWeek = dayjs().endOf("isoWeek").format("YYYY-MM-DD");
     setStartOfWeek(newStartOfWeek);
     setEndOfWeek(newEndOfWeek);
-    loadCalendar(newStartOfWeek, newEndOfWeek)
-  }, [oldSearchData])
+    loadCalendar(newStartOfWeek, newEndOfWeek);
+  }, [oldSearchData]);
+
+  useEffect(() => {
+    if (isFirstLoad) return;
+    loadCalendar(startOfWeek, endOfWeek);
+  }, [searchData]);
 
   useEffect(() => {
     setIsFirstLoad(false);
     loadStaff();
-    // loadCalendar(startOfWeek, endOfWeek);
+    loadProduct();
+    loadCalendar(startOfWeek, endOfWeek);
   }, []);
   return (
     <Grid container>
@@ -175,7 +278,7 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
       <Grid item xs={11.6} sm={11.6} xl={11.6}>
         <Box py={3} mb={3}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={11} xl={11}>
+            <Grid item xs={12} sm={6} xl={6}>
               <Autocomplete
                 options={dataNhanVien}
                 getOptionLabel={(option) =>
@@ -185,11 +288,13 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                 fullWidth
                 value={
                   (dataNhanVien &&
-                    dataNhanVien.find((nv) => nv.idNhanVien === searchData)) ||
+                    dataNhanVien.find(
+                      (nv) => nv.idNhanVien === searchData?.idNhanVien
+                    )) ||
                   null
                 }
                 onChange={(event, newValue) => {
-                  setSearchData(newValue?.idNhanVien);
+                  handleChange(newValue?.idNhanVien, "idNhanVien");
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -207,7 +312,39 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                 }
               />
             </Grid>
-            <Grid item xs={12} sm={1} xl={1}>
+            <Grid item xs={12} sm={6} xl={6}>
+              <Autocomplete
+                options={dataDichVu}
+                getOptionLabel={(option) => `${option.tenDichVu || ""}`}
+                autoSelect
+                fullWidth
+                value={
+                  (dataDichVu &&
+                    dataDichVu.find(
+                      (nv) => nv.idDichVu === searchData?.idDichVu
+                    )) ||
+                  null
+                }
+                onChange={(event, newValue) => {
+                  handleChange(newValue?.idDichVu, "idDichVu");
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Dịch vụ"
+                    variant="outlined"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    placeholder="Chọn dịch vụ"
+                  />
+                )}
+                isOptionEqualToValue={(option, value) =>
+                  option.idDichVu === value
+                }
+              />
+            </Grid>
+            {/* <Grid item xs={12} sm={1} xl={1}>
               <Button
                 variant="contained"
                 sx={{
@@ -234,7 +371,7 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                   Xem lịch
                 </Typography>
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Box>
       </Grid>
@@ -291,6 +428,34 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
               <Box color="text" px={1}>
                 <Button
                   variant="contained"
+                  sx={{
+                    flex: 1,
+                    height: "100%",
+                    marginTop: 0,
+                    marginBottom: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    backgroundColor: "#80d4ff",
+                    color: "white",
+                  }}
+                  onClick={handleSearching}
+                >
+                  <Typography
+                    whiteSpace="nowrap"
+                    color="white"
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: "16px",
+                      textTransform: "none",
+                    }}
+                  >
+                    Hiện tại
+                  </Typography>
+                </Button>
+              </Box>
+              <Box color="text" px={1}>
+                <Button
+                  variant="contained"
                   onClick={handleNext}
                   sx={{
                     flex: 1,
@@ -320,7 +485,10 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
               </Box>
             </div>
           </Box>
-          <Box p={2}>
+          <Box
+            p={2}
+            sx={{ display: "grid", overflowX: "auto", maxWidth: "100%" }}
+          >
             <TableContainer
               component={Paper}
               sx={{
@@ -336,63 +504,22 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
               <Table>
                 <TableHead>
                   <TableRow sx={{ backgroundColor: "#E1E3E9" }}>
-                    <TableCell
-                      className={classes.tableCell}
-                      align="center"
-                      sx={{ fontWeight: "bold", color: "#606F89" }}
-                    >
-                      Thứ 2<br />
-                      {dayjs(startOfWeek).format("DD/MM/YYYY")}
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableCell}
-                      align="center"
-                      sx={{ fontWeight: "bold", color: "#606F89" }}
-                    >
-                      Thứ 3<br />
-                      {dayjs(startOfWeek).add(1, "day").format("DD/MM/YYYY")}
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableCell}
-                      align="center"
-                      sx={{ fontWeight: "bold", color: "#606F89" }}
-                    >
-                      Thứ 4<br />
-                      {dayjs(startOfWeek).add(2, "day").format("DD/MM/YYYY")}
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableCell}
-                      align="center"
-                      sx={{ fontWeight: "bold", color: "#606F89" }}
-                    >
-                      Thứ 5<br />
-                      {dayjs(startOfWeek).add(3, "day").format("DD/MM/YYYY")}
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableCell}
-                      align="center"
-                      sx={{ fontWeight: "bold", color: "#606F89" }}
-                    >
-                      Thứ 6<br />
-                      {dayjs(startOfWeek).add(4, "day").format("DD/MM/YYYY")}
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableCell}
-                      align="center"
-                      sx={{ fontWeight: "bold", color: "#606F89" }}
-                    >
-                      Thứ 7<br />
-                      {dayjs(startOfWeek).add(5, "day").format("DD/MM/YYYY")}
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableCell}
-                      align="center"
-                      sx={{ fontWeight: "bold", color: "#606F89" }}
-                    >
-                      Chủ nhật
-                      <br />
-                      {dayjs(startOfWeek).add(6, "day").format("DD/MM/YYYY")}
-                    </TableCell>
+                    {dayOfWeek &&
+                      Array.isArray(dayOfWeek) &&
+                      dayOfWeek.length > 0 &&
+                      dayOfWeek.map((item, index) => (
+                        <TableCell
+                          className={classes.tableCell}
+                          align="center"
+                          sx={{ fontWeight: "bold", color: "#606F89" }}
+                        >
+                          {item}
+                          <br />
+                          {dayjs(startOfWeek)
+                            .add(index, "day")
+                            .format("DD/MM/YYYY")}
+                        </TableCell>
+                      ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -410,131 +537,126 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                         Array.isArray(monday) &&
                         monday.length > 0 &&
                         monday.map((item, index) => (
-                          <Card
-                            sx={{
-                              minWidth: 300,
-                              padding: "10px",
-                              backgroundColor: "#E7ECF0",
-                            }}
-                          >
-                            <Grid container>
-                              <Grid
-                                item
-                                xs={12}
-                                sm={12}
-                                xl={12}
-                                container // Thêm container để sử dụng các thuộc tính căn giữa
-                                justifyContent="center" // Căn giữa theo chiều ngang
-                                alignItems="center"
-                              >
-                                <Typography
-                                  align="center"
-                                  fontWeight={"bold"}
-                                  fontSize={"16px"}
+                          <>
+                            <Card
+                              sx={{
+                                minWidth: 300,
+                                padding: "10px",
+                                backgroundColor: getBackgroundColor(
+                                  item?.idDichVu
+                                ),
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                handleSelectedData(item);
+                              }}
+                            >
+                              <Grid container>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  sm={12}
+                                  xl={12}
+                                  container // Thêm container để sử dụng các thuộc tính căn giữa
+                                  justifyContent="center" // Căn giữa theo chiều ngang
+                                  alignItems="center"
                                 >
-                                  {item?.tenDichVu}
-                                </Typography>
+                                  <Typography
+                                    align="center"
+                                    fontWeight={"bold"}
+                                    fontSize={"16px"}
+                                  >
+                                    {item?.GioBatDau}
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Mã nhân viên:
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Tên nhân viên
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Số điện thoại
+                                  </Typography>
+                                </Grid>
+                                {monday?.[index]?.ChiTietNhanVienLamDichVu &&
+                                  Array.isArray(
+                                    monday?.[index]?.ChiTietNhanVienLamDichVu
+                                  ) &&
+                                  monday?.[index]?.ChiTietNhanVienLamDichVu
+                                    .length > 0 &&
+                                  monday?.[index]?.ChiTietNhanVienLamDichVu.map(
+                                    (item, index) => (
+                                      <>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.idNhanVien}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={5}
+                                          xl={6}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.name}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.SDT}
+                                          </Typography>
+                                        </Grid>
+                                      </>
+                                    )
+                                  )}
                               </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  ID Phiếu dịch vụ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.idPhieuDichVu}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Giờ bắt đầu:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.GioBatDau}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Khách hàng:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Số điện thoại:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.SDT}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Địa chỉ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.Duong ?? ""}, {item?.ward_name ?? ""}
-                                  {", "}
-                                  {item?.district_name ?? ""},{" "}
-                                  {item?.province_name ?? ""}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </Card>
+                            </Card>
+                          </>
                         ))}
                     </TableCell>
                     <TableCell
@@ -545,131 +667,128 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                         Array.isArray(tuesday) &&
                         tuesday.length > 0 &&
                         tuesday.map((item, index) => (
-                          <Card
-                            sx={{
-                              minWidth: 300,
-                              padding: "10px",
-                              backgroundColor: "#E7ECF0",
-                            }}
-                          >
-                            <Grid container>
-                              <Grid
-                                item
-                                xs={12}
-                                sm={12}
-                                xl={12}
-                                container // Thêm container để sử dụng các thuộc tính căn giữa
-                                justifyContent="center" // Căn giữa theo chiều ngang
-                                alignItems="center"
-                              >
-                                <Typography
-                                  align="center"
-                                  fontWeight={"bold"}
-                                  fontSize={"16px"}
+                          <>
+                            <Card
+                              sx={{
+                                minWidth: 300,
+                                padding: "10px",
+                                backgroundColor: getBackgroundColor(
+                                  item?.idDichVu
+                                ),
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                handleSelectedData(item);
+                              }}
+                            >
+                              <Grid container>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  sm={12}
+                                  xl={12}
+                                  container // Thêm container để sử dụng các thuộc tính căn giữa
+                                  justifyContent="center" // Căn giữa theo chiều ngang
+                                  alignItems="center"
                                 >
-                                  {item?.tenDichVu}
-                                </Typography>
+                                  <Typography
+                                    align="center"
+                                    fontWeight={"bold"}
+                                    fontSize={"16px"}
+                                  >
+                                    {item?.GioBatDau}
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Mã nhân viên:
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Tên nhân viên
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Số điện thoại
+                                  </Typography>
+                                </Grid>
+                                {tuesday?.[index]?.ChiTietNhanVienLamDichVu &&
+                                  Array.isArray(
+                                    tuesday?.[index]?.ChiTietNhanVienLamDichVu
+                                  ) &&
+                                  tuesday?.[index]?.ChiTietNhanVienLamDichVu
+                                    .length > 0 &&
+                                  tuesday?.[
+                                    index
+                                  ]?.ChiTietNhanVienLamDichVu.map(
+                                    (item, index) => (
+                                      <>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.idNhanVien}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={5}
+                                          xl={6}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.name}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.SDT}
+                                          </Typography>
+                                        </Grid>
+                                      </>
+                                    )
+                                  )}
                               </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  ID Phiếu dịch vụ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.idPhieuDichVu}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Giờ bắt đầu:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.GioBatDau}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Khách hàng:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Số điện thoại:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.SDT}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Địa chỉ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.Duong ?? ""}, {item?.ward_name ?? ""}
-                                  {", "}
-                                  {item?.district_name ?? ""},{" "}
-                                  {item?.province_name ?? ""}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </Card>
+                            </Card>
+                          </>
                         ))}
                     </TableCell>
 
@@ -681,131 +800,128 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                         Array.isArray(wednesday) &&
                         wednesday.length > 0 &&
                         wednesday.map((item, index) => (
-                          <Card
-                            sx={{
-                              minWidth: 300,
-                              padding: "10px",
-                              backgroundColor: "#E7ECF0",
-                            }}
-                          >
-                            <Grid container>
-                              <Grid
-                                item
-                                xs={12}
-                                sm={12}
-                                xl={12}
-                                container // Thêm container để sử dụng các thuộc tính căn giữa
-                                justifyContent="center" // Căn giữa theo chiều ngang
-                                alignItems="center"
-                              >
-                                <Typography
-                                  align="center"
-                                  fontWeight={"bold"}
-                                  fontSize={"16px"}
+                          <>
+                            <Card
+                              sx={{
+                                minWidth: 300,
+                                padding: "10px",
+                                backgroundColor: getBackgroundColor(
+                                  item?.idDichVu
+                                ),
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                handleSelectedData(item);
+                              }}
+                            >
+                              <Grid container>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  sm={12}
+                                  xl={12}
+                                  container // Thêm container để sử dụng các thuộc tính căn giữa
+                                  justifyContent="center" // Căn giữa theo chiều ngang
+                                  alignItems="center"
                                 >
-                                  {item?.tenDichVu}
-                                </Typography>
+                                  <Typography
+                                    align="center"
+                                    fontWeight={"bold"}
+                                    fontSize={"16px"}
+                                  >
+                                    {item?.GioBatDau}
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Mã nhân viên:
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Tên nhân viên
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Số điện thoại
+                                  </Typography>
+                                </Grid>
+                                {wednesday?.[index]?.ChiTietNhanVienLamDichVu &&
+                                  Array.isArray(
+                                    wednesday?.[index]?.ChiTietNhanVienLamDichVu
+                                  ) &&
+                                  wednesday?.[index]?.ChiTietNhanVienLamDichVu
+                                    .length > 0 &&
+                                  wednesday?.[
+                                    index
+                                  ]?.ChiTietNhanVienLamDichVu.map(
+                                    (item, index) => (
+                                      <>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.idNhanVien}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={5}
+                                          xl={6}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.name}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.SDT}
+                                          </Typography>
+                                        </Grid>
+                                      </>
+                                    )
+                                  )}
                               </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  ID Phiếu dịch vụ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.idPhieuDichVu}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Giờ bắt đầu:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.GioBatDau}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Khách hàng:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Số điện thoại:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.SDT}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Địa chỉ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.Duong ?? ""}, {item?.ward_name ?? ""}
-                                  {", "}
-                                  {item?.district_name ?? ""},{" "}
-                                  {item?.province_name ?? ""}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </Card>
+                            </Card>
+                          </>
                         ))}
                     </TableCell>
                     <TableCell
@@ -816,131 +932,128 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                         Array.isArray(thursday) &&
                         thursday.length > 0 &&
                         thursday.map((item, index) => (
-                          <Card
-                            sx={{
-                              minWidth: 300,
-                              padding: "10px",
-                              backgroundColor: "#E7ECF0",
-                            }}
-                          >
-                            <Grid container>
-                              <Grid
-                                item
-                                xs={12}
-                                sm={12}
-                                xl={12}
-                                container // Thêm container để sử dụng các thuộc tính căn giữa
-                                justifyContent="center" // Căn giữa theo chiều ngang
-                                alignItems="center"
-                              >
-                                <Typography
-                                  align="center"
-                                  fontWeight={"bold"}
-                                  fontSize={"16px"}
+                          <>
+                            <Card
+                              sx={{
+                                minWidth: 300,
+                                padding: "10px",
+                                backgroundColor: getBackgroundColor(
+                                  item?.idDichVu
+                                ),
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                handleSelectedData(item);
+                              }}
+                            >
+                              <Grid container>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  sm={12}
+                                  xl={12}
+                                  container // Thêm container để sử dụng các thuộc tính căn giữa
+                                  justifyContent="center" // Căn giữa theo chiều ngang
+                                  alignItems="center"
                                 >
-                                  {item?.tenDichVu}
-                                </Typography>
+                                  <Typography
+                                    align="center"
+                                    fontWeight={"bold"}
+                                    fontSize={"16px"}
+                                  >
+                                    {item?.GioBatDau}
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Mã nhân viên:
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Tên nhân viên
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Số điện thoại
+                                  </Typography>
+                                </Grid>
+                                {thursday?.[index]?.ChiTietNhanVienLamDichVu &&
+                                  Array.isArray(
+                                    thursday?.[index]?.ChiTietNhanVienLamDichVu
+                                  ) &&
+                                  thursday?.[index]?.ChiTietNhanVienLamDichVu
+                                    .length > 0 &&
+                                  thursday?.[
+                                    index
+                                  ]?.ChiTietNhanVienLamDichVu.map(
+                                    (item, index) => (
+                                      <>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.idNhanVien}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={5}
+                                          xl={6}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.name}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.SDT}
+                                          </Typography>
+                                        </Grid>
+                                      </>
+                                    )
+                                  )}
                               </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  ID Phiếu dịch vụ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.idPhieuDichVu}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Giờ bắt đầu:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.GioBatDau}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Khách hàng:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Số điện thoại:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.SDT}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Địa chỉ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.Duong ?? ""}, {item?.ward_name ?? ""}
-                                  {", "}
-                                  {item?.district_name ?? ""},{" "}
-                                  {item?.province_name ?? ""}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </Card>
+                            </Card>
+                          </>
                         ))}
                     </TableCell>
                     <TableCell
@@ -951,131 +1064,126 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                         Array.isArray(friday) &&
                         friday.length > 0 &&
                         friday.map((item, index) => (
-                          <Card
-                            sx={{
-                              minWidth: 300,
-                              padding: "10px",
-                              backgroundColor: "#E7ECF0",
-                            }}
-                          >
-                            <Grid container>
-                              <Grid
-                                item
-                                xs={12}
-                                sm={12}
-                                xl={12}
-                                container // Thêm container để sử dụng các thuộc tính căn giữa
-                                justifyContent="center" // Căn giữa theo chiều ngang
-                                alignItems="center"
-                              >
-                                <Typography
-                                  align="center"
-                                  fontWeight={"bold"}
-                                  fontSize={"16px"}
+                          <>
+                            <Card
+                              sx={{
+                                minWidth: 300,
+                                padding: "10px",
+                                backgroundColor: getBackgroundColor(
+                                  item?.idDichVu
+                                ),
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                handleSelectedData(item);
+                              }}
+                            >
+                              <Grid container>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  sm={12}
+                                  xl={12}
+                                  container // Thêm container để sử dụng các thuộc tính căn giữa
+                                  justifyContent="center" // Căn giữa theo chiều ngang
+                                  alignItems="center"
                                 >
-                                  {item?.tenDichVu}
-                                </Typography>
+                                  <Typography
+                                    align="center"
+                                    fontWeight={"bold"}
+                                    fontSize={"16px"}
+                                  >
+                                    {item?.GioBatDau}
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Mã nhân viên:
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Tên nhân viên
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Số điện thoại
+                                  </Typography>
+                                </Grid>
+                                {friday?.[index]?.ChiTietNhanVienLamDichVu &&
+                                  Array.isArray(
+                                    friday?.[index]?.ChiTietNhanVienLamDichVu
+                                  ) &&
+                                  friday?.[index]?.ChiTietNhanVienLamDichVu
+                                    .length > 0 &&
+                                  friday?.[index]?.ChiTietNhanVienLamDichVu.map(
+                                    (item, index) => (
+                                      <>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.idNhanVien}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={5}
+                                          xl={6}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.name}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.SDT}
+                                          </Typography>
+                                        </Grid>
+                                      </>
+                                    )
+                                  )}
                               </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  ID Phiếu dịch vụ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.idPhieuDichVu}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Giờ bắt đầu:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.GioBatDau}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Khách hàng:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Số điện thoại:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.SDT}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Địa chỉ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.Duong ?? ""}, {item?.ward_name ?? ""}
-                                  {", "}
-                                  {item?.district_name ?? ""},{" "}
-                                  {item?.province_name ?? ""}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </Card>
+                            </Card>
+                          </>
                         ))}
                     </TableCell>
                     <TableCell
@@ -1086,131 +1194,128 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                         Array.isArray(saturday) &&
                         saturday.length > 0 &&
                         saturday.map((item, index) => (
-                          <Card
-                            sx={{
-                              minWidth: 300,
-                              padding: "10px",
-                              backgroundColor: "#E7ECF0",
-                            }}
-                          >
-                            <Grid container>
-                              <Grid
-                                item
-                                xs={12}
-                                sm={12}
-                                xl={12}
-                                container // Thêm container để sử dụng các thuộc tính căn giữa
-                                justifyContent="center" // Căn giữa theo chiều ngang
-                                alignItems="center"
-                              >
-                                <Typography
-                                  align="center"
-                                  fontWeight={"bold"}
-                                  fontSize={"16px"}
+                          <>
+                            <Card
+                              sx={{
+                                minWidth: 300,
+                                padding: "10px",
+                                backgroundColor: getBackgroundColor(
+                                  item?.idDichVu
+                                ),
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                handleSelectedData(item);
+                              }}
+                            >
+                              <Grid container>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  sm={12}
+                                  xl={12}
+                                  container // Thêm container để sử dụng các thuộc tính căn giữa
+                                  justifyContent="center" // Căn giữa theo chiều ngang
+                                  alignItems="center"
                                 >
-                                  {item?.tenDichVu}
-                                </Typography>
+                                  <Typography
+                                    align="center"
+                                    fontWeight={"bold"}
+                                    fontSize={"16px"}
+                                  >
+                                    {item?.GioBatDau}
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Mã nhân viên:
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Tên nhân viên
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Số điện thoại
+                                  </Typography>
+                                </Grid>
+                                {saturday?.[index]?.ChiTietNhanVienLamDichVu &&
+                                  Array.isArray(
+                                    saturday?.[index]?.ChiTietNhanVienLamDichVu
+                                  ) &&
+                                  saturday?.[index]?.ChiTietNhanVienLamDichVu
+                                    .length > 0 &&
+                                  saturday?.[
+                                    index
+                                  ]?.ChiTietNhanVienLamDichVu.map(
+                                    (item, index) => (
+                                      <>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.idNhanVien}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={5}
+                                          xl={6}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.name}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.SDT}
+                                          </Typography>
+                                        </Grid>
+                                      </>
+                                    )
+                                  )}
                               </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  ID Phiếu dịch vụ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.idPhieuDichVu}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Giờ bắt đầu:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.GioBatDau}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Khách hàng:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Số điện thoại:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.SDT}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Địa chỉ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.Duong ?? ""}, {item?.ward_name ?? ""}
-                                  {", "}
-                                  {item?.district_name ?? ""},{" "}
-                                  {item?.province_name ?? ""}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </Card>
+                            </Card>
+                          </>
                         ))}
                     </TableCell>
                     <TableCell
@@ -1221,156 +1326,158 @@ const CalendarManager = ({ setPageName, setBreadCrumb }) => {
                         Array.isArray(sunday) &&
                         sunday.length > 0 &&
                         sunday.map((item, index) => (
-                          <Card
-                            sx={{
-                              minWidth: 300,
-                              padding: "10px",
-                              backgroundColor: "#E7ECF0",
-                            }}
-                          >
-                            <Grid container>
-                              <Grid
-                                item
-                                xs={12}
-                                sm={12}
-                                xl={12}
-                                container // Thêm container để sử dụng các thuộc tính căn giữa
-                                justifyContent="center" // Căn giữa theo chiều ngang
-                                alignItems="center"
-                              >
-                                <Typography
-                                  align="center"
-                                  fontWeight={"bold"}
-                                  fontSize={"16px"}
+                          <>
+                            <Card
+                              sx={{
+                                minWidth: 300,
+                                padding: "10px",
+                                backgroundColor: getBackgroundColor(
+                                  item?.idDichVu
+                                ),
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                handleSelectedData(item);
+                              }}
+                            >
+                              <Grid container>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  sm={12}
+                                  xl={12}
+                                  container // Thêm container để sử dụng các thuộc tính căn giữa
+                                  justifyContent="center" // Căn giữa theo chiều ngang
+                                  alignItems="center"
                                 >
-                                  {item?.tenDichVu}
-                                </Typography>
+                                  <Typography
+                                    align="center"
+                                    fontWeight={"bold"}
+                                    fontSize={"16px"}
+                                  >
+                                    {item?.GioBatDau}
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Mã nhân viên:
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Tên nhân viên
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={3} xl={3} paddingTop={1}>
+                                  <Typography
+                                    variant="caption"
+                                    color="text"
+                                    fontWeight="bold"
+                                  >
+                                    Số điện thoại
+                                  </Typography>
+                                </Grid>
+                                {sunday?.[index]?.ChiTietNhanVienLamDichVu &&
+                                  Array.isArray(
+                                    sunday?.[index]?.ChiTietNhanVienLamDichVu
+                                  ) &&
+                                  sunday?.[index]?.ChiTietNhanVienLamDichVu
+                                    .length > 0 &&
+                                  sunday?.[index]?.ChiTietNhanVienLamDichVu.map(
+                                    (item, index) => (
+                                      <>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.idNhanVien}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={5}
+                                          xl={6}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.name}
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          xs={12}
+                                          sm={3}
+                                          xl={3}
+                                          paddingTop={1}
+                                        >
+                                          <Typography
+                                            variant="caption"
+                                            color="text"
+                                            fontWeight="regular"
+                                          >
+                                            {item?.SDT}
+                                          </Typography>
+                                        </Grid>
+                                      </>
+                                    )
+                                  )}
                               </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  ID Phiếu dịch vụ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.idPhieuDichVu}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Giờ bắt đầu:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.GioBatDau}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Khách hàng:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Số điện thoại:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.SDT}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} sm={5} xl={5} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="regular"
-                                >
-                                  Địa chỉ:
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} sm={7} xl={7} paddingTop={1}>
-                                <Typography
-                                  variant="caption"
-                                  color="text"
-                                  fontWeight="bold"
-                                >
-                                  {item?.Duong ?? ""}, {item?.ward_name ?? ""}
-                                  {", "}
-                                  {item?.district_name ?? ""},{" "}
-                                  {item?.province_name ?? ""}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </Card>
+                            </Card>
+                          </>
                         ))}
                     </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
-            {/* <Typography
-            whiteSpace="nowrap"
-            sx={{
-              fontWeight: 600,
-              fontSize: "18px",
-              textTransform: "none",
-              alignItems: "center",
-              display: "flex",
-              flex: 1,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >ssssssssss</Typography> */}
           </Box>
         </Card>
       </Grid>
       <Grid item xs={0.2} sm={0.2} xl={0.2}>
         {" "}
       </Grid>
+      <Grid item xs={0.2} sm={0.2} xl={0.2}>
+        {" "}
+      </Grid>
+      {dataDichVu.map((item) => (
+        <Grid item xs={12} sm={1.9} xl={1.9} sx={{ marginTop: "10px" }}>
+          <LegendItem
+            key={item?.idDichVu}
+            color={getBackgroundColor(item?.idDichVu)}
+            name={item?.tenDichVu}
+          />
+        </Grid>
+      ))}
+      <Grid item xs={0.2} sm={0.2} xl={0.2}>
+        {" "}
+      </Grid>
+      <CalendarDetail
+        open={openDetail}
+        setOpen={handleOpenDetail}
+        item={selectedData}
+      />
     </Grid>
   );
 };
