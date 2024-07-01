@@ -3,16 +3,7 @@ import pattern from "../assets/background/pattern.jpg";
 import axios from "axios";
 import Chart from "chart.js/auto";
 
-const ThongKeView = ({ setPageName, setBreadCrumb }) => {
-  const setPageNameCallback = useCallback(() => setPageName(""), [setPageName]);
-  const setBreadCrumbCallback = useCallback(
-    () => setBreadCrumb([]),
-    [setBreadCrumb]
-  );
-  useEffect(() => {
-    setPageNameCallback();
-    setBreadCrumbCallback();
-  }, [setPageNameCallback, setBreadCrumbCallback]);
+const ThongKeGioView = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [data, setData] = useState([]);
@@ -31,8 +22,8 @@ const ThongKeView = ({ setPageName, setBreadCrumb }) => {
   }, [data]);
 
   renderChart.current = () => {
-    const labels = data.map((item) => item.TenDichVu);
-    const values = data.map((item) => item.DoanhThu);
+    const labels = data.map((item) => item.name);
+    const values = data.map((item) => item.SoGio);
 
     if (chartRef.current) {
       chartRef.current.destroy(); // Destroy old chart before rendering new one
@@ -48,7 +39,7 @@ const ThongKeView = ({ setPageName, setBreadCrumb }) => {
         labels: labels,
         datasets: [
           {
-            label: "Doanh Thu", // Label for the whole dataset
+            label: "Số Giờ Làm", // Label for the whole dataset
             data: values,
             backgroundColor: colors,
             borderColor: colors,
@@ -130,12 +121,15 @@ const ThongKeView = ({ setPageName, setBreadCrumb }) => {
   const handleDateSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get("http://localhost:8000/api/thongke", {
-        params: {
-          NgayBD: startDate,
-          NgayKT: endDate,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:8000/api/thongKeSoGioLam",
+        {
+          params: {
+            NgayBD: startDate,
+            NgayKT: endDate,
+          },
+        }
+      );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -149,7 +143,9 @@ const ThongKeView = ({ setPageName, setBreadCrumb }) => {
     >
       <div className="container">
         <div className="row py-5">
-          <h3 className="text-center mb-3">Thống kê doanh thu từng dịch vụ</h3>
+          <h3 className="text-center mb-3">
+            Thống kê số giờ làm việc của nhân viên
+          </h3>
           <form onSubmit={handleDateSubmit} className="row mb-3">
             <div className="col">
               <input
@@ -185,4 +181,4 @@ const ThongKeView = ({ setPageName, setBreadCrumb }) => {
   );
 };
 
-export default ThongKeView;
+export default ThongKeGioView;

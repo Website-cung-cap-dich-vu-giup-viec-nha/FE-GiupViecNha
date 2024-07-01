@@ -42,6 +42,7 @@ import CalendarManager from "./pages/admin/CalendarManager";
 import PermissionManager from "./pages/admin/PermissionManager";
 import TienMat from "./components/TienMat";
 import FeedbackManager from "./components/FeedbackManager";
+import ThongKeGioView from "./pages/ThongKeGioView";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -167,7 +168,7 @@ function App() {
           />
           <Route path="/ketquathanhtoan" element={<KetQuaThanhToan />} />
           <Route path="/tienmat" element={<TienMat />} />
-          {/* <Route path="/thongke" element={<ThongKeView />} /> */}
+          <Route path="/thongkesogiolam" element={<ThongKeGioView />} />
           <Route path="/giupviectheogio" element={<GiupViecTheoGioView />} />
           <Route path="/tongvesinh" element={<TongVeSinhView />} />
           <Route path="/trongtre" element={<TrongTreView />} />
