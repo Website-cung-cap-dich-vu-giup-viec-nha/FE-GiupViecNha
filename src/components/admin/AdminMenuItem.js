@@ -154,6 +154,12 @@ const AdminMenuItem = ({ pageName, breadCrumb }) => {
         visible:
           permmission && !permmission.some((item) => item?.idQuyen === 4),
       },
+      {
+        to: "/admin/feedbackmanager",
+        icon: CalendarMonth,
+        text: "Phản hồi",
+        visible: true,
+      },
     ]);
   }, [permmission]);
   return (

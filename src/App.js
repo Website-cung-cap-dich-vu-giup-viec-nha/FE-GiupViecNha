@@ -161,7 +161,7 @@ function App() {
           <Route path="/" element={<TrangChuView />} />
           <Route path="/camon" element={<CamOn />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/feedbackmanager" element={<FeedbackManager />} />
+          {/* <Route path="/feedbackmanager" element={<FeedbackManager />} /> */}
           <Route path="/sorry" element={<Sorry />} />
           <Route
             path="/phuongthucthanhtoan"
@@ -277,6 +277,17 @@ function App() {
                 path="permissionmanager"
                 element={
                   <PermissionManager
+                    setPageName={setAdminPageName}
+                    setBreadCrumb={setAdminBreadCrumb}
+                  />
+                }
+              />
+            </Route>
+            <Route element={<ProtectedPermission idQuyen={0} />}>
+              <Route
+                path="feedbackmanager"
+                element={
+                  <FeedbackManager
                     setPageName={setAdminPageName}
                     setBreadCrumb={setAdminBreadCrumb}
                   />

@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { config } from "../config";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { layChiTietNhanVienLamDichVu } from "../api/ChiTietNhanVienLamDichVuAPI";
@@ -33,7 +33,16 @@ const style = {
   outline: "none",
 };
 
-const FeedbackManager = () => {
+const FeedbackManager = ({ setPageName, setBreadCrumb }) => {
+  const setPageNameCallback = useCallback(() => setPageName("Phản hồi khách hàng"), [setPageName]);
+  const setBreadCrumbCallback = useCallback(
+    () => setBreadCrumb(["Phản hồi khách hàng"]),
+    [setBreadCrumb]
+  );
+  useEffect(() => {
+    setPageNameCallback();
+    setBreadCrumbCallback();
+  }, [setPageNameCallback, setBreadCrumbCallback]);
   const [totalElements, setTotalElements] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
