@@ -466,7 +466,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               {item?.province_name ?? ""}
                             </Typography>
                           </Grid>
-                          <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
+                          {/* <Grid item xs={12} sm={6} xl={6} paddingTop={1}>
                             <Typography
                               variant="caption"
                               color="text"
@@ -477,7 +477,7 @@ const Calendar = ({ setPageName, setBreadCrumb }) => {
                               {item?.district_name ?? ""},{" "}
                               {item?.province_name ?? ""}
                             </Typography>
-                          </Grid>
+                          </Grid> */}
                           <Grid
                             item
                             xs={12}

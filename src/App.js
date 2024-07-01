@@ -43,6 +43,7 @@ import PermissionManager from "./pages/admin/PermissionManager";
 import TienMat from "./components/TienMat";
 import FeedbackManager from "./components/FeedbackManager";
 import ThongKeGioView from "./pages/ThongKeGioView";
+import ThongKe from "./pages/admin";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -168,7 +169,7 @@ function App() {
           />
           <Route path="/ketquathanhtoan" element={<KetQuaThanhToan />} />
           <Route path="/tienmat" element={<TienMat />} />
-          <Route path="/thongkesogiolam" element={<ThongKeGioView />} />
+          {/* <Route path="/thongkesogiolam" element={<ThongKeGioView />} /> */}
           <Route path="/giupviectheogio" element={<GiupViecTheoGioView />} />
           <Route path="/tongvesinh" element={<TongVeSinhView />} />
           <Route path="/trongtre" element={<TrongTreView />} />
@@ -253,7 +254,7 @@ function App() {
               <Route
                 path=""
                 element={
-                  <ThongKeView
+                  <ThongKe
                     setPageName={setAdminPageName}
                     setBreadCrumb={setAdminBreadCrumb}
                   />

@@ -3,16 +3,7 @@ import pattern from "../assets/background/pattern.jpg";
 import axios from "axios";
 import Chart from "chart.js/auto";
 
-const ThongKeView = ({ setPageName, setBreadCrumb }) => {
-  const setPageNameCallback = useCallback(() => setPageName(""), [setPageName]);
-  const setBreadCrumbCallback = useCallback(
-    () => setBreadCrumb([]),
-    [setBreadCrumb]
-  );
-  useEffect(() => {
-    setPageNameCallback();
-    setBreadCrumbCallback();
-  }, [setPageNameCallback, setBreadCrumbCallback]);
+const ThongKeView = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [data, setData] = useState([]);
